@@ -11,7 +11,7 @@
     --bg: #2a2a2e;
     --surface: #323236;
     --border: #4a4a52;
-    --accent: #e8a020;
+    --accent: #c8289a;
     --text: #eeeef0;
     --text-dim: #9a9aa8;
     --text-faint: #5a5a66;
@@ -42,9 +42,17 @@
   .hero-img {
     position: absolute;
     inset: 0;
-    background: url('hero.png') center center / cover no-repeat;
+    background: url('images/hero.png') center center / cover no-repeat;
     transform: scale(1.04);
     animation: slow-zoom 20s ease-out forwards;
+  }
+
+  .hero-img-b {
+    position: absolute;
+    inset: 0;
+    background: url('images/DarkStar.png') center center / cover no-repeat;
+    opacity: 0;
+    transition: opacity 1.8s ease-in-out;
   }
 
   @keyframes slow-zoom {
@@ -425,7 +433,8 @@
 <body>
 
 <section class="hero">
-  <div class="hero-img"></div>
+  <div class="hero-img" id="hero-a"></div>
+  <div class="hero-img-b" id="hero-b"></div>
   <div class="hero-overlay"></div>
 
   <div class="top-bar">
@@ -510,6 +519,27 @@
   <span><a href="https://rondomingue.com" target="_blank">rondomingue.com</a></span>
   <span>All values are approximations — verify in production</span>
 </footer>
+
+<script>
+  // Crossfade hero images every 6 seconds
+  const imgA = document.getElementById('hero-a');
+  const imgB = document.getElementById('hero-b');
+  let showingA = true;
+
+  setInterval(() => {
+    if (showingA) {
+      imgB.style.opacity = '1';
+      imgA.style.opacity = '0';
+    } else {
+      imgA.style.opacity = '1';
+      imgB.style.opacity = '0';
+    }
+    showingA = !showingA;
+  }, 6000);
+
+  // Add transition to hero-img too
+  imgA.style.transition = 'opacity 1.8s ease-in-out';
+</script>
 
 </body>
 </html>
