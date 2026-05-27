@@ -453,8 +453,8 @@
   .guide-card:hover .arrow-line { width: 36px; }
 
   .uds-section {
-    background: #141518;
-    border-top: 1px solid var(--border);
+    background: var(--accent);
+    border-top: none;
   }
 
   .uds-header {
@@ -468,8 +468,8 @@
     border-bottom: 1px solid transparent;
   }
 
-  .uds-header:hover { background: rgba(255,255,255,0.02); }
-  .uds-section.open .uds-header { border-bottom-color: var(--border); }
+  .uds-header:hover { background: rgba(0,0,0,0.08); }
+  .uds-section.open .uds-header { border-bottom-color: rgba(255,255,255,0.2); }
 
   .uds-header-left {
     display: flex;
@@ -482,7 +482,7 @@
     font-size: 9px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--text-faint);
+    color: rgba(255,255,255,0.55);
   }
 
   .uds-header-title {
@@ -490,12 +490,12 @@
     font-weight: 300;
     font-size: 16px;
     letter-spacing: 0.08em;
-    color: var(--text);
+    color: #fff;
   }
 
   .uds-toggle-icon {
     font-size: 15px;
-    color: var(--text-dim);
+    color: rgba(255,255,255,0.7);
     transition: transform 0.25s ease;
     flex-shrink: 0;
   }
@@ -529,7 +529,7 @@
     font-size: 9px;
     letter-spacing: 0.25em;
     text-transform: uppercase;
-    color: var(--accent);
+    color: rgba(255,255,255,0.55);
     margin-bottom: 16px;
   }
 
@@ -539,25 +539,25 @@
     font-size: clamp(32px, 4vw, 56px);
     letter-spacing: 0.06em;
     line-height: 0.95;
-    color: var(--text);
+    color: #fff;
     margin-bottom: 24px;
   }
 
-  .uds-title span { color: var(--accent); }
+  .uds-title span { color: rgba(255,255,255,0.75); }
 
   .uds-lead {
     font-family: 'din-2014', sans-serif;
     font-weight: 300;
     font-size: 18px;
     letter-spacing: 0.03em;
-    color: var(--text);
+    color: #fff;
     line-height: 1.5;
     margin-bottom: 20px;
   }
 
   .uds-body {
     font-size: 13px;
-    color: var(--text-dim);
+    color: rgba(255,255,255,0.75);
     line-height: 1.8;
     margin-bottom: 16px;
     max-width: 520px;
@@ -566,17 +566,17 @@
   .uds-callout {
     display: flex;
     gap: 12px;
-    background: rgba(232,192,64,0.07);
-    border: 1px solid rgba(232,192,64,0.2);
+    background: rgba(0,0,0,0.15);
+    border: 1px solid rgba(255,255,255,0.2);
     padding: 14px 16px;
     margin: 20px 0 24px;
     font-size: 12px;
-    color: var(--text-dim);
+    color: rgba(255,255,255,0.8);
     line-height: 1.6;
   }
 
-  .uds-callout strong { color: var(--warning); }
-  .uds-callout-icon { color: var(--warning); font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .uds-callout strong { color: #fff; }
+  .uds-callout-icon { color: rgba(255,255,255,0.9); font-size: 14px; flex-shrink: 0; margin-top: 1px; }
 
   .uds-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 
@@ -585,17 +585,17 @@
     font-size: 9px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--text-faint);
+    color: rgba(255,255,255,0.45);
     margin-bottom: 24px;
     padding-bottom: 12px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid rgba(255,255,255,0.2);
   }
 
   .uds-tip {
     display: flex;
     gap: 20px;
     padding: 20px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.15);
   }
 
   .uds-tip:last-child { border-bottom: none; }
@@ -603,7 +603,7 @@
   .uds-tip-num {
     font-family: 'Space Mono', monospace;
     font-size: 9px;
-    color: var(--accent);
+    color: rgba(255,255,255,0.5);
     letter-spacing: 0.1em;
     flex-shrink: 0;
     padding-top: 3px;
@@ -615,14 +615,14 @@
     font-weight: 400;
     font-size: 14px;
     letter-spacing: 0.04em;
-    color: var(--text);
+    color: #fff;
     margin-bottom: 6px;
     line-height: 1.2;
   }
 
   .uds-tip-desc {
     font-size: 12px;
-    color: var(--text-dim);
+    color: rgba(255,255,255,0.7);
     line-height: 1.7;
   }
 
