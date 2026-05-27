@@ -241,7 +241,9 @@
     display: none;
     position: fixed; inset: 0;
     z-index: 1000;
-    background: rgba(0,0,0,0.95);
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     align-items: center; justify-content: center;
   }
   #video-modal.open { display: flex; }
@@ -450,7 +452,184 @@
   .gc-color .arrow-line { background: #7ac45a; }
   .guide-card:hover .arrow-line { width: 36px; }
 
-  /* ABOUT STRIP */
+  .uds-section {
+    background: #141518;
+    border-top: 1px solid var(--border);
+  }
+
+  .uds-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+    border-bottom: 1px solid transparent;
+  }
+
+  .uds-header:hover { background: rgba(255,255,255,0.02); }
+  .uds-section.open .uds-header { border-bottom-color: var(--border); }
+
+  .uds-header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .uds-header-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  .uds-header-title {
+    font-family: 'din-2014', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    letter-spacing: 0.08em;
+    color: var(--text);
+  }
+
+  .uds-toggle-icon {
+    font-size: 15px;
+    color: var(--text-dim);
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+  }
+
+  .uds-section.open .uds-toggle-icon { transform: rotate(0deg); }
+  .uds-section:not(.open) .uds-toggle-icon { transform: rotate(-90deg); }
+
+  .uds-body-wrap {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+  }
+
+  .uds-section.open .uds-body-wrap {
+    max-height: 2000px;
+    opacity: 1;
+  }
+
+  .uds-inner {
+    max-width: 1300px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+    padding: 60px 48px 80px;
+  }
+
+  .uds-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .uds-title {
+    font-family: 'din-2014', sans-serif;
+    font-weight: 200;
+    font-size: clamp(32px, 4vw, 56px);
+    letter-spacing: 0.06em;
+    line-height: 0.95;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  .uds-title span { color: var(--accent); }
+
+  .uds-lead {
+    font-family: 'din-2014', sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+    letter-spacing: 0.03em;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  .uds-body {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.8;
+    margin-bottom: 16px;
+    max-width: 520px;
+  }
+
+  .uds-callout {
+    display: flex;
+    gap: 12px;
+    background: rgba(232,192,64,0.07);
+    border: 1px solid rgba(232,192,64,0.2);
+    padding: 14px 16px;
+    margin: 20px 0 24px;
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .uds-callout strong { color: var(--warning); }
+  .uds-callout-icon { color: var(--warning); font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  .uds-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .uds-tips-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .uds-tip {
+    display: flex;
+    gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .uds-tip:last-child { border-bottom: none; }
+
+  .uds-tip-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    flex-shrink: 0;
+    padding-top: 3px;
+    min-width: 20px;
+  }
+
+  .uds-tip-title {
+    font-family: 'din-2014', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+
+  .uds-tip-desc {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 900px) {
+    .uds-inner { grid-template-columns: 1fr; gap: 48px; }
+    .uds-section { padding: 60px 24px; }
+  }
   .about-strip {
     background: var(--surface);
     border-top: 1px solid var(--border);
@@ -629,6 +808,95 @@
   </div>
 </section>
 
+<!-- ULTRA DYNAMIC SKY FEATURE SECTION -->
+<section class="uds-section">
+  <div class="uds-header" id="uds-toggle">
+    <div class="uds-header-left">
+      <span class="uds-header-eyebrow">Featured Tool · Unreal Engine 5</span>
+      <span class="uds-header-title">Ultra Dynamic Sky</span>
+    </div>
+    <span class="uds-toggle-icon">▾</span>
+  </div>
+  <div class="uds-body-wrap" id="uds-body">
+  <div class="uds-inner">
+    <div class="uds-left">
+      <div class="uds-eyebrow">Featured Tool · Unreal Engine 5</div>
+      <h2 class="uds-title">Ultra Dynamic <span>Sky</span></h2>
+      <p class="uds-lead">The fastest way to a fully realized sky system in UE5 — without building one from scratch.</p>
+      <p class="uds-body">Building a production-ready sky in Unreal from scratch means wiring together Sky Atmosphere, Volumetric Clouds, Sky Light, weather states, and time-of-day logic — hours of setup before you've lit a single frame. Ultra Dynamic Sky collapses that entire system into a single actor you drop into your scene and start dialing.</p>
+      <p class="uds-body">The real value isn't just speed — it's the range. Clear noon sun, heavy overcast, rolling storm front, golden hour haze — you can move between completely different looks by adjusting a handful of parameters. For cinematic work, that creative agility is the point. You're making lighting decisions, not engineering a weather simulation.</p>
+      <div class="uds-callout">
+        <span class="uds-callout-icon">⚠</span>
+        <div><strong>The VRAM cost is real.</strong> UDS's volumetric clouds and dynamic weather are GPU-heavy. On complex scenes you'll feel it — especially if you're also running Lumen, Nanite, and path tracing. Budget accordingly and consider reducing cloud quality for hero shots where sky detail isn't the focus.</div>
+      </div>
+      <div class="uds-tags">
+        <span class="tag">Unreal Engine 5</span>
+        <span class="tag">Sky Atmosphere</span>
+        <span class="tag">Volumetric Clouds</span>
+        <span class="tag">Weather System</span>
+        <span class="tag">Lumen</span>
+        <span class="tag">Cinematic Lighting</span>
+      </div>
+    </div>
+
+    <div class="uds-right">
+      <div class="uds-tips">
+        <div class="uds-tips-label">Tips & Workflow</div>
+
+        <div class="uds-tip">
+          <div class="uds-tip-num">01</div>
+          <div class="uds-tip-body">
+            <div class="uds-tip-title">Drop it in, set the time of day first</div>
+            <div class="uds-tip-desc">Before touching weather or clouds, lock your time of day. Sun angle drives everything else — color temperature, shadow length, mood. Get that right before layering complexity.</div>
+          </div>
+        </div>
+
+        <div class="uds-tip">
+          <div class="uds-tip-num">02</div>
+          <div class="uds-tip-body">
+            <div class="uds-tip-title">Use weather transitions for cinematic movement</div>
+            <div class="uds-tip-desc">Keyframe the Weather parameter in Sequencer to animate a clear sky turning overcast mid-scene. A subtle 30-second weather shift gives a cinematic alive quality that static skies can't match.</div>
+          </div>
+        </div>
+
+        <div class="uds-tip">
+          <div class="uds-tip-num">03</div>
+          <div class="uds-tip-body">
+            <div class="uds-tip-title">Manage VRAM — reduce cloud quality for non-hero shots</div>
+            <div class="uds-tip-desc">Drop Cloud Quality to Medium or Low on interior shots or scenes where sky is barely visible. Full volumetrics for a sky that's 10% of frame is wasted VRAM. Reserve Ultra for wide establishing shots.</div>
+          </div>
+        </div>
+
+        <div class="uds-tip">
+          <div class="uds-tip-num">04</div>
+          <div class="uds-tip-body">
+            <div class="uds-tip-title">Let it drive your Sky Light automatically</div>
+            <div class="uds-tip-desc">UDS can control the Sky Light — as weather changes, ambient light color and intensity shift with it. Enable this and you get free atmospheric lighting from a single parameter change.</div>
+          </div>
+        </div>
+
+        <div class="uds-tip">
+          <div class="uds-tip-num">05</div>
+          <div class="uds-tip-body">
+            <div class="uds-tip-title">Use fog and haze for cinematic depth</div>
+            <div class="uds-tip-desc">UDS's atmospheric fog integration adds instant depth to wide shots. Even subtle haze on a clear day separates foreground, midground, and background — essential for the depth cue most CG environments lack.</div>
+          </div>
+        </div>
+
+        <div class="uds-tip">
+          <div class="uds-tip-num">06</div>
+          <div class="uds-tip-body">
+            <div class="uds-tip-title">Add thunder and lightning for atmosphere</div>
+            <div class="uds-tip-desc">UDS includes built-in lightning flash and thunder sound support. Enable lightning strikes during storm weather states and pair with UDS's thunder audio — the timing is randomized but believable. For cinematics, keyframe the lightning intensity in Sequencer to sync strikes to specific moments in your edit. A single well-timed bolt over a wide shot adds an enormous amount of drama for almost no extra work.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
 <div class="about-strip">
   <div class="about-text">
     <div class="about-name">Ron Domingue</div>
@@ -655,6 +923,11 @@
     current = (current + 1) % imgs.length;
     imgs[current].style.opacity = '1';
   }, 6000);
+
+  // UDS section toggle
+  const udsSection = document.querySelector('.uds-section');
+  const udsToggle  = document.getElementById('uds-toggle');
+  udsToggle.addEventListener('click', () => udsSection.classList.toggle('open'));
 </script>
 
 <!-- VIDEO MODAL -->
