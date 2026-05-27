@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C4D → Mixamo → UE5 Character Workflow — Ron Domingue</title>
+<link rel="stylesheet" href="https://use.typekit.net/xhf1nbc.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #2a2a2e;
+    --surface: #323236;
+    --surface2: #3a3a3f;
+    --border: #4a4a52;
+    --accent: #e8a020;
+    --text: #eeeef0;
+    --text-dim: #9a9aa8;
+    --text-faint: #5a5a66;
+    --c4d: #4fc8e8;
+    --mixamo: #e85050;
+    --ue5: #7ac45a;
+    --warning: #e8c040;
+    --tip: #c84fc8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* NAV TOGGLE */
+  #nav-toggle {
+    position: fixed;
+    top: 16px; left: 16px;
+    z-index: 200;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  #nav-toggle:hover { background: var(--surface2); }
+  #nav-toggle svg { width: 16px; height: 16px; stroke: var(--text-dim); }
+
+  /* SIDE NAV */
+  #side-nav {
+    position: fixed;
+    top: 0; left: 0;
+    width: 220px;
+    height: 100vh;
+    background: #1e1e22;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0;
+    z-index: 100;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+  #side-nav.open { transform: translateX(0); }
+
+  .nav-logo {
+    padding: 0 18px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+  .nav-logo-name {
+    font-family: 'din-2014', sans-serif;
+    font-weight: 300;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--text);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .nav-logo-name:hover { color: var(--accent); }
+  .nav-logo-url {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--text-faint);
+    text-decoration: none;
+  }
+  .nav-logo-url:hover { color: var(--accent); }
+
+  .nav-section-head {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    padding: 12px 18px 6px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+    text-decoration: none;
+  }
+  .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+  .nav-item.active { color: var(--accent); }
+
+  .nav-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 10px 18px;
+  }
+
+  /* OVERLAY */
+  #nav-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 99;
+  }
+  #nav-overlay.open { display: block; }
+
+  /* STICKY TOP BAR */
+  #top-bar {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px 0 64px;
+    height: 0; overflow: hidden;
+    transition: height 0.2s ease;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  #top-bar.visible { height: 44px; }
+  .top-bar-title {
+    font-family: 'din-2014', sans-serif;
+    font-weight: 300;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+  }
+
+  /* HEADER */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 48px 28px 64px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px);
+    pointer-events: none;
+  }
+  .header-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    text-decoration: none;
+    margin-bottom: 20px;
+    transition: color 0.15s;
+  }
+  .header-back:hover { color: var(--accent); }
+
+  .header-eyebrow {
+    font-family: 'din-2014', sans-serif;
+    font-weight: 300;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-family: 'din-2014', sans-serif;
+    font-weight: 200;
+    font-size: clamp(24px, 3vw, 44px);
+    letter-spacing: 0.08em;
+    line-height: 0.95;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  h1 span { color: var(--accent); }
+
+  .header-sub {
+    font-family: 'din-2014', sans-serif;
+    font-weight: 300;
+    font-size: 13px;
+    color: var(--text-dim);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .header-byline {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .byline-name {
+    font-family: 'din-2014', sans-serif;
+    font-weight: 300;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+  }
+  .byline-link {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--text-faint);
+    text-decoration: none;
+    border-bottom: 1px solid var(--text-faint);
+    padding-bottom: 1px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .byline-link:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* PIPELINE LEGEND */
+  .pipeline-legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 14px 48px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .pill {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-dim);
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot-c4d { background: var(--c4d); }
+  .dot-mixamo { background: var(--mixamo); }
+  .dot-ue5 { background: var(--ue5); }
+  .dot-warn { background: var(--warning); }
+  .dot-tip { background: var(--tip); }
+
+  /* MAIN */
+  main { padding: 40px 48px 80px; max-width: 1400px; }
+
+  /* OVERVIEW FLOW DIAGRAM */
+  .flow-overview {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+
+  .flow-node {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 14px 20px;
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+  }
+
+  .flow-node-label {
+    font-family: 'din-2014', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .flow-node-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+  }
+
+  .fn-c4d { border-top: 2px solid var(--c4d); }
+  .fn-c4d .flow-node-label { color: var(--c4d); }
+  .fn-mixamo { border-top: 2px solid var(--mixamo); }
+  .fn-mixamo .flow-node-label { color: var(--mixamo); }
+  .fn-ue5 { border-top: 2px solid var(--ue5); }
+  .fn-ue5 .flow-node-label { color: var(--ue5); }
+
+  .flow-arrow {
+    font-size: 18px;
+    color: var(--text-faint);
+    padding: 0 4px;
+    flex-shrink: 0;
+  }
+
+  /* SECTION */
+  .section { margin-top: 48px; }
+  .section:first-child { margin-top: 0; }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    border-top: 1px solid var(--border);
+    padding: 14px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.15s;
+  }
+  .section:first-child .section-label { border-top: none; }
+  .section-label:hover { color: var(--text-dim); }
+  .toggle-icon {
+    font-size: 15px;
+    color: var(--text-dim);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+  .section.collapsed .toggle-icon { transform: rotate(-90deg); }
+
+  .section-body {
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.25s ease;
+    max-height: 6000px;
+    opacity: 1;
+  }
+  .section.collapsed .section-body { max-height: 0; opacity: 0; }
+
+  /* PATH TABS */
+  .path-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .path-tab {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    cursor: pointer;
+    color: var(--text-faint);
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+    user-select: none;
+    margin-bottom: -1px;
+  }
+  .path-tab:hover { color: var(--text-dim); }
+  .path-tab.active { color: var(--text); border-bottom-color: var(--accent); }
+
+  .path-panel { display: none; padding-top: 20px; }
+  .path-panel.active { display: block; }
+
+  /* STEPS */
+  .steps { display: flex; flex-direction: column; gap: 0; }
+
+  .step {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 0;
+    position: relative;
+  }
+
+  .step-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 2px;
+  }
+
+  .step-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+
+  .step-line {
+    width: 1px;
+    flex: 1;
+    min-height: 20px;
+    margin-top: 4px;
+  }
+
+  .step:last-child .step-line { display: none; }
+
+  .step-content {
+    padding: 0 0 28px 16px;
+  }
+
+  .step-app {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .step-title {
+    font-family: 'din-2014', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  /* Step color variants */
+  .step-c4d .step-num { background: rgba(79,200,232,0.15); color: var(--c4d); border: 1px solid var(--c4d); }
+  .step-c4d .step-line { background: rgba(79,200,232,0.2); }
+  .step-c4d .step-app { color: var(--c4d); }
+
+  .step-mixamo .step-num { background: rgba(232,80,80,0.15); color: var(--mixamo); border: 1px solid var(--mixamo); }
+  .step-mixamo .step-line { background: rgba(232,80,80,0.2); }
+  .step-mixamo .step-app { color: var(--mixamo); }
+
+  .step-ue5 .step-num { background: rgba(122,196,90,0.12); color: var(--ue5); border: 1px solid var(--ue5); }
+  .step-ue5 .step-line { background: rgba(122,196,90,0.2); }
+  .step-ue5 .step-app { color: var(--ue5); }
+
+  /* SETTINGS BLOCK */
+  .settings-block {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--border);
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--text-dim);
+  }
+  .settings-block.c4d { border-left-color: var(--c4d); }
+  .settings-block.mixamo { border-left-color: var(--mixamo); }
+  .settings-block.ue5 { border-left-color: var(--ue5); }
+
+  .settings-block .key { color: var(--text); }
+  .settings-block .val { color: var(--accent); }
+
+  /* CALLOUT BOXES */
+  .callout {
+    display: flex;
+    gap: 12px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    border-radius: 2px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .callout-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  .callout-warn {
+    background: rgba(232,192,64,0.08);
+    border: 1px solid rgba(232,192,64,0.25);
+    color: var(--text-dim);
+  }
+  .callout-warn .callout-icon { color: var(--warning); }
+
+  .callout-tip {
+    background: rgba(200,79,200,0.07);
+    border: 1px solid rgba(200,79,200,0.2);
+    color: var(--text-dim);
+  }
+  .callout-tip .callout-icon { color: var(--tip); }
+
+  .callout-good {
+    background: rgba(122,196,90,0.07);
+    border: 1px solid rgba(122,196,90,0.2);
+    color: var(--text-dim);
+  }
+  .callout-good .callout-icon { color: var(--ue5); }
+
+  /* COMPARISON TABLE */
+  .table-wrap { overflow-x: auto; margin-bottom: 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 600px; }
+  thead tr { background: var(--surface); }
+  th {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; font-weight: 400;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text-dim); padding: 10px 14px;
+    text-align: left; border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: top; line-height: 1.4;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.03) !important; }
+  .row-alt td { background: rgba(0,0,0,0.22); }
+  tr.pinned td { background: rgba(232,160,32,0.08) !important; border-left: 2px solid var(--accent); }
+
+  .label-col { font-family: 'Barlow', sans-serif; font-weight: 500; font-size: 13px; color: var(--text); cursor: pointer; }
+  .note-col { font-size: 12px; color: var(--text-dim); max-width: 260px; }
+  .val { font-family: 'Space Mono', monospace; font-size: 11px; }
+  .val-c4d { color: var(--c4d); }
+  .val-mixamo { color: var(--mixamo); }
+  .val-ue5 { color: var(--ue5); }
+  .val-warn { color: var(--warning); }
+
+  /* QUICK REF GRID */
+  .qr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-bottom: 8px; }
+  .qr-card {
+    background: var(--surface); border: 1px solid var(--border); padding: 14px 16px;
+    cursor: pointer; transition: border-color 0.15s;
+  }
+  .qr-card:hover { border-color: var(--text-faint); }
+  .qr-card.pinned { border-color: var(--accent); background: rgba(232,160,32,0.05); }
+  .qr-label { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 5px; }
+  .qr-value { font-family: 'din-2014', sans-serif; font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 3px; }
+  .qr-desc { font-size: 11px; color: var(--text-dim); line-height: 1.4; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; letter-spacing: 0.12em;
+    color: var(--text-faint); text-transform: uppercase;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; align-items: center;
+  }
+  footer a { color: var(--text-faint); text-decoration: none; border-bottom: 1px solid var(--text-faint); padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; }
+  footer a:hover { color: var(--accent); border-color: var(--accent); }
+
+  @media (max-width: 700px) {
+    header, .pipeline-legend, main, footer { padding-left: 20px; padding-right: 20px; }
+    #top-bar { padding-left: 56px; padding-right: 20px; }
+    .flow-overview { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+
+<button id="nav-toggle" aria-label="Toggle navigation">
+  <svg viewBox="0 0 16 16" fill="none" stroke-width="1.5" stroke-linecap="round">
+    <line x1="2" y1="4" x2="14" y2="4"/>
+    <line x1="2" y1="8" x2="14" y2="8"/>
+    <line x1="2" y1="12" x2="14" y2="12"/>
+  </svg>
+</button>
+
+<nav id="side-nav">
+  <div class="nav-logo">
+    <a class="nav-logo-name" href="https://rondomingue.com" target="_blank">Ron Domingue</a>
+    <a class="nav-logo-url" href="https://rondomingue.com" target="_blank">rondomingue.com ↗</a>
+  </div>
+  <div class="nav-section-head">Guides</div>
+  <a class="nav-item" href="index.html">← Light Units Cheat Sheet</a>
+  <a class="nav-item active" href="character-workflow.html">Character Workflow</a>
+  <div class="nav-divider"></div>
+  <div class="nav-section-head">On this page</div>
+  <a class="nav-item" href="#s-overview">Overview</a>
+  <a class="nav-item" href="#s-path-a">Path A — Mixamo → UE5</a>
+  <a class="nav-item" href="#s-path-b">Path B — C4D → Mixamo → UE5</a>
+  <a class="nav-item" href="#s-path-c">Path C — C4D → FBX → UE5</a>
+  <a class="nav-item" href="#s-retarget">IK Retargeting in UE5</a>
+  <a class="nav-item" href="#s-troubleshoot">Troubleshooting</a>
+  <a class="nav-item" href="#s-settings">Export Settings Ref</a>
+</nav>
+<div id="nav-overlay"></div>
+
+<div id="top-bar">
+  <span class="top-bar-title">C4D → Mixamo → UE5 Character Workflow</span>
+</div>
+
+<header id="page-top">
+  <a class="header-back" href="index.html">← Light Units Cheat Sheet</a>
+  <div class="header-eyebrow">Technical Guide · Character Animation</div>
+  <h1>C4D · Mixamo · <span>Unreal Engine 5</span><br>Character Workflow</h1>
+  <div class="header-sub">Three Paths · Rigging · Animation · Retargeting</div>
+  <div class="header-byline">
+    <span class="byline-name">Ron Domingue</span>
+    <a class="byline-link" href="https://rondomingue.com" target="_blank">rondomingue.com ↗</a>
+  </div>
+</header>
+
+<div class="pipeline-legend">
+  <div class="pill"><div class="dot dot-c4d"></div>Cinema 4D</div>
+  <div class="pill"><div class="dot dot-mixamo"></div>Mixamo</div>
+  <div class="pill"><div class="dot dot-ue5"></div>Unreal Engine 5</div>
+  <div class="pill"><div class="dot dot-warn"></div>Watch out</div>
+  <div class="pill"><div class="dot dot-tip"></div>Pro tip</div>
+</div>
+
+<main>
+
+  <!-- OVERVIEW -->
+  <div class="section" id="s-overview">
+    <div class="section-label"><span>Overview — Three Paths</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+
+      <div class="flow-overview">
+        <div class="flow-node fn-c4d"><div class="flow-node-label">Cinema 4D</div><div class="flow-node-sub">Model / Rig / Animate</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node fn-mixamo"><div class="flow-node-label">Mixamo</div><div class="flow-node-sub">Auto-rig / Animations</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node fn-ue5"><div class="flow-node-label">Unreal 5</div><div class="flow-node-sub">Retarget / Animate</div></div>
+      </div>
+
+      <div style="padding: 20px 0 8px;">
+        <div class="table-wrap">
+        <table>
+          <thead><tr><th>Path</th><th>Route</th><th>Best For</th><th>Complexity</th><th>Control</th></tr></thead>
+          <tbody>
+            <tr><td class="label-col">A</td><td class="val val-mixamo">Mixamo → UE5 direct</td><td>Fast hero character, prototyping</td><td class="val val-ue5">Low</td><td class="note-col">Limited — Mixamo skeleton, auto-rig only</td></tr>
+            <tr class="row-alt"><td class="label-col">B</td><td><span class="val val-c4d">C4D</span> → <span class="val val-mixamo">Mixamo</span> → <span class="val val-ue5">UE5</span></td><td>Custom mesh, Mixamo rig, UE5 animation</td><td class="val val-warn">Medium</td><td class="note-col">Good — your mesh, Mixamo skeleton</td></tr>
+            <tr><td class="label-col">C</td><td><span class="val val-c4d">C4D</span> → FBX → <span class="val val-ue5">UE5</span></td><td>Full custom rig + animations from C4D</td><td class="val val-mixamo">High</td><td class="note-col">Full — your mesh, your rig, your animations</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+
+      <div class="callout callout-tip">
+        <span class="callout-icon">◆</span>
+        <span><strong style="color:var(--tip)">Pro tip:</strong> For most Unreal cinematic and game work, Path B is the sweet spot — you control the mesh aesthetics in C4D, let Mixamo handle the heavy rigging lift, and use UE5's IK Retargeter to map onto Manny/Quinn or MetaHuman skeletons for the full animation library.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PATH A -->
+  <div class="section" id="s-path-a">
+    <div class="section-label"><span>Path A — Mixamo → UE5 Direct</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+      <div class="callout callout-good">
+        <span class="callout-icon">✓</span>
+        <span>Fastest path. Use when you want Mixamo's character library + animation library directly in UE5 without any custom mesh work.</span>
+      </div>
+
+      <div class="steps">
+        <div class="step step-mixamo">
+          <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Mixamo</div>
+            <div class="step-title">Choose a character + animations</div>
+            <div class="step-desc">Browse mixamo.com, select a character, then select the animations you want. You can queue multiple animations per character.</div>
+            <div class="callout callout-warn">
+              <span class="callout-icon">⚠</span>
+              <span>Download the character and each animation separately. The character download gets the T-pose (bind pose) — critical for retargeting later in UE5.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step step-mixamo">
+          <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Mixamo — Download Settings</div>
+            <div class="step-title">Export FBX for Unreal</div>
+            <div class="settings-block mixamo">
+              <span class="key">Format</span> → <span class="val">FBX Binary (.fbx)</span><br>
+              <span class="key">Skin</span> → <span class="val">With Skin</span> (character) / <span class="val">Without Skin</span> (anim only)<br>
+              <span class="key">Frames per second</span> → <span class="val">30</span> (match your UE5 project)<br>
+              <span class="key">Keyframe Reduction</span> → <span class="val">none</span>
+            </div>
+            <div class="callout callout-warn">
+              <span class="callout-icon">⚠</span>
+              <span>Download the T-pose as its own FBX with "With Skin." This becomes your Skeletal Mesh in UE5. Animations can be downloaded "Without Skin" — they're smaller and import faster.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step step-ue5">
+          <div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Unreal Engine 5 — Import</div>
+            <div class="step-title">Import the Skeletal Mesh (T-pose)</div>
+            <div class="step-desc">Drag the T-pose FBX into Content Browser. UE5 will detect it as a Skeletal Mesh.</div>
+            <div class="settings-block ue5">
+              <span class="key">Skeletal Mesh</span> → <span class="val">✓ enabled</span><br>
+              <span class="key">Import Mesh</span> → <span class="val">✓</span><br>
+              <span class="key">Import Animations</span> → <span class="val">✗ off</span> (import separately)<br>
+              <span class="key">Create Physics Asset</span> → <span class="val">✓</span><br>
+              <span class="key">Normal Import Method</span> → <span class="val">Import Normals</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step step-ue5">
+          <div class="step-left"><div class="step-num">4</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Unreal Engine 5 — Import Animations</div>
+            <div class="step-title">Import each animation FBX</div>
+            <div class="step-desc">Drag each animation FBX in. UE5 will ask which Skeletal Mesh to link it to — point it at the mesh you just imported.</div>
+            <div class="settings-block ue5">
+              <span class="key">Animation Type</span> → <span class="val">Skeletal</span><br>
+              <span class="key">Skeleton</span> → <span class="val">your imported Mixamo skeleton</span><br>
+              <span class="key">Import Mesh</span> → <span class="val">✗ off</span><br>
+              <span class="key">Import Animations</span> → <span class="val">✓</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step step-ue5">
+          <div class="step-left"><div class="step-num">5</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Unreal Engine 5 — Retarget (optional)</div>
+            <div class="step-title">Retarget to UE5 Mannequin skeleton</div>
+            <div class="step-desc">If you want to use UE5's built-in animation library (Manny/Quinn), retarget your Mixamo skeleton to the UE5 Mannequin using the IK Retargeter. See the Retargeting section below for full steps.</div>
+            <div class="callout callout-tip">
+              <span class="callout-icon">◆</span>
+              <span>Skipping retarget is fine for cinematic/rendering use. Only needed if you want Marketplace animations on your character.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PATH B -->
+  <div class="section" id="s-path-b">
+    <div class="section-label"><span>Path B — C4D → Mixamo → UE5</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+      <div class="callout callout-good">
+        <span class="callout-icon">✓</span>
+        <span>Sweet spot for most projects. Your custom mesh gets auto-rigged by Mixamo, then brought into UE5 with full retarget capability.</span>
+      </div>
+
+      <div class="steps">
+        <div class="step step-c4d">
+          <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Cinema 4D — Mesh Prep</div>
+            <div class="step-title">Clean and prepare your mesh</div>
+            <div class="step-desc">Mixamo auto-rig requires a clean, single-mesh humanoid character. Separate mesh pieces (hair, jacket, etc.) should be joined or parented cleanly.</div>
+            <div class="callout callout-warn">
+              <span class="callout-icon">⚠</span>
+              <span>Mixamo works best with a single connected mesh body. Separate accessories that clip through will deform badly. Keep clothing tight to the body or separate and handle manually post-import.</span>
+            </div>
+            <div class="settings-block c4d">
+              <span class="key">Polygon count</span> → <span class="val">10k–100k polys</span> recommended<br>
+              <span class="key">T-pose or A-pose</span> → <span class="val">T-pose preferred</span> for Mixamo<br>
+              <span class="key">Scale</span> → <span class="val">real-world units (cm)</span> — 180cm tall character<br>
+              <span class="key">Facing direction</span> → <span class="val">+Z forward, +Y up</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step step-c4d">
+          <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Cinema 4D — Export</div>
+            <div class="step-title">Export as OBJ or FBX for Mixamo</div>
+            <div class="step-desc">For Mixamo auto-rigging, OBJ is the most reliable format. FBX works too but can carry unwanted transforms.</div>
+            <div class="settings-block c4d">
+              <span class="key">Format</span> → <span class="val">OBJ</span> (preferred for Mixamo upload)<br>
+              <span class="key">Scale</span> → <span class="val">1cm = 1 unit</span><br>
+              <span class="key">Up axis</span> → <span class="val">Y-up</span><br>
+              <span class="key">Apply deformers</span> → <span class="val">✓ if any exist</span><br>
+              <span class="key">Phong normals</span> → <span class="val">✓</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step step-mixamo">
+          <div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Mixamo — Auto-Rig</div>
+            <div class="step-title">Upload mesh and auto-rig</div>
+            <div class="step-desc">Upload your OBJ. Mixamo's auto-rigger will ask you to place 4 markers: chin, wrists, elbows. It generates a full humanoid skeleton with weights.</div>
+            <div class="callout callout-tip">
+              <span class="callout-icon">◆</span>
+              <span>Use "Use Symmetry" if your mesh is symmetrical — much cleaner weight distribution. Check finger count matches (5 fingers assumed).</span>
+            </div>
+            <div class="settings-block mixamo">
+              <span class="key">Skeleton LOD</span> → <span class="val">Joints: standard 65-bone rig</span><br>
+              <span class="key">Finger joints</span> → <span class="val">✓ if character has fingers</span><br>
+              <span class="key">Preview animations</span> → test a walk cycle to check rig quality
+            </div>
+          </div>
+        </div>
+
+        <div class="step step-mixamo">
+          <div class="step-left"><div class="step-num">4</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Mixamo — Download</div>
+            <div class="step-title">Download rigged mesh + animations</div>
+            <div class="settings-block mixamo">
+              <span class="key">Format</span> → <span class="val">FBX Binary</span><br>
+              <span class="key">Pose</span> → <span class="val">T-pose (bind pose)</span> for skeleton import<br>
+              <span class="key">Skin</span> → <span class="val">With Skin</span><br>
+              <span class="key">FPS</span> → <span class="val">30</span><br>
+              <span class="key">Keyframe Reduction</span> → <span class="val">none</span>
+            </div>
+            <div class="step-desc">Then re-download each animation you want "Without Skin" — these are lighter and import faster in UE5.</div>
+          </div>
+        </div>
+
+        <div class="step step-ue5">
+          <div class="step-left"><div class="step-num">5</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Unreal Engine 5 — Import</div>
+            <div class="step-title">Import Skeletal Mesh then animations</div>
+            <div class="step-desc">Same as Path A steps 3–4. Import T-pose FBX as Skeletal Mesh first, then import each animation FBX linked to that skeleton.</div>
+            <div class="callout callout-warn">
+              <span class="callout-icon">⚠</span>
+              <span>If mesh comes in at wrong scale, check: C4D export was in centimeters, and UE5 import scale is 1.0. If still wrong, set "Import Uniform Scale" to 0.01 in the FBX import dialog.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step step-ue5">
+          <div class="step-left"><div class="step-num">6</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Unreal Engine 5 — Materials</div>
+            <div class="step-title">Reassign materials</div>
+            <div class="step-desc">UE5 will create placeholder materials on import. Open the Skeletal Mesh, go to the Materials slot and assign your textures/materials. C4D texture paths often don't carry over — reassign manually.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PATH C -->
+  <div class="section" id="s-path-c">
+    <div class="section-label"><span>Path C — C4D → FBX → UE5 (Full Custom Rig)</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+      <div class="callout callout-warn">
+        <span class="callout-icon">⚠</span>
+        <span>Most complex path. Requires proper rigging in C4D (Character Object or manual joint rig) and clean FBX export. Choose this when you need full control over custom rigs, facial animation, or cloth/hair dynamics baked in C4D.</span>
+      </div>
+
+      <div class="steps">
+        <div class="step step-c4d">
+          <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Cinema 4D — Rig Setup</div>
+            <div class="step-title">Build or use C4D Character Object rig</div>
+            <div class="step-desc">Use C4D's Character Object (Character menu → Character) for a humanoid. Choose the Advanced Biped template. This creates a UE5-compatible joint hierarchy if bone naming is handled correctly.</div>
+            <div class="callout callout-tip">
+              <span class="callout-icon">◆</span>
+              <span>For UE5 compatibility, rename joints to match UE5 Mannequin bone names where possible (pelvis, spine_01–05, clavicle_l/r, upperarm_l/r etc). This makes retargeting far easier.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step step-c4d">
+          <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Cinema 4D — Weight Painting</div>
+            <div class="step-title">Paint weights with Weight Manager</div>
+            <div class="step-desc">Use the Weight tool and Weight Manager to assign smooth vertex weights. Pay special attention to shoulders, hips, and wrists — these break most in UE5 if weights are dirty.</div>
+            <div class="settings-block c4d">
+              <span class="key">Normalize weights</span> → <span class="val">✓ always</span><br>
+              <span class="key">Max influences per vertex</span> → <span class="val">4</span> (UE5 default)<br>
+              <span class="key">Check for zero-weight verts</span> → <span class="val">Weight Manager → filter unweighted</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step step-c4d">
+          <div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Cinema 4D — Animation</div>
+            <div class="step-title">Keyframe or use Motion Clip animations</div>
+            <div class="step-desc">Animate directly on the rig using the Timeline. For multiple animations, use Motion Clips (C4D's non-linear animation layer system) — each clip exports as a separate take.</div>
+            <div class="settings-block c4d">
+              <span class="key">Frame rate</span> → <span class="val">30fps</span> (match UE5 project)<br>
+              <span class="key">Bake IK to FK</span> → <span class="val">required before FBX export</span><br>
+              <span class="key">Bake deformers</span> → <span class="val">✓ if using dynamics</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step step-c4d">
+          <div class="step-left"><div class="step-num">4</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Cinema 4D — FBX Export</div>
+            <div class="step-title">Export FBX with correct settings</div>
+            <div class="settings-block c4d">
+              <span class="key">FBX version</span> → <span class="val">FBX 2014/2015 binary</span><br>
+              <span class="key">Up Axis</span> → <span class="val">Y-up</span><br>
+              <span class="key">Scale</span> → <span class="val">1cm = 1 unit</span><br>
+              <span class="key">Include</span> → <span class="val">✓ Geometry, Skin Weights, Skeleton</span><br>
+              <span class="key">Animation takes</span> → <span class="val">export all or per-take</span><br>
+              <span class="key">Bake all frames</span> → <span class="val">✓</span><br>
+              <span class="key">Include normals</span> → <span class="val">✓</span><br>
+              <span class="key">Include UVs</span> → <span class="val">✓</span>
+            </div>
+            <div class="callout callout-warn">
+              <span class="callout-icon">⚠</span>
+              <span>Do NOT export cameras or lights in the same FBX as the character. Keep them separate. Also disable "Embed Textures" — UE5 handles those separately.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step step-ue5">
+          <div class="step-left"><div class="step-num">5</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Unreal Engine 5 — Import</div>
+            <div class="step-title">Import Skeletal Mesh FBX</div>
+            <div class="settings-block ue5">
+              <span class="key">Import as</span> → <span class="val">Skeletal Mesh</span><br>
+              <span class="key">Import Uniform Scale</span> → <span class="val">1.0</span> (or 0.01 if mesh is 100× too large)<br>
+              <span class="key">Import Normals</span> → <span class="val">Import Normals and Tangents</span><br>
+              <span class="key">Create Physics Asset</span> → <span class="val">✓</span><br>
+              <span class="key">Import Animations</span> → <span class="val">✓ if animations in same FBX</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step step-ue5">
+          <div class="step-left"><div class="step-num">6</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Unreal Engine 5 — Animation Blueprint</div>
+            <div class="step-title">Set up Animation Blueprint</div>
+            <div class="step-desc">Create an Animation Blueprint (AnimBP) for your Skeletal Mesh. Use the AnimGraph to blend between your imported animation sequences. For cinematic use, Level Sequencer is often simpler than AnimBP.</div>
+            <div class="callout callout-tip">
+              <span class="callout-icon">◆</span>
+              <span>For cinematic work in Sequencer: add your character to the scene, add a Skeletal Mesh Animation track, and key your Animation Sequences directly on the timeline. No AnimBP needed.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IK RETARGETING -->
+  <div class="section" id="s-retarget">
+    <div class="section-label"><span>IK Retargeting in UE5 — Mixamo to Mannequin</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+      <div class="step-desc" style="margin-bottom:16px;">Retargeting lets you use UE5's massive Mannequin animation library on your Mixamo-rigged character. Requires two assets: an <strong>IK Rig</strong> for each skeleton, and an <strong>IK Retargeter</strong> to map between them.</div>
+
+      <div class="steps">
+        <div class="step step-ue5">
+          <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">UE5 — IK Rig: Mixamo</div>
+            <div class="step-title">Create IK Rig for your Mixamo skeleton</div>
+            <div class="step-desc">Right-click Skeletal Mesh in Content Browser → Create → IK Rig. Open it and define the Retarget Root (hips/pelvis bone) and IK Chains.</div>
+            <div class="settings-block ue5">
+              <span class="key">Retarget Root</span> → <span class="val">Hips</span> (Mixamo naming)<br>
+              <span class="key">Spine chain</span> → <span class="val">Spine → Spine1 → Spine2</span><br>
+              <span class="key">Left arm chain</span> → <span class="val">LeftArm → LeftForeArm → LeftHand</span><br>
+              <span class="key">Right arm chain</span> → <span class="val">RightArm → RightForeArm → RightHand</span><br>
+              <span class="key">Left leg chain</span> → <span class="val">LeftUpLeg → LeftLeg → LeftFoot</span><br>
+              <span class="key">Right leg chain</span> → <span class="val">RightUpLeg → RightLeg → RightFoot</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step step-ue5">
+          <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">UE5 — IK Rig: Mannequin</div>
+            <div class="step-title">Use built-in Mannequin IK Rig</div>
+            <div class="step-desc">UE5's Third Person template includes a pre-built IK Rig for the Mannequin at <code style="font-family:'Space Mono',monospace;font-size:10px;color:var(--accent)">Characters/Mannequins/Rigs/IK_Mannequin</code>. Use this directly — no need to rebuild.</div>
+            <div class="callout callout-tip">
+              <span class="callout-icon">◆</span>
+              <span>If you don't have the Third Person template, migrate the Mannequin assets from a new template project into your existing project via Content Browser → Migrate.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step step-ue5">
+          <div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">UE5 — IK Retargeter</div>
+            <div class="step-title">Create IK Retargeter asset</div>
+            <div class="step-desc">Right-click Content Browser → Animation → IK Retargeter. Set Source = Mannequin IK Rig, Target = your Mixamo IK Rig. Map the chains.</div>
+            <div class="settings-block ue5">
+              <span class="key">Source IK Rig</span> → <span class="val">IK_Mannequin</span><br>
+              <span class="key">Target IK Rig</span> → <span class="val">your Mixamo IK Rig</span><br>
+              <span class="key">Chain mapping</span> → <span class="val">auto-map, then manually fix mismatches</span><br>
+              <span class="key">Retarget Pose</span> → <span class="val">align T-poses so bones match</span>
+            </div>
+            <div class="callout callout-warn">
+              <span class="callout-icon">⚠</span>
+              <span>The retarget pose is critical. If your Mixamo character imports in A-pose and Mannequin is T-pose, you need to manually adjust the retarget pose in the IK Retargeter to align them — otherwise animations will look twisted at the shoulders.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step step-ue5">
+          <div class="step-left"><div class="step-num">4</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">UE5 — Export Retargeted Animations</div>
+            <div class="step-title">Batch export retargeted animations</div>
+            <div class="step-desc">In the IK Retargeter, click "Export Animations" to bake retargeted versions of any Mannequin animations onto your Mixamo skeleton. These are new Animation Sequence assets you can use directly.</div>
+            <div class="callout callout-tip">
+              <span class="callout-icon">◆</span>
+              <span>You can also use the Retargeter live in an Animation Blueprint without baking — useful for rapid iteration but baking is better for final production.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TROUBLESHOOTING -->
+  <div class="section" id="s-troubleshoot">
+    <div class="section-label"><span>Troubleshooting Common Issues</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Issue</th><th>Likely Cause</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td class="label-col">Mesh 100× too large in UE5</td><td class="note-col">C4D exported in mm, UE5 reads as cm</td><td class="note-col">Set Import Uniform Scale to 0.01 on reimport, or rescale export in C4D to cm</td></tr>
+          <tr class="row-alt"><td class="label-col">Mesh facing wrong direction</td><td class="note-col">C4D Z-forward vs UE5 X-forward</td><td class="note-col">Rotate root bone 90° in C4D before export, or use "Convert Scene" in FBX import</td></tr>
+          <tr><td class="label-col">T-pose deformed at shoulders</td><td class="note-col">Retarget pose mismatch A/T-pose</td><td class="note-col">Edit Retarget Pose in IK Retargeter to match both skeletons' rest pose</td></tr>
+          <tr class="row-alt"><td class="label-col">Animation plays but looks wrong</td><td class="note-col">Chain mapping off in Retargeter</td><td class="note-col">Review chain assignments in IK Retargeter; manually override auto-mapped chains</td></tr>
+          <tr><td class="label-col">Skin weights look broken after import</td><td class="note-col">Too many influences per vertex</td><td class="note-col">In C4D limit to 4 max influences; or enable "Limit Bone Influences" in UE5 import</td></tr>
+          <tr class="row-alt"><td class="label-col">Mixamo auto-rig fails to upload</td><td class="note-col">Mesh has loose geometry, non-manifold edges, or is multi-object</td><td class="note-col">Join all meshes in C4D, run polygon reduction if over 1M polys, check for inverted normals</td></tr>
+          <tr><td class="label-col">Animations jitter or pop at frame 0</td><td class="note-col">Bind pose mismatch between FBX and animation</td><td class="note-col">Ensure T-pose character and animations were downloaded from same Mixamo session/rig</td></tr>
+          <tr class="row-alt"><td class="label-col">Materials missing / grey on import</td><td class="note-col">Texture paths don't transfer</td><td class="note-col">Import textures separately, create UE5 materials, assign to material slots in Skeletal Mesh editor</td></tr>
+          <tr><td class="label-col">Character floats above ground</td><td class="note-col">Root bone offset</td><td class="note-col">Check root bone position in C4D — should be at world origin. Or zero out root translation in UE5 AnimBP.</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPORT SETTINGS REFERENCE -->
+  <div class="section" id="s-settings">
+    <div class="section-label"><span>Export Settings Quick Reference</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+      <div class="qr-grid">
+        <div class="qr-card"><div class="qr-label">C4D → Mixamo</div><div class="qr-value">OBJ</div><div class="qr-desc">Y-up · cm scale · single mesh · T-pose</div></div>
+        <div class="qr-card"><div class="qr-label">Mixamo → UE5 mesh</div><div class="qr-value">FBX Binary</div><div class="qr-desc">With Skin · T-pose · 30fps · no keyframe reduction</div></div>
+        <div class="qr-card"><div class="qr-label">Mixamo → UE5 anims</div><div class="qr-value">FBX Binary</div><div class="qr-desc">Without Skin · 30fps · no keyframe reduction</div></div>
+        <div class="qr-card"><div class="qr-label">C4D → UE5 direct</div><div class="qr-value">FBX 2014</div><div class="qr-desc">Binary · Y-up · cm · bake IK · all takes</div></div>
+        <div class="qr-card"><div class="qr-label">UE5 import scale</div><div class="qr-value">1.0 or 0.01</div><div class="qr-desc">Use 0.01 if mesh imports 100× too large</div></div>
+        <div class="qr-card"><div class="qr-label">Max bone influences</div><div class="qr-value">4</div><div class="qr-desc">UE5 default · set in C4D weight manager before export</div></div>
+        <div class="qr-card"><div class="qr-label">Frame rate</div><div class="qr-value">30 fps</div><div class="qr-desc">Match C4D, Mixamo, and UE5 project settings</div></div>
+        <div class="qr-card"><div class="qr-label">Poly budget (Mixamo)</div><div class="qr-value">10k–100k</div><div class="qr-desc">Auto-rig works best under 100k polys</div></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span>C4D · Mixamo · UE5 Character Workflow</span>
+  <span>By <a href="https://rondomingue.com" target="_blank">Ron Domingue</a> · <a href="https://rondomingue.com" target="_blank">rondomingue.com</a></span>
+  <span><a href="index.html">← Light Units Cheat Sheet</a></span>
+</footer>
+
+<script>
+  // NAV
+  const navToggle = document.getElementById('nav-toggle');
+  const sideNav   = document.getElementById('side-nav');
+  const overlay   = document.getElementById('nav-overlay');
+  const topBar    = document.getElementById('top-bar');
+  const pageTop   = document.getElementById('page-top');
+
+  navToggle.addEventListener('click', () => sideNav.classList.contains('open') ? closeNav() : openNav());
+  overlay.addEventListener('click', closeNav);
+  function openNav()  { sideNav.classList.add('open'); overlay.classList.add('open'); }
+  function closeNav() { sideNav.classList.remove('open'); overlay.classList.remove('open'); }
+
+  // Active nav on scroll
+  const sections = document.querySelectorAll('.section[id]');
+  const navItems = document.querySelectorAll('#side-nav .nav-item');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) current = s.id; });
+    navItems.forEach(n => n.classList.toggle('active', n.getAttribute('href') === '#' + current));
+  }, { passive: true });
+
+  // Sticky top bar
+  new IntersectionObserver(([e]) => topBar.classList.toggle('visible', !e.isIntersecting), { threshold: 0 }).observe(pageTop);
+
+  // Collapsible sections
+  document.querySelectorAll('.section-label').forEach(label => {
+    label.addEventListener('click', () => label.closest('.section').classList.toggle('collapsed'));
+  });
+
+  // Row pinning
+  document.querySelectorAll('tbody tr').forEach(row => row.addEventListener('click', () => row.classList.toggle('pinned')));
+  document.querySelectorAll('.qr-card').forEach(card => card.addEventListener('click', () => card.classList.toggle('pinned')));
+</script>
+
+</body>
+</html>
