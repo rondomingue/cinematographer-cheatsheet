@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cinematic Color & LUT Pipeline — Ron Domingue</title>
+<link rel="stylesheet" href="https://use.typekit.net/xhf1nbc.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #2a2a2e;
+    --surface: #323236;
+    --surface2: #3a3a3f;
+    --border: #4a4a52;
+    --accent: #c8289a;
+    --text: #eeeef0;
+    --text-dim: #9a9aa8;
+    --text-faint: #5a5a66;
+    --octane: #e8a020;
+    --redshift: #e85050;
+    --ue5: #7ac45a;
+    --resolve: #4fc8e8;
+    --warning: #e8c040;
+    --tip: #c84fc8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* NAV TOGGLE */
+  #nav-toggle {
+    position: fixed; top: 16px; left: 16px; z-index: 200;
+    background: var(--surface); border: 1px solid var(--border);
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: background 0.15s;
+  }
+  #nav-toggle:hover { background: var(--surface2); }
+  #nav-toggle svg { width: 16px; height: 16px; stroke: var(--text-dim); }
+
+  #side-nav {
+    position: fixed; top: 0; left: 0; width: 220px; height: 100vh;
+    background: #1e1e22; border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; padding: 24px 0;
+    z-index: 100; overflow-y: auto;
+    transform: translateX(-100%); transition: transform 0.25s ease;
+  }
+  #side-nav.open { transform: translateX(0); }
+
+  .nav-logo { padding: 0 18px 20px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+  .nav-logo-name { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.12em; color: var(--text); text-decoration: none; display: block; margin-bottom: 2px; }
+  .nav-logo-name:hover { color: var(--accent); }
+  .nav-logo-url { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--text-faint); text-decoration: none; }
+  .nav-logo-url:hover { color: var(--accent); }
+
+  .nav-section-head { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-faint); padding: 12px 18px 6px; }
+  .nav-divider { height: 1px; background: var(--border); margin: 10px 18px; }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 18px;
+    font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-faint); cursor: pointer; transition: color 0.15s, background 0.15s; text-decoration: none;
+  }
+  .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+  .nav-item.active { color: var(--accent); }
+
+  #nav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 99; }
+  #nav-overlay.open { display: block; }
+
+  #top-bar {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 0 48px 0 64px; height: 0; overflow: hidden;
+    transition: height 0.2s ease; display: flex; align-items: center; justify-content: space-between;
+  }
+  #top-bar.visible { height: 44px; }
+  .top-bar-title { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.1em; color: var(--text-dim); }
+
+  /* HEADER */
+  header {
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 32px 48px 28px 64px; position: relative; overflow: hidden;
+  }
+  header::before {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px);
+    pointer-events: none;
+  }
+  .header-back { display: inline-flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); text-decoration: none; margin-bottom: 20px; transition: color 0.15s; }
+  .header-back:hover { color: var(--accent); }
+  .header-eyebrow { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 11px; letter-spacing: 0.28em; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
+  h1 { font-family: 'din-2014', sans-serif; font-weight: 200; font-size: clamp(24px, 3vw, 44px); letter-spacing: 0.08em; line-height: 0.95; color: var(--text); margin-bottom: 10px; }
+  h1 span { color: var(--accent); }
+  .header-sub { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 13px; color: var(--text-dim); letter-spacing: 0.18em; text-transform: uppercase; }
+  .header-byline { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 16px; }
+  .byline-name { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.12em; color: var(--text-dim); }
+  .byline-link { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.1em; color: var(--text-faint); text-decoration: none; border-bottom: 1px solid var(--text-faint); padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; }
+  .byline-link:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* LEGEND */
+  .legend { display: flex; gap: 20px; flex-wrap: wrap; padding: 14px 48px; background: var(--bg); border-bottom: 1px solid var(--border); }
+  .pill { display: flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot-octane { background: var(--octane); }
+  .dot-redshift { background: var(--redshift); }
+  .dot-ue5 { background: var(--ue5); }
+  .dot-resolve { background: var(--resolve); }
+  .dot-warn { background: var(--warning); }
+  .dot-tip { background: var(--tip); }
+
+  /* MAIN */
+  main { padding: 40px 48px 80px; max-width: 1400px; }
+
+  /* SECTION */
+  .section { margin-top: 48px; }
+  .section:first-child { margin-top: 0; }
+  .section-label {
+    font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--text-faint); border-top: 1px solid var(--border); padding: 14px 0;
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; user-select: none; transition: color 0.15s;
+  }
+  .section:first-child .section-label { border-top: none; }
+  .section-label:hover { color: var(--text-dim); }
+  .toggle-icon { font-size: 15px; color: var(--text-dim); transition: transform 0.2s ease; flex-shrink: 0; }
+  .section.collapsed .toggle-icon { transform: rotate(-90deg); }
+  .section-body { overflow: hidden; transition: max-height 0.35s ease, opacity 0.25s ease; max-height: 6000px; opacity: 1; }
+  .section.collapsed .section-body { max-height: 0; opacity: 0; }
+
+  /* PIPELINE FLOW */
+  .pipeline-flow {
+    display: flex; align-items: stretch; gap: 0;
+    margin-bottom: 20px; flex-wrap: wrap;
+    background: var(--surface); border: 1px solid var(--border);
+  }
+
+  .pf-node {
+    flex: 1; min-width: 120px;
+    padding: 16px 18px;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+  .pf-node:last-child { border-right: none; }
+
+  .pf-num { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.15em; color: var(--text-faint); margin-bottom: 6px; }
+  .pf-app { font-family: 'din-2014', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .pf-detail { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--text-faint); letter-spacing: 0.06em; line-height: 1.5; }
+
+  .pf-octane .pf-app { color: var(--octane); }
+  .pf-redshift .pf-app { color: var(--redshift); }
+  .pf-ue5 .pf-app { color: var(--ue5); }
+  .pf-resolve .pf-app { color: var(--resolve); }
+
+  .pf-node::after {
+    content: '→';
+    position: absolute; right: -10px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-faint); font-size: 12px;
+    z-index: 1;
+  }
+  .pf-node:last-child::after { display: none; }
+
+  /* STEPS */
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step { display: grid; grid-template-columns: 48px 1fr; gap: 0; position: relative; }
+  .step-left { display: flex; flex-direction: column; align-items: center; padding-top: 2px; }
+  .step-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; flex-shrink: 0; z-index: 1; }
+  .step-line { width: 1px; flex: 1; min-height: 20px; margin-top: 4px; }
+  .step:last-child .step-line { display: none; }
+  .step-content { padding: 0 0 28px 16px; }
+  .step-app { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 4px; }
+  .step-title { font-family: 'din-2014', sans-serif; font-weight: 400; font-size: 16px; letter-spacing: 0.04em; margin-bottom: 6px; line-height: 1.2; }
+  .step-desc { font-size: 13px; color: var(--text-dim); line-height: 1.6; margin-bottom: 10px; }
+
+  .step-octane .step-num { background: rgba(232,160,32,0.12); color: var(--octane); border: 1px solid var(--octane); }
+  .step-octane .step-line { background: rgba(232,160,32,0.2); }
+  .step-octane .step-app { color: var(--octane); }
+
+  .step-redshift .step-num { background: rgba(232,80,80,0.12); color: var(--redshift); border: 1px solid var(--redshift); }
+  .step-redshift .step-line { background: rgba(232,80,80,0.2); }
+  .step-redshift .step-app { color: var(--redshift); }
+
+  .step-ue5 .step-num { background: rgba(122,196,90,0.1); color: var(--ue5); border: 1px solid var(--ue5); }
+  .step-ue5 .step-line { background: rgba(122,196,90,0.2); }
+  .step-ue5 .step-app { color: var(--ue5); }
+
+  .step-resolve .step-num { background: rgba(79,200,232,0.1); color: var(--resolve); border: 1px solid var(--resolve); }
+  .step-resolve .step-line { background: rgba(79,200,232,0.2); }
+  .step-resolve .step-app { color: var(--resolve); }
+
+  /* SETTINGS BLOCKS */
+  .settings-block {
+    background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-left: 3px solid var(--border);
+    padding: 12px 16px; margin-bottom: 10px;
+    font-family: 'Space Mono', monospace; font-size: 11px; line-height: 1.8; color: var(--text-dim);
+  }
+  .settings-block.octane { border-left-color: var(--octane); }
+  .settings-block.redshift { border-left-color: var(--redshift); }
+  .settings-block.ue5 { border-left-color: var(--ue5); }
+  .settings-block.resolve { border-left-color: var(--resolve); }
+  .settings-block.ron { border-left-color: var(--accent); background: rgba(200,40,154,0.06); }
+  .settings-block .key { color: var(--text); }
+  .settings-block .val { color: var(--accent); }
+  .settings-block .val-off { color: var(--redshift); }
+  .settings-block .val-on { color: var(--ue5); }
+
+  /* CALLOUTS */
+  .callout { display: flex; gap: 12px; padding: 12px 14px; margin-bottom: 10px; font-size: 12px; line-height: 1.5; }
+  .callout-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .callout-warn { background: rgba(232,192,64,0.08); border: 1px solid rgba(232,192,64,0.25); color: var(--text-dim); }
+  .callout-warn .callout-icon { color: var(--warning); }
+  .callout-tip { background: rgba(200,79,200,0.07); border: 1px solid rgba(200,79,200,0.2); color: var(--text-dim); }
+  .callout-tip .callout-icon { color: var(--tip); }
+  .callout-ron { background: rgba(200,40,154,0.07); border: 1px solid rgba(200,40,154,0.25); color: var(--text-dim); }
+  .callout-ron .callout-icon { color: var(--accent); }
+  .callout-good { background: rgba(122,196,90,0.07); border: 1px solid rgba(122,196,90,0.2); color: var(--text-dim); }
+  .callout-good .callout-icon { color: var(--ue5); }
+
+  /* NODE TREE DIAGRAM */
+  .node-tree {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border);
+    padding: 20px 24px;
+    margin-bottom: 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+  }
+
+  .node-tree-title {
+    font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--text-faint); margin-bottom: 16px;
+  }
+
+  .node-row { display: flex; align-items: center; gap: 0; flex-wrap: wrap; margin-bottom: 10px; }
+  .node-row:last-child { margin-bottom: 0; }
+
+  .node-box {
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    font-size: 10px;
+    color: var(--text-dim);
+    white-space: nowrap;
+    background: var(--surface);
+  }
+  .node-box.active { color: var(--text); border-color: var(--text-faint); }
+  .node-box.resolve-node { border-color: var(--resolve); color: var(--resolve); background: rgba(79,200,232,0.06); }
+  .node-box.ron-node { border-color: var(--accent); color: var(--accent); background: rgba(200,40,154,0.06); }
+  .node-box.dehancer-node { border-color: var(--tip); color: var(--tip); background: rgba(200,79,200,0.06); }
+  .node-arrow { color: var(--text-faint); padding: 0 6px; font-size: 11px; }
+
+  .node-row-label { font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); width: 60px; flex-shrink: 0; }
+
+  /* TABLES */
+  .table-wrap { overflow-x: auto; margin-bottom: 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 500px; }
+  thead tr { background: var(--surface); }
+  th { font-family: 'Space Mono', monospace; font-size: 9px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; line-height: 1.4; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.03) !important; }
+  .row-alt td { background: rgba(0,0,0,0.22); }
+  tr.pinned td { background: rgba(200,40,154,0.08) !important; border-left: 2px solid var(--accent); }
+  .label-col { font-family: 'Barlow', sans-serif; font-weight: 500; font-size: 13px; color: var(--text); cursor: pointer; white-space: nowrap; }
+  .note-col { font-size: 12px; color: var(--text-dim); max-width: 260px; }
+  .val { font-family: 'Space Mono', monospace; font-size: 11px; }
+  .val-octane { color: var(--octane); }
+  .val-redshift { color: var(--redshift); }
+  .val-ue5 { color: var(--ue5); }
+  .val-resolve { color: var(--resolve); }
+  .val-off { color: var(--redshift); }
+  .val-on { color: var(--ue5); }
+
+  /* QR GRID */
+  .qr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; margin-bottom: 8px; }
+  .qr-card { background: var(--surface); border: 1px solid var(--border); padding: 14px 16px; cursor: pointer; transition: border-color 0.15s; }
+  .qr-card:hover { border-color: var(--text-faint); }
+  .qr-card.pinned { border-color: var(--accent); background: rgba(200,40,154,0.05); }
+  .qr-label { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 5px; }
+  .qr-value { font-family: 'din-2014', sans-serif; font-weight: 600; font-size: 15px; color: var(--text); margin-bottom: 3px; line-height: 1.2; }
+  .qr-desc { font-size: 11px; color: var(--text-dim); line-height: 1.4; }
+
+  /* FOOTER */
+  footer { border-top: 1px solid var(--border); padding: 20px 48px; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.12em; color: var(--text-faint); text-transform: uppercase; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; align-items: center; }
+  footer a { color: var(--text-faint); text-decoration: none; border-bottom: 1px solid var(--text-faint); padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; }
+  footer a:hover { color: var(--accent); border-color: var(--accent); }
+
+  @media (max-width: 700px) {
+    header, .legend, main, footer { padding-left: 20px; padding-right: 20px; }
+    #top-bar { padding-left: 56px; padding-right: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<button id="nav-toggle" aria-label="Toggle navigation">
+  <svg viewBox="0 0 16 16" fill="none" stroke-width="1.5" stroke-linecap="round">
+    <line x1="2" y1="4" x2="14" y2="4"/><line x1="2" y1="8" x2="14" y2="8"/><line x1="2" y1="12" x2="14" y2="12"/>
+  </svg>
+</button>
+
+<nav id="side-nav">
+  <div class="nav-logo">
+    <a class="nav-logo-name" href="https://rondomingue.com" target="_blank">Ron Domingue</a>
+    <a class="nav-logo-url" href="https://rondomingue.com" target="_blank">rondomingue.com ↗</a>
+  </div>
+  <div class="nav-section-head">Guides</div>
+  <a class="nav-item" href="index.html">← Home</a>
+  <a class="nav-item" href="light-units.html">Light Units Cheat Sheet</a>
+  <a class="nav-item" href="character-workflow.html">Character Workflow</a>
+  <a class="nav-item active" href="color-pipeline.html">Color & LUT Pipeline</a>
+  <div class="nav-divider"></div>
+  <div class="nav-section-head">On this page</div>
+  <a class="nav-item" href="#s-philosophy">The Philosophy</a>
+  <a class="nav-item" href="#s-octane">Octane Setup</a>
+  <a class="nav-item" href="#s-redshift">Redshift Setup</a>
+  <a class="nav-item" href="#s-ue5">UE5 Setup</a>
+  <a class="nav-item" href="#s-resolve">Resolve Pipeline</a>
+  <a class="nav-item" href="#s-nodes">Node Tree</a>
+  <a class="nav-item" href="#s-dehancer">Dehancer & Film</a>
+  <a class="nav-item" href="#s-lut">LUT Pipeline</a>
+  <a class="nav-item" href="#s-delivery">Delivery Reference</a>
+</nav>
+<div id="nav-overlay"></div>
+
+<div id="top-bar">
+  <span class="top-bar-title">Cinematic Color & LUT Pipeline</span>
+</div>
+
+<header id="page-top">
+  <a class="header-back" href="index.html">← Home</a>
+  <div class="header-eyebrow">Technical Guide · Color & Grading</div>
+  <h1>Cinematic <span>Color</span> &amp;<br>LUT Pipeline</h1>
+  <div class="header-sub">Octane · Redshift · UE5 · DaVinci Resolve</div>
+  <div class="header-byline">
+    <span class="byline-name">Ron Domingue</span>
+    <a class="byline-link" href="https://rondomingue.com" target="_blank">rondomingue.com ↗</a>
+  </div>
+</header>
+
+<div class="legend">
+  <div class="pill"><div class="dot dot-octane"></div>Octane</div>
+  <div class="pill"><div class="dot dot-redshift"></div>Redshift</div>
+  <div class="pill"><div class="dot dot-ue5"></div>Unreal 5</div>
+  <div class="pill"><div class="dot dot-resolve"></div>DaVinci Resolve</div>
+  <div class="pill"><div class="dot dot-warn"></div>Watch out</div>
+  <div class="pill"><div class="dot dot-tip"></div>Pro tip</div>
+</div>
+
+<main>
+
+  <!-- PHILOSOPHY -->
+  <div class="section" id="s-philosophy">
+    <div class="section-label"><span>The Philosophy — Renderer as Digital Negative</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+
+      <div class="pipeline-flow">
+        <div class="pf-node pf-octane"><div class="pf-num">01</div><div class="pf-app">Renderer</div><div class="pf-detail">Tone curve OFF<br>Linear EXR out<br>No creative color</div></div>
+        <div class="pf-node pf-resolve"><div class="pf-num">02</div><div class="pf-app">Resolve</div><div class="pf-detail">ACES transform<br>Creative grade<br>Film emulation</div></div>
+        <div class="pf-node pf-resolve"><div class="pf-num">03</div><div class="pf-app">Deliver</div><div class="pf-detail">rec.709 / H.264<br>or rec.2020 HDR<br>baked LUT option</div></div>
+      </div>
+
+      <div class="step-desc" style="margin-bottom:16px; max-width: 680px;">The core idea is simple: your renderer captures physically accurate light information in linear color space — like a RAW file from a camera. Applying a tone curve inside the renderer permanently bakes creative decisions into the image before you've even touched it in post. Instead, export that linear data untouched as EXR, and let DaVinci Resolve handle all the creative color work.</div>
+
+      <div class="callout callout-ron">
+        <span class="callout-icon">◆</span>
+        <div><strong style="color:var(--accent)">Ron's workflow:</strong> Tone curve disabled in all renderers. Everything exports as linear EXR. ACES color space in Resolve (Linear-ACES_HD project). The ACES Transform node converts linear to display — that's the only "tone mapping" in the pipeline. Everything after is creative: contrast, Film Look Creator, Dehancer 35mm grain, custom vignette and chromatic aberration.</div>
+      </div>
+
+      <div class="callout callout-tip">
+        <span class="callout-icon">◆</span>
+        <span>Think of it like shooting LOG on a cinema camera. You'd never shoot with a baked-in look. Same principle — keep the data clean, grade it properly.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- OCTANE -->
+  <div class="section" id="s-octane">
+    <div class="section-label"><span>Octane Render — Disable Tone Curve</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+      <div class="steps">
+        <div class="step step-octane">
+          <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Octane — Imager Node</div>
+            <div class="step-title">Disable Response Curve in the Imager</div>
+            <div class="step-desc">The Octane Imager controls all post-render tone and color operations. This is where you kill the tone curve.</div>
+            <div class="settings-block octane">
+              <span class="key">Response</span> → <span class="val-off">Linear (no curve)</span><br>
+              <span class="key">Gamma</span> → <span class="val">1.0</span><br>
+              <span class="key">Exposure</span> → <span class="val">1.0</span><br>
+              <span class="key">Highlight Compression</span> → <span class="val-off">0 (off)</span><br>
+              <span class="key">Vignetting</span> → <span class="val-off">0 (off — do in Resolve)</span><br>
+              <span class="key">White Balance</span> → <span class="val">6500 K neutral, or match scene</span>
+            </div>
+            <div class="callout callout-warn">
+              <span class="callout-icon">⚠</span>
+              <span>Your Octane viewport will look flat and washed out — that's correct. You're looking at linear light data. The grade happens in Resolve.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step step-octane">
+          <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Octane — Render Output</div>
+            <div class="step-title">Export EXR with full dynamic range</div>
+            <div class="settings-block octane">
+              <span class="key">Format</span> → <span class="val">OpenEXR (.exr)</span><br>
+              <span class="key">Bit depth</span> → <span class="val">32-bit float</span> (or 16-bit half for speed)<br>
+              <span class="key">Compression</span> → <span class="val">PIZ or ZIP</span><br>
+              <span class="key">Color space</span> → <span class="val">Linear sRGB</span><br>
+              <span class="key">Render passes</span> → <span class="val">Beauty + optional AOVs</span>
+            </div>
+            <div class="callout callout-tip">
+              <span class="callout-icon">◆</span>
+              <span>32-bit float preserves every stop of dynamic range. 16-bit half is fine for most work and renders faster — only go 32-bit if you need extreme highlight recovery in Resolve.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REDSHIFT -->
+  <div class="section" id="s-redshift">
+    <div class="section-label"><span>Redshift — Disable Tone Mapping</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+      <div class="steps">
+        <div class="step step-redshift">
+          <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Redshift — Render Settings</div>
+            <div class="step-title">Set Tone Mapping to None / Linear</div>
+            <div class="step-desc">In Redshift Render Settings under the "Globals" or "Post FX" tab, disable the tone mapping operator entirely.</div>
+            <div class="settings-block redshift">
+              <span class="key">Tone Mapping</span> → <span class="val-off">None (Linear)</span><br>
+              <span class="key">Photographic Exposure</span> → <span class="val-off">disabled</span><br>
+              <span class="key">Gamma Correction</span> → <span class="val">1.0 (linear)</span><br>
+              <span class="key">Vignette</span> → <span class="val-off">off</span><br>
+              <span class="key">Bloom / Glare</span> → <span class="val-off">off (do in Resolve)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step step-redshift">
+          <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Redshift — Output</div>
+            <div class="step-title">Export EXR sequence</div>
+            <div class="settings-block redshift">
+              <span class="key">Format</span> → <span class="val">OpenEXR (.exr)</span><br>
+              <span class="key">Bit depth</span> → <span class="val">16-bit half or 32-bit float</span><br>
+              <span class="key">Color space</span> → <span class="val">Linear / ACEScg if using ACES pipeline</span><br>
+              <span class="key">Multi-layer EXR</span> → <span class="val">optional — combine passes in one file</span>
+            </div>
+            <div class="callout callout-tip">
+              <span class="callout-icon">◆</span>
+              <span>Redshift can output ACEScg directly if your project uses ACES. This matches Ron's Linear-ACES_HD Resolve project perfectly — no color space conversion node needed on import.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UE5 -->
+  <div class="section" id="s-ue5">
+    <div class="section-label"><span>Unreal Engine 5 — Disable ACES Tone Curve</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+      <div class="steps">
+        <div class="step step-ue5">
+          <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">UE5 — Post Process Volume</div>
+            <div class="step-title">Disable the tone curve in Post Process</div>
+            <div class="step-desc">UE5 applies ACES tone mapping by default. You need to turn this off so you get linear output from Movie Render Queue.</div>
+            <div class="settings-block ue5">
+              <span class="key">Tone Curve Amount</span> → <span class="val-off">0.0 (fully disabled)</span><br>
+              <span class="key">Expand Gamut</span> → <span class="val-off">0.0</span><br>
+              <span class="key">Blue Correction</span> → <span class="val-off">0.0</span><br>
+              <span class="key">Scene Color Tint</span> → <span class="val">white (1,1,1)</span><br>
+              <span class="key">Auto Exposure</span> → <span class="val-off">disabled (use Manual)</span>
+            </div>
+            <div class="callout callout-warn">
+              <span class="callout-icon">⚠</span>
+              <span>With tone curve at 0, UE5's viewport will look overexposed and blown out in bright areas — that's normal. You're seeing untonemapped linear HDR values. Trust the EXR output, not the viewport.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step step-ue5">
+          <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">UE5 — Movie Render Queue</div>
+            <div class="step-title">Render EXR via Movie Render Queue</div>
+            <div class="settings-block ue5">
+              <span class="key">Output format</span> → <span class="val">EXR Sequence</span><br>
+              <span class="key">Bit depth</span> → <span class="val">16-bit (half float)</span><br>
+              <span class="key">Compression</span> → <span class="val">PIZ</span><br>
+              <span class="key">Disable tone curve</span> → <span class="val-on">✓ confirm in Post Process settings</span><br>
+              <span class="key">Anti-aliasing</span> → <span class="val">Temporal AA or Path Tracer samples</span><br>
+              <span class="key">Output resolution</span> → <span class="val">match delivery spec (1920×1080 / 3840×2160)</span>
+            </div>
+            <div class="callout callout-tip">
+              <span class="callout-icon">◆</span>
+              <span>Use the High Resolution screenshot or Spatial Sample Count in MRQ for clean anti-aliasing on still frames. For animation, Temporal AA with 8–32 samples gives good results without the render time of path tracing.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESOLVE PIPELINE -->
+  <div class="section" id="s-resolve">
+    <div class="section-label"><span>DaVinci Resolve — Project Setup & EXR Import</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+      <div class="steps">
+        <div class="step step-resolve">
+          <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Resolve — Project Settings</div>
+            <div class="step-title">Set up ACES color managed project</div>
+            <div class="settings-block resolve">
+              <span class="key">Color science</span> → <span class="val">DaVinci YRGB Color Managed</span><br>
+              <span class="key">Color space</span> → <span class="val">Linear · ACES (ACEScg)</span><br>
+              <span class="key">Gamma</span> → <span class="val">Linear</span><br>
+              <span class="key">Timeline color space</span> → <span class="val">DaVinci Wide Gamut</span><br>
+              <span class="key">Output color space</span> → <span class="val">rec.709 gamma 2.4</span> (web/SDR delivery)
+            </div>
+            <div class="callout callout-ron">
+              <span class="callout-icon">◆</span>
+              <span><strong style="color:var(--accent)">Ron's project:</strong> Linear-ACES_HD — working in ACES color space with linear gamma input. This is why the Curves panel shows a straight diagonal line: Resolve is receiving linear light, not a log or gamma-encoded signal.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step step-resolve">
+          <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+          <div class="step-content">
+            <div class="step-app">Resolve — Media Import</div>
+            <div class="step-title">Import EXR sequence</div>
+            <div class="step-desc">Drag your EXR folder into the Media Pool. Resolve will auto-detect the sequence. Set the input color space to match your renderer's output.</div>
+            <div class="settings-block resolve">
+              <span class="key">Input color space</span> → <span class="val">Linear / ACEScg</span><br>
+              <span class="key">Input gamma</span> → <span class="val">Linear</span><br>
+              <span class="key">Frame rate</span> → <span class="val">24fps (cinematic) · 30fps for motion graphics</span><br>
+              <span class="key">Decode quality</span> → <span class="val">Source — use original EXR data</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NODE TREE -->
+  <div class="section" id="s-nodes">
+    <div class="section-label"><span>Ron's Resolve Node Tree</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+
+      <div class="callout callout-ron">
+        <span class="callout-icon">◆</span>
+        <span>This is the actual node structure from the screenshot above. Two parallel chains feed into a final output: the primary correction chain on top, and the creative/film chain on the bottom.</span>
+      </div>
+
+      <div class="node-tree">
+        <div class="node-tree-title">Primary Chain (top row)</div>
+        <div class="node-row">
+          <div class="node-box active">01 · Source</div>
+          <div class="node-arrow">→</div>
+          <div class="node-box resolve-node">02 · ACES Transform</div>
+          <div class="node-arrow">→</div>
+          <div class="node-box ron-node">03 · Contrast</div>
+          <div class="node-arrow">→</div>
+          <div class="node-box ron-node">04 · Color Correct</div>
+          <div class="node-arrow">→</div>
+          <div class="node-box ron-node">05 · Vignette</div>
+        </div>
+      </div>
+
+      <div class="node-tree">
+        <div class="node-tree-title">Creative / Film Chain (bottom row)</div>
+        <div class="node-row">
+          <div class="node-box ron-node">06 · Glow</div>
+          <div class="node-arrow">→</div>
+          <div class="node-box ron-node">07 · Chromatic Aberration</div>
+          <div class="node-arrow">→</div>
+          <div class="node-box dehancer-node">08 · Dehancer (Film Look)</div>
+          <div class="node-arrow">→</div>
+          <div class="node-box ron-node">09 · Defocus / Output</div>
+        </div>
+      </div>
+
+      <div class="table-wrap" style="margin-top:16px;">
+      <table>
+        <thead><tr><th>Node</th><th>Type</th><th>Purpose</th><th>Key Settings</th></tr></thead>
+        <tbody>
+          <tr><td class="label-col">01 · Source</td><td class="val val-resolve">Input</td><td>Raw linear EXR from renderer</td><td class="note-col">No adjustments — pure linear signal in</td></tr>
+          <tr class="row-alt"><td class="label-col">02 · ACES Transform</td><td class="val val-resolve">CST Node</td><td>Converts linear to display — this is the tone map</td><td class="note-col">Input: ACEScg linear → Output: rec.709 or display</td></tr>
+          <tr><td class="label-col">03 · Contrast</td><td class="val" style="color:var(--accent)">Corrector</td><td>Global contrast lift post-ACES</td><td class="note-col">Contrast 1.25 · Pivot 0.435</td></tr>
+          <tr class="row-alt"><td class="label-col">04 · Color Correct</td><td class="val" style="color:var(--accent)">Corrector</td><td>Primary hue/sat/luma corrections</td><td class="note-col">Per-shot adjustments</td></tr>
+          <tr><td class="label-col">05 · Vignette</td><td class="val" style="color:var(--accent)">Custom</td><td>Lens-style radial darkening</td><td class="note-col">Soft oval, subtle — not a hard circle</td></tr>
+          <tr class="row-alt"><td class="label-col">06 · Glow</td><td class="val" style="color:var(--accent)">FX</td><td>Bloom / halation on highlights</td><td class="note-col">Low intensity — cinematic light bleed</td></tr>
+          <tr><td class="label-col">07 · Chromatic Aberration</td><td class="val" style="color:var(--accent)">Custom / FX</td><td>RGB fringe toward frame edges</td><td class="note-col">Very subtle — lens character, not distortion</td></tr>
+          <tr class="row-alt"><td class="label-col">08 · Dehancer</td><td class="val" style="color:var(--tip)">Plugin</td><td>35mm film emulation + grain</td><td class="note-col">35mm stock · Film Look Blend 1.0 · Cinematic core</td></tr>
+          <tr><td class="label-col">09 · Output</td><td class="val" style="color:var(--accent)">Corrector</td><td>Final trim before delivery</td><td class="note-col">Defocus, last exposure check</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEHANCER -->
+  <div class="section" id="s-dehancer">
+    <div class="section-label"><span>Dehancer & Film Look Settings</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+      <div class="callout callout-ron">
+        <span class="callout-icon">◆</span>
+        <span><strong style="color:var(--accent)">Ron's approach:</strong> Dehancer handles all film grain — not Resolve's built-in grain. The 35mm emulations in Dehancer include authentic grain structure, halation, and color response that's far more convincing than any synthetic grain node. Film Look Creator in Resolve adds the tone/color character, Dehancer adds the physical texture.</span>
+      </div>
+
+      <div class="settings-block ron">
+        <span class="key">Dehancer stock</span> → <span class="val">35mm (varies per scene)</span><br>
+        <span class="key">Film Look Blend</span> → <span class="val">1.0</span><br>
+        <span class="key">Color Blend</span> → <span class="val">1.0</span><br>
+        <span class="key">Effects Blend</span> → <span class="val">1.0</span><br>
+        <span class="key">Core Look</span> → <span class="val">Cinematic</span><br>
+        <span class="key">Contrast</span> → <span class="val">1.250</span><br>
+        <span class="key">Highlights</span> → <span class="val">0.350</span><br>
+        <span class="key">Fade</span> → <span class="val">0.285</span><br>
+        <span class="key">White Balance</span> → <span class="val">6500 K</span><br>
+        <span class="key">Subtractive Sat</span> → <span class="val">1.200</span><br>
+        <span class="key">Richness</span> → <span class="val">1.000</span>
+      </div>
+
+      <div class="callout callout-tip">
+        <span class="callout-icon">◆</span>
+        <span>The Fade at 0.285 is key — it lifts the blacks slightly, giving that analogue film look where true black is never truly black. Combined with the Highlights rolloff it creates the characteristic compressed dynamic range of 35mm print.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LUT PIPELINE -->
+  <div class="section" id="s-lut">
+    <div class="section-label"><span>LUT Pipeline — Preview & Export</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+      <div class="step-desc" style="margin-bottom:16px;">LUTs let you bake a Resolve grade into a single file you can apply in other apps — or use as a viewport preview in your renderer so what you see while lighting roughly matches your final grade.</div>
+
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Use Case</th><th>LUT Type</th><th>How to Export from Resolve</th><th>Apply In</th></tr></thead>
+        <tbody>
+          <tr><td class="label-col">Viewport preview</td><td class="val">33-point .cube</td><td class="note-col">Color menu → Generate LUT → 33pt</td><td class="note-col">Octane Imager / RS Post FX / UE5 Post Process</td></tr>
+          <tr class="row-alt"><td class="label-col">Delivery bake</td><td class="val">65-point .cube</td><td class="note-col">Deliver page → LUT export in render settings</td><td class="note-col">Applied to finished render for client preview</td></tr>
+          <tr><td class="label-col">Show LUT</td><td class="val">.cube or .3dl</td><td class="note-col">Export base grade without shot-specific corrections</td><td class="note-col">Applied across entire project for consistent look</td></tr>
+          <tr class="row-alt"><td class="label-col">Cross-app consistency</td><td class="val">33-point .cube</td><td class="note-col">Export from Resolve, apply in Octane/RS to match grade</td><td class="note-col">Lighting decisions match final grade during production</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">⚠</span>
+        <span>A LUT baked from your Resolve grade will only look correct if the input color space matches. If your renderer outputs linear and your LUT was built on linear input — it'll match. If there's a mismatch, you'll get a color shift. Always document what color space the LUT expects.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELIVERY -->
+  <div class="section" id="s-delivery">
+    <div class="section-label"><span>Delivery Reference</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+      <div class="qr-grid">
+        <div class="qr-card"><div class="qr-label">Web / Social</div><div class="qr-value">H.264 / H.265</div><div class="qr-desc">rec.709 · gamma 2.4 · 8-bit · high bitrate</div></div>
+        <div class="qr-card"><div class="qr-label">Client Preview</div><div class="qr-value">ProRes 422</div><div class="qr-desc">rec.709 · 10-bit · smaller than 4444</div></div>
+        <div class="qr-card"><div class="qr-label">Archive / Master</div><div class="qr-value">ProRes 4444</div><div class="qr-desc">Full color + alpha · 12-bit · lossless quality</div></div>
+        <div class="qr-card"><div class="qr-label">HDR Delivery</div><div class="qr-value">H.265 HDR10</div><div class="qr-desc">rec.2020 · PQ gamma · 10-bit</div></div>
+        <div class="qr-card"><div class="qr-label">Frame Sequence</div><div class="qr-value">EXR / TIFF</div><div class="qr-desc">32-bit EXR for VFX handoff · TIFF for print</div></div>
+        <div class="qr-card"><div class="qr-label">Render EXR bit depth</div><div class="qr-value">16-bit half</div><div class="qr-desc">Best speed/quality balance · use 32-bit only for extreme recovery</div></div>
+        <div class="qr-card"><div class="qr-label">Timeline FPS</div><div class="qr-value">24 fps</div><div class="qr-desc">24fps = cinematic standard · 30fps for motion graphics / broadcast only</div></div>
+        <div class="qr-card"><div class="qr-label">Resolve output gamma</div><div class="qr-value">2.4</div><div class="qr-desc">rec.709 gamma 2.4 for SDR · ST.2084 PQ for HDR</div></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span>Cinematic Color & LUT Pipeline · v1.0</span>
+  <span>By <a href="https://rondomingue.com" target="_blank">Ron Domingue</a> · <a href="https://rondomingue.com" target="_blank">rondomingue.com</a></span>
+  <span><a href="index.html">← Home</a></span>
+</footer>
+
+<script>
+  const navToggle = document.getElementById('nav-toggle');
+  const sideNav   = document.getElementById('side-nav');
+  const overlay   = document.getElementById('nav-overlay');
+  const topBar    = document.getElementById('top-bar');
+  const pageTop   = document.getElementById('page-top');
+
+  navToggle.addEventListener('click', () => sideNav.classList.contains('open') ? closeNav() : openNav());
+  overlay.addEventListener('click', closeNav);
+  function openNav()  { sideNav.classList.add('open'); overlay.classList.add('open'); }
+  function closeNav() { sideNav.classList.remove('open'); overlay.classList.remove('open'); }
+
+  const sections = document.querySelectorAll('.section[id]');
+  const navItems = document.querySelectorAll('#side-nav .nav-item');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) current = s.id; });
+    navItems.forEach(n => n.classList.toggle('active', n.getAttribute('href') === '#' + current));
+  }, { passive: true });
+
+  new IntersectionObserver(([e]) => topBar.classList.toggle('visible', !e.isIntersecting), { threshold: 0 }).observe(pageTop);
+
+  document.querySelectorAll('.section-label').forEach(label => {
+    label.addEventListener('click', () => label.closest('.section').classList.toggle('collapsed'));
+  });
+
+  document.querySelectorAll('tbody tr').forEach(row => row.addEventListener('click', () => row.classList.toggle('pinned')));
+  document.querySelectorAll('.qr-card').forEach(card => card.addEventListener('click', () => card.classList.toggle('pinned')));
+</script>
+
+</body>
+</html>
