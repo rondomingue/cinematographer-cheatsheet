@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Kit — Cinematic Field Guide · Ron Domingue</title>
+<link rel="stylesheet" href="https://use.typekit.net/xhf1nbc.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #2a2a2e;
+    --surface: #323236;
+    --surface2: #3a3a3f;
+    --border: #4a4a52;
+    --accent: #c8289a;
+    --text: #eeeef0;
+    --text-dim: #9a9aa8;
+    --text-faint: #5a5a66;
+    --ue5: #7ac45a;
+    --scan: #4fc8e8;
+    --kit: #e8a020;
+    --plugin: #c84fc8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* NAV TOGGLE */
+  #nav-toggle {
+    position: fixed; top: 16px; left: 16px; z-index: 200;
+    background: var(--surface); border: 1px solid var(--border);
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: background 0.15s;
+  }
+  #nav-toggle:hover { background: var(--surface2); }
+  #nav-toggle svg { width: 16px; height: 16px; stroke: var(--text-dim); }
+
+  #side-nav {
+    position: fixed; top: 0; left: 0; width: 220px; height: 100vh;
+    background: #1e1e22; border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; padding: 24px 0;
+    z-index: 100; overflow-y: auto;
+    transform: translateX(-100%); transition: transform 0.25s ease;
+  }
+  #side-nav.open { transform: translateX(0); }
+
+  .nav-logo { padding: 0 18px 20px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+  .nav-logo-name { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.12em; color: var(--text); text-decoration: none; display: block; margin-bottom: 2px; }
+  .nav-logo-name:hover { color: var(--accent); }
+  .nav-logo-url { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--text-faint); text-decoration: none; }
+  .nav-logo-url:hover { color: var(--accent); }
+
+  .nav-section-head { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-faint); padding: 12px 18px 6px; }
+  .nav-divider { height: 1px; background: var(--border); margin: 10px 18px; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 7px 18px; font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); cursor: pointer; transition: color 0.15s, background 0.15s; text-decoration: none; }
+  .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+  .nav-item.active { color: var(--accent); }
+
+  #nav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 99; }
+  #nav-overlay.open { display: block; }
+
+  /* TOP BAR */
+  #top-bar { position: sticky; top: 0; z-index: 50; background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 48px 0 64px; height: 0; overflow: hidden; transition: height 0.2s ease; display: flex; align-items: center; }
+  #top-bar.visible { height: 44px; }
+  .top-bar-title { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.1em; color: var(--text-dim); }
+
+  /* HEADER */
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 32px 48px 28px 64px; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px); pointer-events: none; }
+  .header-back { display: inline-flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); text-decoration: none; margin-bottom: 20px; transition: color 0.15s; }
+  .header-back:hover { color: var(--accent); }
+  .header-eyebrow { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 11px; letter-spacing: 0.28em; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
+  h1 { font-family: 'din-2014', sans-serif; font-weight: 200; font-size: clamp(24px, 3vw, 44px); letter-spacing: 0.08em; line-height: 0.95; color: var(--text); margin-bottom: 10px; }
+  h1 span { color: var(--accent); }
+  .header-sub { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 13px; color: var(--text-dim); letter-spacing: 0.18em; text-transform: uppercase; }
+  .header-byline { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 16px; }
+  .byline-name { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.12em; color: var(--text-dim); }
+  .byline-link { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.1em; color: var(--text-faint); text-decoration: none; border-bottom: 1px solid var(--text-faint); padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; }
+  .byline-link:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* MAIN */
+  main { padding: 48px 48px 80px 48px; max-width: 1400px; }
+
+  /* CATEGORY LABEL */
+  .cat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    border-top: 1px solid var(--border);
+    padding: 16px 0 20px;
+    margin-top: 48px;
+  }
+  .cat-label:first-child { margin-top: 0; border-top: none; padding-top: 0; }
+
+  /* ASSET GRID */
+  .asset-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    margin-bottom: 4px;
+  }
+
+  /* ASSET CARD */
+  .asset-card {
+    background: var(--surface);
+    padding: 28px 28px 24px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+
+  .asset-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .asset-card:hover { background: var(--surface2); }
+  .asset-card:hover::before { transform: scaleX(1); }
+
+  .ac-ue5::before { background: var(--ue5); }
+  .ac-scan::before { background: var(--scan); }
+  .ac-kit::before { background: var(--kit); }
+  .ac-plugin::before { background: var(--plugin); }
+
+  .asset-type {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .ac-ue5 .asset-type { color: var(--ue5); }
+  .ac-scan .asset-type { color: var(--scan); }
+  .ac-kit .asset-type { color: var(--kit); }
+  .ac-plugin .asset-type { color: var(--plugin); }
+
+  .asset-name {
+    font-family: 'din-2014', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    letter-spacing: 0.06em;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.1;
+  }
+
+  .asset-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    flex: 1;
+    margin-bottom: 20px;
+  }
+
+  .asset-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 18px;
+  }
+
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    color: var(--text-faint);
+  }
+
+  .asset-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: gap 0.2s;
+  }
+  .ac-ue5 .asset-link { color: var(--ue5); }
+  .ac-scan .asset-link { color: var(--scan); }
+  .ac-kit .asset-link { color: var(--kit); }
+  .ac-plugin .asset-link { color: var(--plugin); }
+
+  .asset-card:hover .asset-link { gap: 16px; }
+
+  .link-line { height: 1px; width: 20px; transition: width 0.2s; }
+  .ac-ue5 .link-line { background: var(--ue5); }
+  .ac-scan .link-line { background: var(--scan); }
+  .ac-kit .link-line { background: var(--kit); }
+  .ac-plugin .link-line { background: var(--plugin); }
+  .asset-card:hover .link-line { width: 32px; }
+
+  /* FOOTER */
+  footer { border-top: 1px solid var(--border); padding: 20px 48px; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.12em; color: var(--text-faint); text-transform: uppercase; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; align-items: center; }
+  footer a { color: var(--text-faint); text-decoration: none; border-bottom: 1px solid var(--text-faint); padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; }
+  footer a:hover { color: var(--accent); border-color: var(--accent); }
+
+  @media (max-width: 700px) {
+    header, main, footer { padding-left: 20px; padding-right: 20px; }
+    #top-bar { padding-left: 56px; padding-right: 20px; }
+    .asset-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<button id="nav-toggle" aria-label="Toggle navigation">
+  <svg viewBox="0 0 16 16" fill="none" stroke-width="1.5" stroke-linecap="round">
+    <line x1="2" y1="4" x2="14" y2="4"/><line x1="2" y1="8" x2="14" y2="8"/><line x1="2" y1="12" x2="14" y2="12"/>
+  </svg>
+</button>
+
+<nav id="side-nav">
+  <div class="nav-logo">
+    <a class="nav-logo-name" href="index.html">Ron Domingue</a>
+    <a class="nav-logo-url" href="https://rondomingue.com" target="_blank">rondomingue.com ↗</a>
+  </div>
+  <div class="nav-section-head">Guides</div>
+  <a class="nav-item" href="index.html">← Home</a>
+  <a class="nav-item" href="light-units.html">Light Units Cheat Sheet</a>
+  <a class="nav-item" href="character-workflow.html">Character Workflow</a>
+  <a class="nav-item" href="color-pipeline.html">Color &amp; LUT Pipeline</a>
+  <div class="nav-divider"></div>
+  <a class="nav-item active" href="field-kit.html">Field Kit</a>
+</nav>
+<div id="nav-overlay"></div>
+
+<div id="top-bar">
+  <span class="top-bar-title">Field Kit — Assets & Tools</span>
+</div>
+
+<header id="page-top">
+  <a class="header-back" href="index.html">← Home</a>
+  <div class="header-eyebrow">Cinematic Field Guide · Resources</div>
+  <h1>Field <span>Kit</span></h1>
+  <div class="header-sub">Assets · Plugins · Tools · Libraries</div>
+  <div class="header-byline">
+    <span class="byline-name">Ron Domingue</span>
+    <a class="byline-link" href="https://rondomingue.com" target="_blank">rondomingue.com ↗</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- UE5 PLUGINS -->
+  <div class="cat-label">UE5 Plugins</div>
+  <div class="asset-grid">
+
+    <a class="asset-card ac-plugin" href="https://www.fab.com/sellers/Everett%20Gunther" target="_blank">
+      <div class="asset-type">UE5 Plugin · Sky & Weather</div>
+      <div class="asset-name">Ultra Dynamic Sky</div>
+      <div class="asset-desc">The fastest way to a fully realized sky system in UE5. Drop a single actor into your scene and you have atmospheric sky, volumetric clouds, time of day, weather states, lightning, and Lumen integration — all without wiring a single node. The range of looks you can achieve just by dialing weather and time of day is remarkable. The VRAM cost is real, but for cinematic work the creative speed is worth it.</div>
+      <div class="asset-tags">
+        <span class="tag">Unreal Engine 5</span>
+        <span class="tag">Sky Atmosphere</span>
+        <span class="tag">Volumetric Clouds</span>
+        <span class="tag">Weather</span>
+        <span class="tag">Lightning</span>
+        <span class="tag">Lumen</span>
+      </div>
+      <div class="asset-link"><div class="link-line"></div>Visit on Fab ↗</div>
+    </a>
+
+  </div>
+
+  <!-- MODULAR ASSET KITS -->
+  <div class="cat-label">Modular Asset Kits</div>
+  <div class="asset-grid">
+
+    <a class="asset-card ac-kit" href="https://www.kitbash3d.com" target="_blank">
+      <div class="asset-type">3D Asset Kit · Multi-Genre</div>
+      <div class="asset-name">KitBash3D</div>
+      <div class="asset-desc">High-quality modular 3D kits spanning sci-fi, fantasy, ancient, brutalist, and everything in between. The kits are designed to be mixed and layered — a single pack gives you enough pieces to build an entire environment. UE5-ready with Nanite support, and the "Secrets of the Luminara" kit in particular has been a go-to for temple and ancient structure work.</div>
+      <div class="asset-tags">
+        <span class="tag">Modular</span>
+        <span class="tag">Sci-Fi</span>
+        <span class="tag">Fantasy</span>
+        <span class="tag">Architecture</span>
+        <span class="tag">Nanite</span>
+        <span class="tag">UE5</span>
+      </div>
+      <div class="asset-link"><div class="link-line"></div>kitbash3d.com ↗</div>
+    </a>
+
+    <a class="asset-card ac-kit" href="https://www.bigmediumsmall.com" target="_blank">
+      <div class="asset-type">3D Asset Kit · Handcrafted</div>
+      <div class="asset-name">Big Medium Small</div>
+      <div class="asset-desc">Handcrafted 3D asset packs built for concept artists and environment designers. Medieval, cyberpunk, Wild West, and more — each pack has a strong visual identity and a level of craft detail that stands out from generic marketplace content. The "Big, Medium, Small" naming philosophy reflects their approach: every pack covers hero pieces, supporting elements, and fine detail props for a complete scene.</div>
+      <div class="asset-tags">
+        <span class="tag">Medieval</span>
+        <span class="tag">Cyberpunk</span>
+        <span class="tag">Wild West</span>
+        <span class="tag">Props</span>
+        <span class="tag">Environment</span>
+        <span class="tag">Handcrafted</span>
+      </div>
+      <div class="asset-link"><div class="link-line"></div>bigmediumsmall.com ↗</div>
+    </a>
+
+    <a class="asset-card ac-kit" href="https://forma3dstore.com" target="_blank">
+      <div class="asset-type">3D Asset Store · Premium</div>
+      <div class="asset-name">Forma 3D Store</div>
+      <div class="asset-desc">Premium 3D models, textures, materials, and environment collections built for Unreal Engine, Unity, Blender, and professional film and VFX production. Strong catalogue of buildings, landscapes, vegetation, and PBR material libraries. The quality bar is consistently high — production-ready assets that don't need post-processing cleanup before they hit the renderer.</div>
+      <div class="asset-tags">
+        <span class="tag">UE5</span>
+        <span class="tag">Blender</span>
+        <span class="tag">Buildings</span>
+        <span class="tag">Landscapes</span>
+        <span class="tag">PBR Materials</span>
+        <span class="tag">VFX</span>
+      </div>
+      <div class="asset-link"><div class="link-line"></div>forma3dstore.com ↗</div>
+    </a>
+
+  </div>
+
+  <!-- SCAN LIBRARIES -->
+  <div class="cat-label">Scan Libraries</div>
+  <div class="asset-grid">
+
+    <a class="asset-card ac-scan" href="https://www.scansfactory.com" target="_blank">
+      <div class="asset-type">Photogrammetry · Scan Library</div>
+      <div class="asset-name">Scans Factory</div>
+      <div class="asset-desc">Photorealistic scanned assets — surfaces, rocks, ground cover, organic debris, and architectural detail. The kind of material that grounds a CG environment in physical reality. Nanite-ready geometry means you drop them in at full resolution without LOD headaches. For cinematic work, scanned assets in the foreground are the difference between a render that reads as real and one that reads as CG.</div>
+      <div class="asset-tags">
+        <span class="tag">Photogrammetry</span>
+        <span class="tag">Rocks</span>
+        <span class="tag">Surfaces</span>
+        <span class="tag">Organic</span>
+        <span class="tag">Nanite</span>
+        <span class="tag">PBR</span>
+      </div>
+      <div class="asset-link"><div class="link-line"></div>scansfactory.com ↗</div>
+    </a>
+
+  </div>
+
+</main>
+
+<footer>
+  <span>Field Kit · Cinematic Field Guide</span>
+  <span>By <a href="https://rondomingue.com" target="_blank">Ron Domingue</a> · <a href="https://rondomingue.com" target="_blank">rondomingue.com</a></span>
+  <span><a href="index.html">← Home</a></span>
+</footer>
+
+<script>
+  const navToggle = document.getElementById('nav-toggle');
+  const sideNav   = document.getElementById('side-nav');
+  const overlay   = document.getElementById('nav-overlay');
+  const topBar    = document.getElementById('top-bar');
+  const pageTop   = document.getElementById('page-top');
+
+  navToggle.addEventListener('click', () => sideNav.classList.contains('open') ? closeNav() : openNav());
+  overlay.addEventListener('click', closeNav);
+  function openNav()  { sideNav.classList.add('open'); overlay.classList.add('open'); }
+  function closeNav() { sideNav.classList.remove('open'); overlay.classList.remove('open'); }
+
+  new IntersectionObserver(([e]) => topBar.classList.toggle('visible', !e.isIntersecting), { threshold: 0 }).observe(pageTop);
+</script>
+
+</body>
+</html>
