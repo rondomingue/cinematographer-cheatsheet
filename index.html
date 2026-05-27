@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cinematographer's Light Unit Cheat Sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0b;
+    --surface: #111114;
+    --surface2: #18181d;
+    --border: #2a2a35;
+    --accent: #e8a020;
+    --text: #e8e8ec;
+    --text-dim: #7a7a8a;
+    --text-faint: #3a3a4a;
+    --real: #4fc8e8;
+    --octane: #e8a020;
+    --unreal: #7ac45a;
+    --redshift: #e85050;
+    --shared: #c84fc8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 48px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px);
+    pointer-events: none;
+  }
+
+  .header-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(36px, 5vw, 64px);
+    letter-spacing: -0.01em;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  h1 span { color: var(--accent); }
+
+  .header-sub {
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+  }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 16px 48px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot-real { background: var(--real); }
+  .dot-octane { background: var(--octane); }
+  .dot-unreal { background: var(--unreal); }
+  .dot-redshift { background: var(--redshift); }
+  .dot-shared { background: var(--shared); }
+
+  main {
+    padding: 40px 48px 80px;
+    max-width: 1600px;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 16px;
+    margin-top: 48px;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+
+  .section-label:first-child { margin-top: 0; border-top: none; padding-top: 0; }
+
+  .table-wrap { overflow-x: auto; margin-bottom: 8px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 700px;
+  }
+
+  thead tr { background: var(--surface); }
+
+  th {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: top;
+    line-height: 1.4;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .row-alt td { background: rgba(255,255,255,0.015); }
+  .row-alt:hover td { background: rgba(255,255,255,0.03); }
+
+  .val { font-family: 'Space Mono', monospace; font-size: 11px; }
+  .val-real { color: var(--real); }
+  .val-octane { color: var(--octane); }
+  .val-unreal { color: var(--unreal); }
+  .val-redshift { color: var(--redshift); }
+  .val-shared { color: var(--shared); }
+  .val-neutral { color: var(--text); }
+
+  .label-col {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .sub { font-size: 11px; color: var(--text-dim); display: block; margin-top: 2px; font-family: 'Barlow', sans-serif; font-weight: 300; }
+  .note-col { font-size: 12px; color: var(--text-dim); max-width: 240px; }
+
+  .formula-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .formula-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px 18px;
+    position: relative;
+  }
+
+  .formula-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+  }
+  .fc-real::before { background: var(--real); }
+  .fc-octane::before { background: var(--octane); }
+  .fc-unreal::before { background: var(--unreal); }
+  .fc-redshift::before { background: var(--redshift); }
+  .fc-shared::before { background: var(--shared); }
+
+  .formula-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .fc-real .formula-title { color: var(--real); }
+  .fc-octane .formula-title { color: var(--octane); }
+  .fc-unreal .formula-title { color: var(--unreal); }
+  .fc-redshift .formula-title { color: var(--redshift); }
+  .fc-shared .formula-title { color: var(--shared); }
+
+  .formula-eq {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
+    background: rgba(0,0,0,0.4);
+    padding: 8px 12px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+
+  .formula-note { font-size: 11px; color: var(--text-dim); line-height: 1.5; }
+
+  .qr-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .qr-card { background: var(--surface); border: 1px solid var(--border); padding: 14px 16px; }
+  .qr-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 6px; }
+  .qr-value { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.01em; line-height: 1.1; margin-bottom: 4px; }
+  .qr-desc { font-size: 11px; color: var(--text-dim); line-height: 1.4; }
+
+  .temp-bar-wrap { background: var(--surface); border: 1px solid var(--border); padding: 20px 24px; margin-bottom: 8px; }
+
+  .temp-bar {
+    height: 20px;
+    border-radius: 2px;
+    background: linear-gradient(to right,
+      #c8d8ff 0%, #d4e4ff 8%, #ddeeff 15%, #eef6ff 22%,
+      #fff8f0 35%, #fff5e8 45%, #ffe8c8 55%, #ffd090 65%,
+      #ffb858 75%, #ff9020 85%, #ff5810 93%, #ff2800 100%
+    );
+    margin-bottom: 4px;
+  }
+
+  .temp-labels { display: flex; justify-content: space-between; font-family: 'Space Mono', monospace; font-size: 9px; color: var(--text-dim); letter-spacing: 0.08em; }
+
+  .temp-markers {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 6px;
+    margin-top: 16px;
+  }
+
+  .temp-marker { display: flex; align-items: baseline; gap: 8px; }
+  .temp-k { font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; color: var(--accent); white-space: nowrap; }
+  .temp-src { font-size: 11px; color: var(--text-dim); }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 20px 48px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  @media (max-width: 600px) {
+    header, .legend, main, footer { padding-left: 20px; padding-right: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-eyebrow">Technical Reference · v1.1 — Added Redshift</div>
+  <h1>Cinematographer's<br><span>Light Units</span> Cheat Sheet</h1>
+  <div class="header-sub">Real Photography &nbsp;·&nbsp; Octane Render &nbsp;·&nbsp; Redshift &nbsp;·&nbsp; Unreal Engine 5</div>
+</header>
+
+<div class="legend">
+  <div class="pill"><div class="dot dot-real"></div>Real / Physical Camera</div>
+  <div class="pill"><div class="dot dot-octane"></div>Octane Render</div>
+  <div class="pill"><div class="dot dot-redshift"></div>Redshift</div>
+  <div class="pill"><div class="dot dot-unreal"></div>Unreal Engine 5</div>
+  <div class="pill"><div class="dot dot-shared"></div>Shared / Universal</div>
+</div>
+
+<main>
+
+  <!-- 01 GLOSSARY -->
+  <div class="section-label">01 — Unit Glossary</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Unit</th><th>Symbol</th><th>Measures</th>
+          <th>Real Camera</th><th>Octane</th><th>Redshift</th><th>Unreal 5</th><th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label-col">Candela</td><td class="val">cd</td><td class="note-col">Luminous intensity in one direction</td>
+          <td class="val val-real">Fixture datasheets</td>
+          <td class="val val-octane">Sphere/Spot (Power mode)</td>
+          <td class="val val-redshift">Physical Light (cd)</td>
+          <td class="val val-unreal">Point, Spot lights</td>
+          <td class="note-col">UE5 defaults cd for points/spots; RS Physical Light exposes unit selector</td>
+        </tr>
+        <tr class="row-alt">
+          <td class="label-col">Lumen</td><td class="val">lm</td><td class="note-col">Total luminous flux emitted</td>
+          <td class="val val-real">Bulb packaging</td>
+          <td class="val val-octane">Area lights (Power)</td>
+          <td class="val val-redshift">Physical Light (lm)</td>
+          <td class="val val-unreal">Rect / Area lights</td>
+          <td class="note-col">Integrates intensity over solid angle</td>
+        </tr>
+        <tr>
+          <td class="label-col">Lux</td><td class="val">lx</td><td class="note-col">Illuminance at surface (lm/m²)</td>
+          <td class="val val-real">Light meter reading</td>
+          <td class="val val-octane">—</td>
+          <td class="val val-redshift">—</td>
+          <td class="val val-unreal">Sky Light / Directional</td>
+          <td class="note-col">Falls off with distance²</td>
+        </tr>
+        <tr class="row-alt">
+          <td class="label-col">Nit</td><td class="val">cd/m²</td><td class="note-col">Luminance — surface brightness</td>
+          <td class="val val-real">Monitor / display spec</td>
+          <td class="val val-octane">—</td>
+          <td class="val val-redshift">Physical Light (nits)</td>
+          <td class="val val-unreal">Emissive material intensity</td>
+          <td class="note-col">HDR displays: 400–10,000 nits</td>
+        </tr>
+        <tr>
+          <td class="label-col">Foot-candle</td><td class="val">fc</td><td class="note-col">Illuminance (imperial) lm/ft²</td>
+          <td class="val val-real">Film/TV on-set standard</td>
+          <td class="val val-octane">—</td>
+          <td class="val val-redshift">—</td>
+          <td class="val val-unreal">—</td>
+          <td class="note-col">1 fc = 10.764 lux</td>
+        </tr>
+        <tr class="row-alt">
+          <td class="label-col">EV (Exposure Value)</td><td class="val">EV</td><td class="note-col">Log₂ scale of exposure</td>
+          <td class="val val-real">Core camera param</td>
+          <td class="val val-octane">Imager exposure</td>
+          <td class="val val-redshift">Camera EV / f-stop/shutter/ISO</td>
+          <td class="val val-unreal">Post Process EV100</td>
+          <td class="note-col">Each +1 EV = 2× brighter</td>
+        </tr>
+        <tr>
+          <td class="label-col">Watt (radiometric)</td><td class="val">W</td><td class="note-col">Radiant power, not perceptual</td>
+          <td class="val val-real">Flash / strobe power</td>
+          <td class="val val-octane">Legacy Power mode</td>
+          <td class="val val-redshift">Scene-relative intensity</td>
+          <td class="val val-unreal">—</td>
+          <td class="note-col">Renderer "watts" ≠ real watts; scene-relative</td>
+        </tr>
+        <tr class="row-alt">
+          <td class="label-col">Kelvin (CCT)</td><td class="val">K</td><td class="note-col">Color temperature of source</td>
+          <td class="val val-real">WB dial, gels</td>
+          <td class="val val-octane">Light color temp</td>
+          <td class="val val-redshift">Light color temp (K picker)</td>
+          <td class="val val-unreal">Light color temp</td>
+          <td class="note-col">Universal across all four — same values, same meaning</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 02 REAL-WORLD REF -->
+  <div class="section-label">02 — Real-World Intensity Reference</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Light Source</th><th>Lux at subject</th><th>Foot-candles</th><th>Approx EV (ISO 100)</th><th>Color Temp</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="label-col">Direct midday sun</td><td class="val val-real">100,000 lx</td><td class="val">9,300 fc</td><td class="val">15–16 EV</td><td class="val val-shared">5,500–6,500 K</td></tr>
+        <tr class="row-alt"><td class="label-col">Overcast sky</td><td class="val val-real">10,000 lx</td><td class="val">930 fc</td><td class="val">12–13 EV</td><td class="val val-shared">6,500–7,500 K</td></tr>
+        <tr><td class="label-col">Sunrise / Sunset</td><td class="val val-real">1,000–5,000 lx</td><td class="val">93–465 fc</td><td class="val">11–13 EV</td><td class="val val-shared">2,000–3,500 K</td></tr>
+        <tr class="row-alt"><td class="label-col">Indoor office (fluorescent)</td><td class="val val-real">300–500 lx</td><td class="val">28–46 fc</td><td class="val">9–10 EV</td><td class="val val-shared">4,000–5,000 K</td></tr>
+        <tr><td class="label-col">Tungsten work light 500W</td><td class="val val-real">1,000–5,000 lx @1m</td><td class="val">93–465 fc</td><td class="val">—</td><td class="val val-shared">2,800–3,200 K</td></tr>
+        <tr class="row-alt"><td class="label-col">Candlelight</td><td class="val val-real">10–15 lx</td><td class="val">~1 fc</td><td class="val">6–7 EV</td><td class="val val-shared">1,800–2,000 K</td></tr>
+        <tr><td class="label-col">Full moon (clear night)</td><td class="val val-real">0.05–0.1 lx</td><td class="val">0.005 fc</td><td class="val">1–3 EV</td><td class="val val-shared">4,100 K</td></tr>
+        <tr class="row-alt"><td class="label-col">Film set HMI 1.2kW @3m</td><td class="val val-real">~3,000 lx</td><td class="val">~279 fc</td><td class="val">—</td><td class="val val-shared">5,600 K</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 03 OCTANE -->
+  <div class="section-label">03 — Octane Render Light Settings</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Light Type</th><th>Power Unit</th><th>Typical Range</th><th>Distribution</th><th>Equiv. Real Source</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="label-col">Daylight (Sun)</td><td class="val val-octane">Intensity (relative)</td><td class="val val-octane">1.0 default</td><td class="note-col">Directional</td><td>Direct sun</td><td class="note-col">Turbidity 2–6 for weather states</td></tr>
+        <tr class="row-alt"><td class="label-col">Area Light</td><td class="val val-octane">Power (W)</td><td class="val val-octane">10–10,000 W</td><td class="note-col">Lambertian</td><td>Softbox / LED panel</td><td class="note-col">Size affects softness; supports texture emission</td></tr>
+        <tr><td class="label-col">Sphere / Point</td><td class="val val-octane">Power (W)</td><td class="val val-octane">50–5,000 W</td><td class="note-col">Isotropic</td><td>Practical bulb</td><td class="note-col">Radius affects shadow softness</td></tr>
+        <tr class="row-alt"><td class="label-col">Spot Light</td><td class="val val-octane">Power (W)</td><td class="val val-octane">100–5,000 W</td><td class="note-col">Cone + falloff</td><td>Fresnel / ERS spot</td><td class="note-col">Supports IES photometry profile</td></tr>
+        <tr><td class="label-col">HDRI Environment</td><td class="val val-octane">Intensity multiplier</td><td class="val val-octane">0.5–4.0</td><td class="note-col">Full spherical</td><td>Real environment</td><td class="note-col">1.0 = physically calibrated if HDRI is real-world captured</td></tr>
+        <tr class="row-alt"><td class="label-col">Emissive Material</td><td class="val val-octane">Texture Emission power</td><td class="val val-octane">1–10,000+ W</td><td class="note-col">Surface normal</td><td>Neon / screen / LED strip</td><td class="note-col">Bake into mesh for GI contribution</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 04 OCTANE CAMERA -->
+  <div class="section-label">04 — Octane Camera / Exposure Params</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>Octane Default</th><th>Real Equiv.</th><th>Range</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="label-col">F-stop (Aperture)</td><td class="val val-octane">f/2.8</td><td class="val val-real">f/2.8</td><td class="val">f/0.9–f/32</td><td class="note-col">Affects DOF + exposure</td></tr>
+        <tr class="row-alt"><td class="label-col">Shutter Speed</td><td class="val val-octane">1/250</td><td class="val val-real">1/250 sec</td><td class="val">1–1/4000</td><td class="note-col">Affects motion blur + exposure</td></tr>
+        <tr><td class="label-col">ISO</td><td class="val val-octane">100</td><td class="val val-real">ISO 100</td><td class="val">50–6400+</td><td class="note-col">↑ ISO = ↑ noise grain in render</td></tr>
+        <tr class="row-alt"><td class="label-col">Response (tone map)</td><td class="val val-octane">sRGB linear 1.0</td><td class="val val-real">Film response</td><td class="val">Multiple presets</td><td class="note-col">ACES / filmic for cinematic look</td></tr>
+        <tr><td class="label-col">White Balance</td><td class="val val-octane">6500 K</td><td class="val val-real">Daylight WB</td><td class="val">1000–12000 K</td><td class="note-col">Match to dominant light source</td></tr>
+        <tr class="row-alt"><td class="label-col">Vignette</td><td class="val val-octane">0.0</td><td class="val val-real">Lens falloff</td><td class="val">0–1</td><td class="note-col">Subtle 0.1–0.3 for cinema feel</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 05 REDSHIFT LIGHTS -->
+  <div class="section-label">05 — Redshift Light Settings</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>RS Light Type</th><th>Intensity Unit</th><th>Typical Range</th><th>Distribution</th><th>Equiv. Real Source</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label-col">Physical Light<span class="sub">Area / Rect</span></td>
+          <td class="val val-redshift">Selectable: W, lm, cd, nits</td>
+          <td class="val val-redshift">100–10,000 W / 1,000–50,000 lm</td>
+          <td class="note-col">Lambertian (surface-normal)</td>
+          <td>Softbox / LED panel</td>
+          <td class="note-col">Unit selector in light attributes; physically accurate when set to lm/cd. Size directly scales softness.</td>
+        </tr>
+        <tr class="row-alt">
+          <td class="label-col">Dome Light<span class="sub">IBL / Sky</span></td>
+          <td class="val val-redshift">Exposure (EV) or Intensity multiplier</td>
+          <td class="val val-redshift">0.5–4.0 mult / EV ±3</td>
+          <td class="note-col">Full spherical</td>
+          <td>HDRI environment</td>
+          <td class="note-col">Use Background Plate for separate BG vs. lighting; portal lights boost interior accuracy</td>
+        </tr>
+        <tr>
+          <td class="label-col">Directional Light<span class="sub">Sun</span></td>
+          <td class="val val-redshift">Intensity (relative)</td>
+          <td class="val val-redshift">1.0 default; scale to taste</td>
+          <td class="note-col">Parallel rays</td>
+          <td>Direct sunlight</td>
+          <td class="note-col">Combine with RS Sky node or Physical Sky for atmosphere; angle drives sunrise/sunset color</td>
+        </tr>
+        <tr class="row-alt">
+          <td class="label-col">Point / Spot Light<span class="sub">Omni / cone</span></td>
+          <td class="val val-redshift">Selectable: W, lm, cd</td>
+          <td class="val val-redshift">800 cd (60W equiv) / 50,000 cd (spot)</td>
+          <td class="note-col">Isotropic / cone</td>
+          <td>Practical bulb / stage spot</td>
+          <td class="note-col">IES profile supported; Decay Rate: Quadratic = physically correct</td>
+        </tr>
+        <tr>
+          <td class="label-col">Portal Light<span class="sub">Window assist</span></td>
+          <td class="val val-redshift">Intensity multiplier</td>
+          <td class="val val-redshift">1.0 (transparent / pass-through)</td>
+          <td class="note-col">Directional funnel</td>
+          <td>Window / doorway</td>
+          <td class="note-col">Placed at openings; guides dome/sky light inward for faster interior GI convergence</td>
+        </tr>
+        <tr class="row-alt">
+          <td class="label-col">Emissive Material<span class="sub">RS Light Material</span></td>
+          <td class="val val-redshift">Selectable: W, lm, cd, nits</td>
+          <td class="val val-redshift">100–10,000 nits / 500–5,000 W</td>
+          <td class="note-col">Surface normal</td>
+          <td>Neon / screen / LED strip</td>
+          <td class="note-col">Enable "Visible in Reflections" and "Affect GI" for full contribution; use nits for screen emissives</td>
+        </tr>
+        <tr>
+          <td class="label-col">RS Sun &amp; Sky<span class="sub">Physical atmosphere</span></td>
+          <td class="val val-redshift">Intensity + turbidity</td>
+          <td class="val val-redshift">1.0 sun / turbidity 2–8</td>
+          <td class="note-col">Rayleigh + Mie scatter</td>
+          <td>Outdoor atmosphere</td>
+          <td class="note-col">Turbidity 2 = very clear; 8 = heavy haze. Drives automatic color temp shift at low sun angles.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 06 REDSHIFT CAMERA -->
+  <div class="section-label">06 — Redshift Camera / Exposure Params</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Parameter</th><th>RS Default</th><th>Real Equiv.</th><th>Range</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="label-col">F-stop (Aperture)</td><td class="val val-redshift">f/5.6</td><td class="val val-real">f/5.6</td><td class="val">f/1.0–f/32</td><td class="note-col">Physical camera tag in C4D/Maya/Houdini; DOF + exposure</td></tr>
+        <tr class="row-alt"><td class="label-col">Shutter Speed</td><td class="val val-redshift">1/60 sec</td><td class="val val-real">1/60 sec</td><td class="val">1–1/8000</td><td class="note-col">Affects motion blur amount; 180° rule: 1/(fps × 2)</td></tr>
+        <tr><td class="label-col">ISO</td><td class="val val-redshift">100</td><td class="val val-real">ISO 100</td><td class="val">50–6400+</td><td class="note-col">Raises gain; use Film Grain node to add matching noise</td></tr>
+        <tr class="row-alt"><td class="label-col">Exposure Compensation</td><td class="val val-redshift">0 EV</td><td class="val val-real">Exposure comp dial</td><td class="val">–5 to +5 EV</td><td class="note-col">Post-render EV comp; non-destructive override</td></tr>
+        <tr><td class="label-col">White Balance</td><td class="val val-redshift">6500 K</td><td class="val val-real">Daylight</td><td class="val">1500–12000 K</td><td class="note-col">In RS Camera or Post FX node; tint for magenta/green offset</td></tr>
+        <tr class="row-alt"><td class="label-col">Tone Mapping</td><td class="val val-redshift">Photographic / ACES</td><td class="val val-real">Film response</td><td class="val">Linear, Photographic, ACES, Reinhard</td><td class="note-col">ACES recommended for cinematic; Photographic for commercial product</td></tr>
+        <tr><td class="label-col">Vignette</td><td class="val val-redshift">0.0</td><td class="val val-real">Lens falloff</td><td class="val">0–1</td><td class="note-col">In RS Post FX; combine with chromatic aberration for lens feel</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 07 UE5 LIGHTS -->
+  <div class="section-label">07 — Unreal Engine 5 Light Settings</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>UE5 Light Type</th><th>Intensity Unit</th><th>Typical Value</th><th>Real Equiv.</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label-col">Directional Light<span class="sub">Sun / Moon</span></td>
+          <td class="val val-unreal">Lux</td>
+          <td class="val val-unreal">100,000 lx (sun) · 0.1 lx (moon)</td>
+          <td>Direct sunlight</td>
+          <td class="note-col">Lumen + Sky Atmosphere for physical sky</td>
+        </tr>
+        <tr class="row-alt">
+          <td class="label-col">Sky Light<span class="sub">Ambient dome</span></td>
+          <td class="val val-unreal">Lux or EV</td>
+          <td class="val val-unreal">1–50,000 lx</td>
+          <td>Overcast / HDRI sky</td>
+          <td class="note-col">Capture scene or HDRI cubemap; recapture when lights change</td>
+        </tr>
+        <tr>
+          <td class="label-col">Point Light<span class="sub">Practical / omni</span></td>
+          <td class="val val-unreal">Candela</td>
+          <td class="val val-unreal">800 cd (60W) · 1600 cd (100W)</td>
+          <td>Practical bulb</td>
+          <td class="note-col">Inverse square falloff; adjust Attenuation Radius</td>
+        </tr>
+        <tr class="row-alt">
+          <td class="label-col">Spot Light<span class="sub">Theatrical / car</span></td>
+          <td class="val val-unreal">Candela</td>
+          <td class="val val-unreal">2,000–50,000 cd</td>
+          <td>Stage spot / headlight</td>
+          <td class="note-col">Inner/Outer cone angles; IES texture supported</td>
+        </tr>
+        <tr>
+          <td class="label-col">Rect Light<span class="sub">Softbox / panel</span></td>
+          <td class="val val-unreal">Lumen</td>
+          <td class="val val-unreal">1,000–10,000 lm</td>
+          <td>LED panel / softbox</td>
+          <td class="note-col">Width × Height = area; Barn Door angles; source texture supported</td>
+        </tr>
+        <tr class="row-alt">
+          <td class="label-col">Emissive Material<span class="sub">Screen / neon</span></td>
+          <td class="val val-unreal">cd/m² (nits)</td>
+          <td class="val val-unreal">100–10,000 nits</td>
+          <td>Monitor / LED strip</td>
+          <td class="note-col">Enable "Emissive for GI" for Lumen; scale via Emissive Boost</td>
+        </tr>
+        <tr>
+          <td class="label-col">Sky Atmosphere<span class="sub">Physical sky</span></td>
+          <td class="val val-unreal">Managed by system</td>
+          <td class="val val-unreal">Driven by Directional</td>
+          <td>Rayleigh / Mie scatter</td>
+          <td class="note-col">Aerosol density drives haze; scattering scale for atmosphere thickness</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 08 UE5 CAMERA -->
+  <div class="section-label">08 — Unreal Engine 5 Camera / Exposure</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Param</th><th>UE5 Default</th><th>Real Equiv.</th><th>Typical Range</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="label-col">Auto Exposure Method</td><td class="val val-unreal">Manual / Auto Histogram</td><td class="val val-real">Exposure meter</td><td class="val">Histogram or Luminance</td><td class="note-col">Manual = use EV100; Auto = set Min/Max EV</td></tr>
+        <tr class="row-alt"><td class="label-col">EV100</td><td class="val val-unreal">0</td><td class="val val-real">f/1.0 · 1s · ISO 100</td><td class="val">–4 to +20</td><td class="note-col">Physically calibrated; match to scene lux</td></tr>
+        <tr><td class="label-col">ISO (Cine Cam)</td><td class="val val-unreal">100</td><td class="val val-real">ISO 100</td><td class="val">50–3200</td><td class="note-col">CineCamera Actor exposes full lens params</td></tr>
+        <tr class="row-alt"><td class="label-col">F-stop (Cine Cam)</td><td class="val val-unreal">f/5.6</td><td class="val val-real">f/5.6</td><td class="val">f/1.4–f/22</td><td class="note-col">Controls DOF; sensor size determines CoC</td></tr>
+        <tr><td class="label-col">Shutter Speed (Cine Cam)</td><td class="val val-unreal">1/24 sec</td><td class="val val-real">180° rule</td><td class="val">1/16–1/8000</td><td class="note-col">Motion blur follows 180° shutter rule (fps × 2)</td></tr>
+        <tr class="row-alt"><td class="label-col">White Balance</td><td class="val val-unreal">6500 K</td><td class="val val-real">Daylight</td><td class="val">1500–15000 K</td><td class="note-col">Post Process Volume; tint slider for green/magenta offset</td></tr>
+        <tr><td class="label-col">Tone Mapper</td><td class="val val-unreal">ACES filmic</td><td class="val val-real">Film/Grade LUT</td><td class="val">Filmic / custom LUT</td><td class="note-col">Apply Resolve LUT for match; Film Slope/Toe/Shoulder adjustable</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 09 COLOR TEMP -->
+  <div class="section-label">09 — Color Temperature Reference</div>
+  <div class="temp-bar-wrap">
+    <div class="temp-bar"></div>
+    <div class="temp-labels">
+      <span>← WARM · 1,000K</span><span>3,200K</span><span>5,600K</span><span>8,000K</span><span>10,000K+ · COOL →</span>
+    </div>
+    <div class="temp-markers">
+      <div class="temp-marker"><span class="temp-k">1,800 K</span><span class="temp-src">Candlelight</span></div>
+      <div class="temp-marker"><span class="temp-k">2,400 K</span><span class="temp-src">Incandescent dim</span></div>
+      <div class="temp-marker"><span class="temp-k">2,800 K</span><span class="temp-src">Tungsten halogen</span></div>
+      <div class="temp-marker"><span class="temp-k">3,200 K</span><span class="temp-src">Studio tungsten standard</span></div>
+      <div class="temp-marker"><span class="temp-k">3,500 K</span><span class="temp-src">Warm white LED</span></div>
+      <div class="temp-marker"><span class="temp-k">4,000 K</span><span class="temp-src">Neutral / cool white LED</span></div>
+      <div class="temp-marker"><span class="temp-k">4,300 K</span><span class="temp-src">HMI partial warm</span></div>
+      <div class="temp-marker"><span class="temp-k">5,500 K</span><span class="temp-src">Noon daylight / flash</span></div>
+      <div class="temp-marker"><span class="temp-k">5,600 K</span><span class="temp-src">HMI / film daylight std.</span></div>
+      <div class="temp-marker"><span class="temp-k">6,500 K</span><span class="temp-src">Overcast sky / D65</span></div>
+      <div class="temp-marker"><span class="temp-k">7,500 K</span><span class="temp-src">Light overcast shade</span></div>
+      <div class="temp-marker"><span class="temp-k">9,000 K</span><span class="temp-src">Open shade / deep shadow</span></div>
+      <div class="temp-marker"><span class="temp-k">10,000+ K</span><span class="temp-src">Clear blue sky zenith</span></div>
+    </div>
+  </div>
+
+  <!-- 10 FORMULAS -->
+  <div class="section-label">10 — Conversion Formulas</div>
+  <div class="formula-grid">
+    <div class="formula-card fc-shared">
+      <div class="formula-title">EV ↔ Lux</div>
+      <div class="formula-eq">EV = log₂(Lux / 2.5)<br>Lux = 2.5 × 2^EV</div>
+      <div class="formula-note">Assumes reflected-light metering at ISO 100. Direct-light metering uses different constant.</div>
+    </div>
+    <div class="formula-card fc-shared">
+      <div class="formula-title">Lumen ↔ Candela</div>
+      <div class="formula-eq">lm = cd × Ω (steradians)<br>Point: lm = cd × 4π ≈ cd × 12.57<br>Spot: lm = cd × 2π(1 − cos θ)</div>
+      <div class="formula-note">θ = half-angle of spot cone</div>
+    </div>
+    <div class="formula-card fc-real">
+      <div class="formula-title">Foot-candle ↔ Lux</div>
+      <div class="formula-eq">lx = fc × 10.764<br>fc = lx ÷ 10.764</div>
+      <div class="formula-note">100 fc ≈ 1,076 lx. US film/TV uses fc; metric DPs use lux.</div>
+    </div>
+    <div class="formula-card fc-real">
+      <div class="formula-title">Inverse Square Law</div>
+      <div class="formula-eq">E₂ = E₁ × (d₁ / d₂)²<br><br>Double distance → ¼ lux<br>Triple distance → 1/9 lux</div>
+      <div class="formula-note">Applies in real, Octane, RS (Quadratic decay), and UE5. Disable in UE5 only if stylized look needed.</div>
+    </div>
+    <div class="formula-card fc-unreal">
+      <div class="formula-title">UE5 EV100</div>
+      <div class="formula-eq">EV100 = log₂(N² / t × 100/S)<br>EV100 = log₂(Lux / 1.2)<br><br>Noon sun 100,000 lx → EV100 ≈ 16.4</div>
+      <div class="formula-note">Use Manual Exposure in Post Process for physical accuracy.</div>
+    </div>
+    <div class="formula-card fc-octane">
+      <div class="formula-title">Octane / RS Power → Lux</div>
+      <div class="formula-eq">No direct formula — relative.<br>Anchor camera EV to real-world<br>lux reference, scale lights to match.</div>
+      <div class="formula-note">Renderer "watts" are scene-relative. RS Physical Lights in lm/cd are closer to physical but still require camera calibration.</div>
+    </div>
+  </div>
+
+  <!-- 11 QUICK REF -->
+  <div class="section-label">11 — Quick Reference: Common Scene EV Values</div>
+  <div class="qr-grid">
+    <div class="qr-card"><div class="qr-label">Direct Noon Sun</div><div class="qr-value" style="color:var(--accent)">EV 15–16</div><div class="qr-desc">100,000 lx · 5500–6500 K</div></div>
+    <div class="qr-card"><div class="qr-label">Overcast Day</div><div class="qr-value" style="color:var(--accent)">EV 12–13</div><div class="qr-desc">10,000 lx · 6500–7500 K</div></div>
+    <div class="qr-card"><div class="qr-label">Sunset / Golden Hour</div><div class="qr-value" style="color:var(--accent)">EV 11–13</div><div class="qr-desc">2,000–3,500 K · warm orange</div></div>
+    <div class="qr-card"><div class="qr-label">Interior Daylight Window</div><div class="qr-value" style="color:var(--accent)">EV 10–12</div><div class="qr-desc">300–2,000 lx indirect</div></div>
+    <div class="qr-card"><div class="qr-label">Bright Office Interior</div><div class="qr-value" style="color:var(--accent)">EV 9–10</div><div class="qr-desc">300–500 lx · 4000 K fluoro</div></div>
+    <div class="qr-card"><div class="qr-label">Restaurant / Bar</div><div class="qr-value" style="color:var(--accent)">EV 7–8</div><div class="qr-desc">50–100 lx · 2800–3200 K</div></div>
+    <div class="qr-card"><div class="qr-label">Candlelit Room</div><div class="qr-value" style="color:var(--accent)">EV 6–7</div><div class="qr-desc">10–15 lx · 1800 K</div></div>
+    <div class="qr-card"><div class="qr-label">City Night Street</div><div class="qr-value" style="color:var(--accent)">EV 4–6</div><div class="qr-desc">5–20 lx · mixed sources</div></div>
+    <div class="qr-card"><div class="qr-label">Moonlit Night</div><div class="qr-value" style="color:var(--accent)">EV 1–3</div><div class="qr-desc">0.05–0.1 lx · 4100 K</div></div>
+    <div class="qr-card"><div class="qr-label">Starlight only</div><div class="qr-value" style="color:var(--accent)">EV −6</div><div class="qr-desc">0.001 lx</div></div>
+  </div>
+
+  <!-- 12 CROSS-APP -->
+  <div class="section-label">12 — Cross-App Workflow Comparison</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Task</th><th>Real Camera</th><th>Octane</th><th>Redshift</th><th>Unreal Engine 5</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label-col">Match exposure to scene</td>
+          <td>Meter → f-stop / shutter / ISO</td>
+          <td class="val val-octane">Set camera EV, scale light Power</td>
+          <td class="val val-redshift">Set camera ISO/f-stop or EV comp; use Physical Lights in lm/cd</td>
+          <td class="val val-unreal">Set EV100 in Post Process; match scene lux</td>
+        </tr>
+        <tr class="row-alt">
+          <td class="label-col">Practical bulb light</td>
+          <td>60W = ~800 lm · 2700 K</td>
+          <td class="val val-octane">Sphere ~200–800W · 2700 K</td>
+          <td class="val val-redshift">Point Light 800 cd or 800 lm · 2700 K</td>
+          <td class="val val-unreal">Point Light 800 cd · 2700 K</td>
+        </tr>
+        <tr>
+          <td class="label-col">Simulate noon sun</td>
+          <td>f/16 · 1/250 · ISO 100</td>
+          <td class="val val-octane">Daylight Intensity 1.0 · Turbidity 2</td>
+          <td class="val val-redshift">RS Sun node · Turbidity 2 · Intensity 1.0</td>
+          <td class="val val-unreal">Directional 100,000 lx · Sky Atmosphere on</td>
+        </tr>
+        <tr class="row-alt">
+          <td class="label-col">Soft fill (4×4 panel)</td>
+          <td>~2,000 lx at 2m</td>
+          <td class="val val-octane">Area light 50×50 cm · ~500 W</td>
+          <td class="val val-redshift">Physical Area Light 50×50 cm · 3,000–5,000 lm</td>
+          <td class="val val-unreal">Rect Light 100×100 cm · ~3,000 lm</td>
+        </tr>
+        <tr>
+          <td class="label-col">Emissive neon</td>
+          <td>Practical neon 2,000–5,000 cd/m²</td>
+          <td class="val val-octane">Emission mat 1,000–5,000 W</td>
+          <td class="val val-redshift">RS Light Material 2,000–5,000 nits · Affect GI on</td>
+          <td class="val val-unreal">Emissive 2,000–5,000 nits · GI enabled</td>
+        </tr>
+        <tr class="row-alt">
+          <td class="label-col">Depth of field</td>
+          <td>f/1.4 = shallow, f/11 = deep</td>
+          <td class="val val-octane">Thin Lens f-stop + focal length</td>
+          <td class="val val-redshift">Physical Camera f-stop + focus dist; Bokus shape via aperture blades</td>
+          <td class="val val-unreal">CineCam f-stop + Focus Distance</td>
+        </tr>
+        <tr>
+          <td class="label-col">White balance</td>
+          <td>Kelvin dial or preset</td>
+          <td class="val val-octane">WB K in Imager node</td>
+          <td class="val val-redshift">RS Camera WB or Post FX node K value</td>
+          <td class="val val-unreal">Post Process → White Balance Temp</td>
+        </tr>
+        <tr class="row-alt">
+          <td class="label-col">IES fixture profile</td>
+          <td>Use real fixture file</td>
+          <td class="val val-octane">IES Photometry in Spot light</td>
+          <td class="val val-redshift">IES Profile in Point / Spot light attrs</td>
+          <td class="val val-unreal">IES Texture in Spot / Point light</td>
+        </tr>
+        <tr>
+          <td class="label-col">Interior GI boost</td>
+          <td>Bounce cards / kickers</td>
+          <td class="val val-octane">Increase bounce count; use portal geometry</td>
+          <td class="val val-redshift">Portal Light at window openings; raise GI bounces in RS settings</td>
+          <td class="val val-unreal">Lumen Scene Detail / Quality settings; add Sky Light</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<footer>
+  <span>Cinematographer's Light Units Cheat Sheet · v1.1</span>
+  <span>Real · Octane · Redshift · Unreal Engine 5</span>
+  <span>All lux/EV values are approximations — meter your scene</span>
+</footer>
+
+</body>
+</html>
