@@ -4,17 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cinematographer's Light Unit Cheat Sheet</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.typekit.net/xhf1nbc.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0b;
-    --surface: #111114;
-    --surface2: #18181d;
-    --border: #2a2a35;
+    --bg: #2a2a2e;
+    --surface: #323236;
+    --surface2: #3a3a3f;
+    --border: #4a4a52;
     --accent: #e8a020;
-    --text: #e8e8ec;
-    --text-dim: #7a7a8a;
-    --text-faint: #3a3a4a;
+    --text: #eeeef0;
+    --text-dim: #9a9aa8;
+    --text-faint: #5a5a66;
     --real: #4fc8e8;
     --octane: #e8a020;
     --unreal: #7ac45a;
@@ -51,33 +52,35 @@
   }
 
   .header-eyebrow {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.2em;
+    font-family: 'din-2014', sans-serif;
+    font-weight: 300;
+    font-size: 11px;
+    letter-spacing: 0.28em;
     color: var(--accent);
     text-transform: uppercase;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
 
   h1 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 900;
-    font-size: clamp(36px, 5vw, 64px);
-    letter-spacing: -0.01em;
-    line-height: 1;
-    text-transform: uppercase;
+    font-family: 'din-2014', sans-serif;
+    font-weight: 200;
+    font-size: clamp(42px, 6vw, 80px);
+    letter-spacing: 0.08em;
+    line-height: 0.95;
+    text-transform: none;
     color: var(--text);
-    margin-bottom: 6px;
+    margin-bottom: 10px;
   }
 
   h1 span { color: var(--accent); }
 
   .header-sub {
-    font-family: 'Barlow', sans-serif;
+    font-family: 'din-2014', sans-serif;
     font-weight: 300;
-    font-size: 14px;
+    font-size: 13px;
     color: var(--text-dim);
-    letter-spacing: 0.04em;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
   }
 
   .legend {
