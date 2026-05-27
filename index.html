@@ -40,27 +40,45 @@
   }
 
   .hero-img {
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background: url('images/hero.png') center center / cover no-repeat;
     transform: scale(1.04);
     animation: slow-zoom 20s ease-out forwards;
   }
-
   .hero-img-b {
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background: url('images/DarkStar.png') center center / cover no-repeat;
-    opacity: 0;
-    transition: opacity 1.8s ease-in-out;
+    opacity: 0; transition: opacity 1.8s ease-in-out;
   }
-
   .hero-img-c {
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background: url('images/Desert_01.png') center center / cover no-repeat;
-    opacity: 0;
-    transition: opacity 1.8s ease-in-out;
+    opacity: 0; transition: opacity 1.8s ease-in-out;
+  }
+  .hero-img-d {
+    position: absolute; inset: 0;
+    background: url('images/ArcticBase_001.png') center center / cover no-repeat;
+    opacity: 0; transition: opacity 1.8s ease-in-out;
+  }
+  .hero-img-e {
+    position: absolute; inset: 0;
+    background: url('images/BladeRunner_01.png') center center / cover no-repeat;
+    opacity: 0; transition: opacity 1.8s ease-in-out;
+  }
+  .hero-img-f {
+    position: absolute; inset: 0;
+    background: url('images/GlassUI_01.png') center center / cover no-repeat;
+    opacity: 0; transition: opacity 1.8s ease-in-out;
+  }
+  .hero-img-g {
+    position: absolute; inset: 0;
+    background: url('images/HauntedSwamp.png') center center / cover no-repeat;
+    opacity: 0; transition: opacity 1.8s ease-in-out;
+  }
+  .hero-img-h {
+    position: absolute; inset: 0;
+    background: url('images/Temple_01.png') center center / cover no-repeat;
+    opacity: 0; transition: opacity 1.8s ease-in-out;
   }
 
   @keyframes slow-zoom {
@@ -448,6 +466,11 @@
   <div class="hero-img" id="hero-a"></div>
   <div class="hero-img-b" id="hero-b"></div>
   <div class="hero-img-c" id="hero-c"></div>
+  <div class="hero-img-d" id="hero-d"></div>
+  <div class="hero-img-e" id="hero-e"></div>
+  <div class="hero-img-f" id="hero-f"></div>
+  <div class="hero-img-g" id="hero-g"></div>
+  <div class="hero-img-h" id="hero-h"></div>
   <div class="hero-overlay"></div>
 
   <div class="top-bar">
@@ -554,17 +577,12 @@
 </footer>
 
 <script>
-  // Crossfade hero images every 6 seconds — 3 image rotation
-  const imgs = [
-    document.getElementById('hero-a'),
-    document.getElementById('hero-b'),
-    document.getElementById('hero-c')
-  ];
+  const imgs = ['a','b','c','d','e','f','g','h']
+    .map(id => document.getElementById('hero-' + id));
 
   imgs.forEach(img => img.style.transition = 'opacity 1.8s ease-in-out');
 
   let current = 0;
-
   setInterval(() => {
     imgs[current].style.opacity = '0';
     current = (current + 1) % imgs.length;
