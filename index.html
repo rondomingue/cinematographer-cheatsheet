@@ -765,8 +765,8 @@
   .extras-inner {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1px;
-    background: var(--border);
+    gap: 12px;
+    background: transparent;
     margin: 48px 48px 60px;
   }
 
@@ -948,10 +948,17 @@
     <h1 class="hero-title">Cinematic<br><em>Field Guide</em></h1>
     <p class="hero-desc">Unreal Engine 5 production references for cinematographers coming from Cinema 4D, Octane, and Redshift. Lighting, rendering, color grading, camera systems, and character workflows.</p>
     <div class="hero-cta">
-      <button class="btn-play" id="play-btn">
+      <button class="btn-play" id="play-btn" data-yt="P_hXaVLEV2w">
         <span class="play-icon">▶</span>
         <span class="play-text-wrap">
           <span class="play-text">Ravens Isle</span>
+          <span class="play-sub">UE5 Cinematic · Watch</span>
+        </span>
+      </button>
+      <button class="btn-play" id="play-btn-2" data-yt="gyDP4i_UdcY">
+        <span class="play-icon">▶</span>
+        <span class="play-text-wrap">
+          <span class="play-text">Desert Silence</span>
           <span class="play-sub">UE5 Cinematic · Watch</span>
         </span>
       </button>
@@ -1252,16 +1259,17 @@
 </div>
 
 <script>
-  const playBtn   = document.getElementById('play-btn');
-  const modal     = document.getElementById('video-modal');
-  const closeBtn  = document.getElementById('modal-close');
-  const ytFrame   = document.getElementById('yt-frame');
-  const YT_ID     = 'P_hXaVLEV2w';
+  const modal    = document.getElementById('video-modal');
+  const closeBtn = document.getElementById('modal-close');
+  const ytFrame  = document.getElementById('yt-frame');
 
-  playBtn.addEventListener('click', () => {
-    ytFrame.src = `https://www.youtube.com/embed/${YT_ID}?autoplay=1&rel=0&modestbranding=1&controls=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&color=white&vq=hd1080`;
-    modal.classList.add('open');
-    document.body.style.overflow = 'hidden';
+  document.querySelectorAll('.btn-play[data-yt]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ytId = btn.getAttribute('data-yt');
+      ytFrame.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1&controls=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&color=white&vq=hd1080`;
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
   });
 
   function closeModal() {
