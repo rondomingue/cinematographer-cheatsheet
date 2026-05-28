@@ -631,6 +631,33 @@
 
   /* HERO IMAGE HEADER */
 
+
+  /* HERO IMAGE HEADER */
+  .header-bg {
+    position: absolute; inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+
+  .header-bg.loaded { opacity: 1; }
+
+  .header-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(30,30,34,0.92) 0%,
+      rgba(30,30,34,0.75) 50%,
+      rgba(30,30,34,0.5) 100%
+    );
+  }
+
+  header > *:not(.header-bg):not(.header-overlay) {
+    position: relative;
+    z-index: 2;
+  }
 </style>
 </head>
 <body>
@@ -683,6 +710,8 @@
 
 <!-- HEADER -->
 <header id="page-top">
+  <div class="header-bg" id="page-hero-img"></div>
+  <div class="header-overlay"></div>
   <div class="header-eyebrow">Technical Reference · v1.2</div>
   <h1>Cinematographer's<br><span>Light Units</span> Cheat Sheet</h1>
   <div class="header-sub">Real Photography · Octane Render · Redshift · Unreal Engine 5</div>
