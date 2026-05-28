@@ -12,7 +12,7 @@
     --surface: #323236;
     --surface2: #3a3a3f;
     --border: #4a4a52;
-    --accent: #e8a020;
+    --accent: #ff00e5;
     --text: #eeeef0;
     --text-dim: #9a9aa8;
     --text-faint: #5a5a66;
@@ -55,7 +55,9 @@
     top: 0; left: 0;
     width: 220px;
     height: 100vh;
-    background: #1e1e22;
+    background: rgba(30, 30, 34, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
@@ -612,14 +614,18 @@
     <a class="nav-logo-name" href="index.html">Ron Domingue</a>
     <a class="nav-logo-url" href="https://rondomingue.com" target="_blank">rondomingue.com ↗</a>
   </div>
+
+  <a class="nav-item" href="index.html">← Home</a>
+
   <div class="nav-section-head">Guides</div>
-  <a class="nav-item" href="light-units.html">← Light Units Cheat Sheet</a>
-  <a class="nav-item active" href="character-workflow.html">Character Workflow</a>
-  <a class="nav-item" href="color-pipeline.html">Color &amp; LUT Pipeline</a>
   <a class="nav-item" href="alexa-blueprint.html">Alexa Blueprint Camera</a>
-  <div class="nav-divider"></div>
-  <a class="nav-item" href="field-kit.html">Field Kit →</a>
-  <div class="nav-divider"></div>
+  <a class="nav-item" href="light-units.html">Light Units Cheat Sheet</a>
+  <a class="nav-item" href="color-pipeline.html">Color & LUT Pipeline</a>
+
+  <div class="nav-section-head">Extras</div>
+  <a class="nav-item" href="field-kit.html">Field Kit</a>
+  <a class="nav-item active" href="character-workflow.html">Character Workflow</a>
+
   <div class="nav-section-head">On this page</div>
   <a class="nav-item" href="#s-overview">Overview</a>
   <a class="nav-item" href="#s-path-a">Path A — Mixamo → UE5</a>
