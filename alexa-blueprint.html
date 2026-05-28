@@ -25,6 +25,8 @@
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
+  html { scroll-behavior: smooth; }
+
   body {
     background: var(--bg);
     color: var(--text);
@@ -35,18 +37,28 @@
   }
 
   #nav-toggle {
-    position: fixed; top: 16px; left: 16px; z-index: 200;
-    background: var(--surface); border: 1px solid var(--border);
-    width: 36px; height: 36px;
+    position: fixed;
+    top: 16px; left: 16px;
+    z-index: 200;
+    background: rgba(30, 30, 34, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 40px; height: 40px;
     display: flex; align-items: center; justify-content: center;
-    cursor: pointer; transition: background 0.15s;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
   }
-  #nav-toggle:hover { background: var(--surface2); }
-  #nav-toggle svg { width: 16px; height: 16px; stroke: var(--text-dim); }
+
+  #nav-toggle:hover { background: rgba(50, 50, 56, 0.95); border-color: var(--accent); }
+
+  #nav-toggle svg { width: 18px; height: 18px; stroke: rgba(238,238,240,0.7); transition: stroke 0.15s; }
+  #nav-toggle:hover svg { stroke: var(--accent); }
 
   #side-nav {
     position: fixed; top: 0; left: 0; width: 300px; height: 100vh;
-    background: rgba(30, 30, 34, 0.60);
+    background: rgba(30, 30, 34, 0.55);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px); border-right: 1px solid var(--border);
     display: flex; flex-direction: column; padding: 24px 0;
@@ -286,8 +298,10 @@
 <body>
 
 <button id="nav-toggle" aria-label="Toggle navigation">
-  <svg viewBox="0 0 16 16" fill="none" stroke-width="1.5" stroke-linecap="round">
-    <line x1="2" y1="4" x2="14" y2="4"/><line x1="2" y1="8" x2="14" y2="8"/><line x1="2" y1="12" x2="14" y2="12"/>
+  <svg viewBox="0 0 18 18" fill="none" stroke-width="1.75" stroke-linecap="round">
+    <line x1="3" y1="5" x2="15" y2="5"/>
+    <line x1="3" y1="9" x2="15" y2="9"/>
+    <line x1="3" y1="13" x2="15" y2="13"/>
   </svg>
 </button>
 
@@ -510,6 +524,34 @@
 
 <script>
   const navToggle = document.getElementById('nav-toggle');
+
+  // Smooth scroll nav anchor links with offset
+  document.querySelectorAll('#side-nav a[href^="#"]').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (!target) return;
+      const top = target.getBoundingClientRect().top + window.scrollY - 32;
+      const start = window.scrollY;
+      const distance = top - start;
+      const duration = 800;
+      let startTime = null;
+      function easeInOutCubic(t) {
+        return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+      }
+      function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const elapsed = timestamp - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        window.scrollTo(0, start + distance * easeInOutCubic(progress));
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+      document.getElementById('side-nav').classList.remove('open');
+      document.getElementById('nav-overlay').classList.remove('open');
+    });
+  });
+
   const sideNav   = document.getElementById('side-nav');
   const overlay   = document.getElementById('nav-overlay');
   const topBar    = document.getElementById('top-bar');
