@@ -145,6 +145,7 @@
     z-index: 10;
     padding: 0 48px 64px;
     max-width: 900px;
+    overflow: visible;
   }
 
   .hero-eyebrow {
@@ -241,6 +242,64 @@
   }
 
   .play-text-wrap { display: flex; flex-direction: column; }
+
+  /* REEL DROPDOWN */
+  .reel-wrap { position: relative; display: inline-block; }
+
+  .reel-panel {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    background: rgba(14,15,17,0.97);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 4px;
+    min-width: 300px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(6px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 200;
+  }
+  .reel-panel.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+  .reel-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: background 0.15s;
+  }
+  .reel-item:last-child { border-bottom: none; }
+  .reel-item:hover { background: rgba(255,255,255,0.05); }
+
+  .reel-thumb {
+    width: 72px; height: 40px;
+    object-fit: cover;
+    border-radius: 2px;
+    flex-shrink: 0;
+    opacity: 0.8;
+    transition: opacity 0.15s;
+  }
+  .reel-item:hover .reel-thumb { opacity: 1; }
+
+  .reel-item-title {
+    font-family: 'din-2014', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+  .reel-item-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
 
   /* VIDEO MODAL */
   #video-modal {
@@ -919,6 +978,14 @@
     .guide-grid { grid-template-columns: 1fr; }
   }
 </style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9CMETG9RBQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-9CMETG9RBQ');
+</script>
 </head>
 <body>
 
@@ -948,27 +1015,42 @@
     <h1 class="hero-title">Cinematic<br><em>Field Guide</em></h1>
     <p class="hero-desc">Unreal Engine 5 production references for cinematographers coming from Cinema 4D, Octane, and Redshift. Lighting, rendering, color grading, camera systems, and character workflows.</p>
     <div class="hero-cta">
-      <button class="btn-play" id="play-btn" data-yt="P_hXaVLEV2w">
-        <span class="play-icon">▶</span>
-        <span class="play-text-wrap">
-          <span class="play-text">Ravens Isle</span>
-          <span class="play-sub">UE5 Cinematic · Watch</span>
-        </span>
-      </button>
-      <button class="btn-play" id="play-btn-2" data-yt="gyDP4i_UdcY">
-        <span class="play-icon">▶</span>
-        <span class="play-text-wrap">
-          <span class="play-text">Desert Silence</span>
-          <span class="play-sub">UE5 Cinematic · Watch</span>
-        </span>
-      </button>
-      <button class="btn-play" id="play-btn-3" data-yt="2vdD53dA1dA">
-        <span class="play-icon">▶</span>
-        <span class="play-text-wrap">
-          <span class="play-text">Dark Star</span>
-          <span class="play-sub">UE5 Cinematic · Watch</span>
-        </span>
-      </button>
+    <div class="hero-cta">
+      <div class="reel-wrap" id="reel-wrap">
+        <button class="btn-play" id="reel-trigger">
+          <span class="play-icon">▶</span>
+          <span class="play-text-wrap">
+            <span class="play-text">Watch</span>
+            <span class="play-sub">Select a film ↓</span>
+          </span>
+        </button>
+        <div class="reel-panel" id="reel-panel">
+          <div class="reel-item" data-yt="P_hXaVLEV2w">
+            <img class="reel-thumb" src="https://img.youtube.com/vi/P_hXaVLEV2w/mqdefault.jpg" alt="Ravens Isle">
+            <div><div class="reel-item-title">Ravens Isle</div><div class="reel-item-sub">UE5 Cinematic</div></div>
+          </div>
+          <div class="reel-item" data-yt="gyDP4i_UdcY">
+            <img class="reel-thumb" src="https://img.youtube.com/vi/gyDP4i_UdcY/mqdefault.jpg" alt="Desert Silence">
+            <div><div class="reel-item-title">Desert Silence</div><div class="reel-item-sub">UE5 Cinematic</div></div>
+          </div>
+          <div class="reel-item" data-yt="2vdD53dA1dA">
+            <img class="reel-thumb" src="https://img.youtube.com/vi/2vdD53dA1dA/mqdefault.jpg" alt="Dark Star">
+            <div><div class="reel-item-title">Dark Star</div><div class="reel-item-sub">UE5 Cinematic</div></div>
+          </div>
+          <div class="reel-item" data-yt="icHBlydH1f0">
+            <img class="reel-thumb" src="https://img.youtube.com/vi/icHBlydH1f0/mqdefault.jpg" alt="Temple of the Sun">
+            <div><div class="reel-item-title">Temple of the Sun</div><div class="reel-item-sub">UE5 Cinematic</div></div>
+          </div>
+          <div class="reel-item" data-yt="MJL8IqGHe2M">
+            <img class="reel-thumb" src="https://img.youtube.com/vi/MJL8IqGHe2M/mqdefault.jpg" alt="Haunted Swamp">
+            <div><div class="reel-item-title">Haunted Swamp</div><div class="reel-item-sub">UE5 Cinematic</div></div>
+          </div>
+          <div class="reel-item" data-yt="gbZAz9QDxB8">
+            <img class="reel-thumb" src="https://img.youtube.com/vi/gbZAz9QDxB8/mqdefault.jpg" alt="Cold Warnings">
+            <div><div class="reel-item-title">Cold Warnings</div><div class="reel-item-sub">UE5 Cinematic</div></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1269,14 +1351,28 @@
   const modal    = document.getElementById('video-modal');
   const closeBtn = document.getElementById('modal-close');
   const ytFrame  = document.getElementById('yt-frame');
+  const reelTrigger = document.getElementById('reel-trigger');
+  const reelPanel   = document.getElementById('reel-panel');
 
-  document.querySelectorAll('.btn-play[data-yt]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const ytId = btn.getAttribute('data-yt');
+  reelTrigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    reelPanel.classList.toggle('open');
+  });
+
+  document.querySelectorAll('.reel-item[data-yt]').forEach(item => {
+    item.addEventListener('click', () => {
+      const ytId = item.getAttribute('data-yt');
       ytFrame.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1&controls=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0&color=white&vq=hd1080`;
       modal.classList.add('open');
       document.body.style.overflow = 'hidden';
+      reelPanel.classList.remove('open');
     });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!document.getElementById('reel-wrap').contains(e.target)) {
+      reelPanel.classList.remove('open');
+    }
   });
 
   function closeModal() {
