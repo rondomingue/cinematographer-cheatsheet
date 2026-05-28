@@ -299,33 +299,6 @@
   }
 
   /* HERO IMAGE HEADER */
-  .page-hero {
-    position: relative;
-    height: 280px;
-    overflow: hidden;
-  }
-
-  .page-hero-img {
-    position: absolute; inset: 0;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    transform: scale(1.03);
-    transition: transform 8s ease-out;
-  }
-
-  .page-hero-img.loaded { transform: scale(1.0); }
-
-  .page-hero-overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(
-      to bottom,
-      rgba(0,0,0,0.3) 0%,
-      rgba(0,0,0,0.1) 40%,
-      rgba(30,30,34,0.85) 80%,
-      #323236 100%
-    );
-  }
 
 </style>
 </head>
@@ -365,12 +338,9 @@
   <span class="top-bar-title">Cinematic Color & LUT Pipeline</span>
 </div>
 
-<div class="page-hero">
-  <div class="page-hero-img" id="page-hero-img"></div>
-  <div class="page-hero-overlay"></div>
-</div>
-
 <header id="page-top">
+  <div class="header-bg" id="page-hero-img"></div>
+  <div class="header-overlay"></div>
   <a class="header-back" href="index.html">← Home</a>
   <div class="header-eyebrow">Technical Guide · Color & Grading</div>
   <h1>Cinematic <span>Color</span> &amp;<br>LUT Pipeline</h1>

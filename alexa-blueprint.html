@@ -72,7 +72,39 @@
   #top-bar.visible { height: 44px; }
   .top-bar-title { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.1em; color: var(--text-dim); }
 
-  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 32px 48px 28px 64px; position: relative; overflow: hidden; }
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 48px 28px 64px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header-bg {
+    position: absolute; inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+
+  .header-bg.loaded { opacity: 1; }
+
+  .header-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(30,30,34,0.92) 0%,
+      rgba(30,30,34,0.75) 50%,
+      rgba(30,30,34,0.5) 100%
+    );
+  }
+
+  header > *:not(.header-bg):not(.header-overlay) {
+    position: relative;
+    z-index: 2;
+  }
   header::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px); pointer-events: none; }
   .header-back { display: inline-flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); text-decoration: none; margin-bottom: 20px; transition: color 0.15s; }
   .header-back:hover { color: var(--accent); }
@@ -240,33 +272,6 @@
   }
 
   /* HERO IMAGE HEADER */
-  .page-hero {
-    position: relative;
-    height: 280px;
-    overflow: hidden;
-  }
-
-  .page-hero-img {
-    position: absolute; inset: 0;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    transform: scale(1.03);
-    transition: transform 8s ease-out;
-  }
-
-  .page-hero-img.loaded { transform: scale(1.0); }
-
-  .page-hero-overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(
-      to bottom,
-      rgba(0,0,0,0.3) 0%,
-      rgba(0,0,0,0.1) 40%,
-      rgba(30,30,34,0.85) 80%,
-      #323236 100%
-    );
-  }
 
 </style>
 </head>
@@ -306,12 +311,9 @@
   <span class="top-bar-title">Arri Alexa Blueprint Camera</span>
 </div>
 
-<div class="page-hero">
-  <div class="page-hero-img" id="page-hero-img"></div>
-  <div class="page-hero-overlay"></div>
-</div>
-
 <header id="page-top">
+  <div class="header-bg" id="page-hero-img"></div>
+  <div class="header-overlay"></div>
   <a class="header-back" href="index.html">← Home</a>
   <div class="header-eyebrow">Blueprint · Unreal Engine 5 · Camera</div>
   <h1>Arri Alexa <span>Blueprint</span> Camera</h1>
