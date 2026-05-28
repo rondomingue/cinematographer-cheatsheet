@@ -41,7 +41,7 @@
     top: 0; left: 0;
     width: var(--nav-w);
     height: 100vh;
-    background: rgba(30, 30, 34, 0.85);
+    background: rgba(30, 30, 34, 0.60);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-right: 1px solid var(--border);
@@ -57,7 +57,7 @@
   #side-nav.open { transform: translateX(0); }
 
   .nav-logo {
-    padding: 64px 18px 20px;
+    padding: 64px 28px 20px;
     border-bottom: 1px solid var(--border);
     margin-bottom: 16px;
   }
@@ -89,7 +89,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 7px 18px;
+    padding: 7px 28px 7px 38px;
     font-family: 'Space Mono', monospace;
     font-size: 8px;
     letter-spacing: 0.14em;
@@ -101,6 +101,7 @@
   }
 
   .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+  .nav-section-head { font-family: 'Space Mono', monospace; font-size: 7px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; color: rgba(255,255,255,0.9); padding: 14px 28px 5px 24px; }
   .nav-item.active { color: var(--accent); }
 
   .nav-num {
@@ -492,7 +493,7 @@
   .formula-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    padding: 16px 18px;
+    padding: 16px 28px;
     position: relative;
     cursor: pointer;
     transition: border-color 0.15s;

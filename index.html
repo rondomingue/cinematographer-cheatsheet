@@ -828,8 +828,8 @@
   }
 
   .about-strip {
-    background: var(--surface);
-    border-top: 1px solid var(--border);
+    background: #060608;
+    border-top: 1px solid rgba(255,255,255,0.06);
     padding: 40px 48px;
     display: flex;
     align-items: center;
@@ -874,8 +874,8 @@
 
   /* FOOTER */
   footer {
-    background: #0e0f11;
-    border-top: 1px solid var(--border);
+    background: #040405;
+    border-top: 1px solid rgba(255,255,255,0.04);
     padding: 20px 48px;
     font-family: 'Space Mono', monospace;
     font-size: 9px;
@@ -924,7 +924,7 @@
   <div class="hero-content">
     <div class="hero-eyebrow" id="glitch-eyebrow"></div>
     <h1 class="hero-title">Cinematic<br><em>Field Guide</em></h1>
-    <p class="hero-desc">Unreal Engine 5 production references for cinematographers coming from Cinema 4D, Octane, and Redshift. Lighting, rendering, color grading, camera systems, and character workflows — built from real production experience.</p>
+    <p class="hero-desc">Unreal Engine 5 production references for cinematographers coming from Cinema 4D, Octane, and Redshift. Lighting, rendering, color grading, camera systems, and character workflows.</p>
     <div class="hero-cta">
       <button class="btn-play" id="play-btn">
         <span class="play-icon">▶</span>
@@ -1125,17 +1125,22 @@
 </section>
 
 <div class="about-strip">
-  <div class="about-text">
-    <div class="about-name">Ron Domingue</div>
-    <div class="about-desc">New Orleans-based Art Director and 3D Visual Artist. These guides are working references built for real production — cinematic lighting, rendering, and virtual production across Cinema 4D, Octane, Redshift, and Unreal Engine.</div>
+  <div style="display:flex;align-items:center;gap:20px;">
+    <img src="images/misc/Thai-Emblem_white.png" style="width:48px;height:48px;opacity:0.5;flex-shrink:0;" alt="Ron Domingue insignia">
+    <div class="about-text">
+      <div class="about-name">Ron Domingue</div>
+      <div class="about-desc">New Orleans-based Art Director and 3D Visual Artist. These guides are working references built for real production — cinematic lighting, rendering, and virtual production across Cinema 4D, Octane, Redshift, and Unreal Engine.</div>
+    </div>
   </div>
   <a class="about-link" href="https://rondomingue.com" target="_blank">rondomingue.com ↗</a>
 </div>
 
 <footer>
   <span>Cinematic Field Guide · Ron Domingue</span>
+  <span style="display:flex;align-items:center;gap:10px;">
+    <img src="images/misc/Thai-Emblem_white.png" style="width:20px;height:20px;opacity:0.35;" alt="Ron Domingue insignia">
+  </span>
   <span><a href="https://rondomingue.com" target="_blank">rondomingue.com</a></span>
-  <span>All values are approximations — verify in production</span>
 </footer>
 
 <script>
