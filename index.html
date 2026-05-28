@@ -314,19 +314,25 @@
 
   /* SCROLL HINT */
   .scroll-hint {
-    position: absolute;
-    bottom: 36px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
+    position: fixed;
+    bottom: 40px;
+    left: 0;
+    right: 0;
+    width: max-content;
+    margin: 0 auto;
+    z-index: 100;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     opacity: 0;
-    animation: fade-up 1s 1.6s ease forwards;
-    transition: opacity 0.6s ease;
+    animation: scroll-hint-in 1s 1.6s ease forwards;
     pointer-events: none;
+  }
+
+  @keyframes scroll-hint-in {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   .scroll-hint.hidden {
@@ -336,34 +342,24 @@
 
   .scroll-hint-label {
     font-family: 'Space Mono', monospace;
-    font-size: 8px;
-    letter-spacing: 0.22em;
+    font-size: 9px;
+    letter-spacing: 0.28em;
     text-transform: uppercase;
-    color: rgba(238,238,240,0.25);
+    color: rgba(238,238,240,0.45);
   }
 
-  .scroll-chevrons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
+  .scroll-arrow {
+    animation: arrow-bounce 1.8s ease-in-out infinite;
   }
 
-  .scroll-chevron {
-    width: 12px;
-    height: 7px;
-    border-right: 1.5px solid rgba(238,238,240,0.5);
-    border-bottom: 1.5px solid rgba(238,238,240,0.5);
-    transform: rotate(45deg);
-    animation: chevron-bounce 1.8s ease-in-out infinite;
+  .scroll-arrow svg {
+    width: 24px;
+    height: 32px;
   }
-  .scroll-chevron:nth-child(1) { opacity: 0.2; animation-delay: 0s; }
-  .scroll-chevron:nth-child(2) { opacity: 0.45; animation-delay: 0.18s; }
-  .scroll-chevron:nth-child(3) { opacity: 0.75; animation-delay: 0.36s; }
 
-  @keyframes chevron-bounce {
-    0%, 100% { transform: rotate(45deg) translateY(0); }
-    50%       { transform: rotate(45deg) translateY(5px); }
+  @keyframes arrow-bounce {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(9px); }
   }
 
   /* GUIDES SECTION */
@@ -398,16 +394,12 @@
 
   .guide-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1px;
     background: var(--border);
   }
 
-  @media (max-width: 1200px) {
-    .guide-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-
-  @media (max-width: 640px) {
+  @media (max-width: 800px) {
     .guide-grid { grid-template-columns: 1fr; }
   }
 
@@ -697,6 +689,151 @@
     .uds-inner { grid-template-columns: 1fr; gap: 48px; }
     .uds-section { padding: 60px 24px; }
   }
+
+  /* EXTRAS SECTION */
+  .extras-section {
+    background: #141518;
+  }
+
+  .extras-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+    border-bottom: 1px solid transparent;
+    background: #6b3fa0;
+  }
+  .extras-header:hover { background: #7d4eba; }
+  .extras-section.open .extras-header { border-bottom-color: rgba(255,255,255,0.2); }
+
+  .extras-header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .extras-header-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .extras-header-title {
+    font-family: 'din-2014', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    letter-spacing: 0.08em;
+    color: #fff;
+  }
+
+  .extras-toggle-icon {
+    font-size: 15px;
+    color: rgba(255,255,255,0.75);
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+  }
+  .extras-section.open .extras-toggle-icon { transform: rotate(0deg); }
+  .extras-section:not(.open) .extras-toggle-icon { transform: rotate(-90deg); }
+
+  .extras-body-wrap {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+  }
+  .extras-section.open .extras-body-wrap {
+    max-height: 600px;
+    opacity: 1;
+  }
+
+  .extras-inner {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin: 48px 48px 60px;
+  }
+
+  .extras-card {
+    background: #1a1b1f;
+    padding: 32px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .extras-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 2px;
+    background: #8b55c8;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .extras-card:hover { background: #202128; }
+  .extras-card:hover::before { transform: scaleX(1); }
+
+  .extras-card-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #9b6dd8;
+  }
+
+  .extras-card-title {
+    font-family: 'din-2014', sans-serif;
+    font-weight: 300;
+    font-size: 22px;
+    letter-spacing: 0.05em;
+    color: var(--text);
+    line-height: 1.1;
+  }
+
+  .extras-card-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    max-width: 420px;
+  }
+
+  .extras-card-arrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-top: 8px;
+    transition: color 0.2s;
+  }
+  .extras-card:hover .extras-card-arrow { color: #9b6dd8; }
+
+  .extras-card-arrow-line {
+    width: 24px;
+    height: 1px;
+    background: currentColor;
+    transition: width 0.25s ease;
+  }
+  .extras-card:hover .extras-card-arrow-line { width: 40px; }
+
+  @media (max-width: 800px) {
+    .extras-inner { grid-template-columns: 1fr; margin: 32px 24px 48px; }
+    .extras-header { padding: 20px 24px; }
+  }
+
   .about-strip {
     background: var(--surface);
     border-top: 1px solid var(--border);
@@ -763,6 +900,7 @@
 
   @media (max-width: 640px) {
     .top-bar, .hero-content, .guides, .about-strip, footer { padding-left: 24px; padding-right: 24px; }
+
     .guide-grid { grid-template-columns: 1fr; }
   }
 </style>
@@ -802,24 +940,26 @@
           <span class="play-sub">UE5 Cinematic · Watch</span>
         </span>
       </button>
-      <a class="btn-field-kit" href="field-kit.html">Field Kit</a>
     </div>
   </div>
 
-  <div class="scroll-hint" id="scroll-hint">
-    <span class="scroll-hint-label">Scroll</span>
-    <div class="scroll-chevrons">
-      <div class="scroll-chevron"></div>
-      <div class="scroll-chevron"></div>
-      <div class="scroll-chevron"></div>
-    </div>
   </div>
 </section>
+
+<div class="scroll-hint" id="scroll-hint">
+  <span class="scroll-hint-label">Scroll</span>
+  <div class="scroll-arrow">
+    <svg viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="12" y1="2" x2="12" y2="26" stroke="rgba(238,238,240,0.7)" stroke-width="1.5" stroke-linecap="round"/>
+      <polyline points="4,18 12,27 20,18" fill="none" stroke="rgba(238,238,240,0.9)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+</div>
 
 <section class="guides">
   <div class="guides-header">
     <span class="guides-label">Guides</span>
-    <span class="guides-count">04 available</span>
+    <span class="guides-count">03 available</span>
   </div>
 
   <div class="guide-grid">
@@ -881,23 +1021,6 @@
       </div>
     </a>
 
-    <a class="guide-card gc-character" href="character-workflow.html">
-      <div class="guide-num">04</div>
-      <div class="guide-title">C4D · Mixamo · <span>UE5</span><br>Character Workflow</div>
-      <div class="guide-desc">Three complete paths for getting animated characters into Unreal Engine 5. Covers Mixamo auto-rigging, FBX export from Cinema 4D, IK retargeting to the UE5 Mannequin, and common troubleshooting.</div>
-      <div class="guide-tags">
-        <span class="tag">Cinema 4D</span>
-        <span class="tag">Mixamo</span>
-        <span class="tag">Unreal 5</span>
-        <span class="tag">IK Retarget</span>
-        <span class="tag">FBX</span>
-        <span class="tag">Animation</span>
-      </div>
-      <div class="guide-arrow">
-        <div class="arrow-line"></div>
-        Open guide
-      </div>
-    </a>
 
   </div>
 </section>
@@ -931,6 +1054,10 @@
         <span class="tag">Lumen</span>
         <span class="tag">Cinematic Lighting</span>
       </div>
+      <a href="https://www.ultradynamicsky.com" target="_blank" style="display:inline-flex;align-items:center;gap:10px;margin-top:24px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-dim);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">
+        <span style="display:block;width:24px;height:1px;background:currentColor;"></span>
+        ultradynamicsky.com ↗
+      </a>
     </div>
 
     <div class="uds-right">
@@ -940,54 +1067,66 @@
         <div class="uds-tip">
           <div class="uds-tip-num">01</div>
           <div class="uds-tip-body">
-            <div class="uds-tip-title">Drop it in, set the time of day first</div>
-            <div class="uds-tip-desc">Before touching weather or clouds, lock your time of day. Sun angle drives everything else — color temperature, shadow length, mood. Get that right before layering complexity.</div>
+            <div class="uds-tip-title">Set time of day first, then layer weather</div>
+            <div class="uds-tip-desc">Lock your sun angle before touching clouds or weather — it drives color temperature, shadow length, and mood. Once time of day is right, keyframe the Weather parameter in Sequencer to animate sky changes mid-scene. Even a subtle 30-second shift from clear to overcast adds cinematic life that static skies can't match.</div>
           </div>
         </div>
 
         <div class="uds-tip">
           <div class="uds-tip-num">02</div>
           <div class="uds-tip-body">
-            <div class="uds-tip-title">Use weather transitions for cinematic movement</div>
-            <div class="uds-tip-desc">Keyframe the Weather parameter in Sequencer to animate a clear sky turning overcast mid-scene. A subtle 30-second weather shift gives a cinematic alive quality that static skies can't match.</div>
+            <div class="uds-tip-title">Let UDS drive your Sky Light and fog</div>
+            <div class="uds-tip-desc">Enable Sky Light control so ambient color and intensity shift automatically as weather changes — free atmospheric lighting from a single parameter. Pair with UDS's fog integration: even subtle haze on a clear day separates foreground, midground, and background in a way most CG environments lack.</div>
           </div>
         </div>
 
         <div class="uds-tip">
           <div class="uds-tip-num">03</div>
           <div class="uds-tip-body">
-            <div class="uds-tip-title">Manage VRAM — reduce cloud quality for non-hero shots</div>
-            <div class="uds-tip-desc">Drop Cloud Quality to Medium or Low on interior shots or scenes where sky is barely visible. Full volumetrics for a sky that's 10% of frame is wasted VRAM. Reserve Ultra for wide establishing shots.</div>
-          </div>
-        </div>
-
-        <div class="uds-tip">
-          <div class="uds-tip-num">04</div>
-          <div class="uds-tip-body">
-            <div class="uds-tip-title">Let it drive your Sky Light automatically</div>
-            <div class="uds-tip-desc">UDS can control the Sky Light — as weather changes, ambient light color and intensity shift with it. Enable this and you get free atmospheric lighting from a single parameter change.</div>
-          </div>
-        </div>
-
-        <div class="uds-tip">
-          <div class="uds-tip-num">05</div>
-          <div class="uds-tip-body">
-            <div class="uds-tip-title">Use fog and haze for cinematic depth</div>
-            <div class="uds-tip-desc">UDS's atmospheric fog integration adds instant depth to wide shots. Even subtle haze on a clear day separates foreground, midground, and background — essential for the depth cue most CG environments lack.</div>
-          </div>
-        </div>
-
-        <div class="uds-tip">
-          <div class="uds-tip-num">06</div>
-          <div class="uds-tip-body">
-            <div class="uds-tip-title">Add thunder and lightning for atmosphere</div>
-            <div class="uds-tip-desc">UDS includes built-in lightning flash and thunder sound support. Enable lightning strikes during storm weather states and pair with UDS's thunder audio — the timing is randomized but believable. For cinematics, keyframe the lightning intensity in Sequencer to sync strikes to specific moments in your edit. A single well-timed bolt over a wide shot adds an enormous amount of drama for almost no extra work.</div>
+            <div class="uds-tip-title">Manage VRAM — reserve Ultra for hero shots</div>
+            <div class="uds-tip-desc">Drop Cloud Quality to Medium or Low on interiors or scenes where sky is barely visible. Full volumetrics for 10% of frame is wasted budget. Reserve Ultra for wide establishing shots, and use lightning in Sequencer — a single well-timed bolt adds enormous drama for almost no extra work.</div>
           </div>
         </div>
 
       </div>
     </div>
   </div>
+  </div>
+</section>
+
+<!-- EXTRAS SECTION -->
+<section class="extras-section" id="extras-section">
+  <div class="extras-header" id="extras-toggle">
+    <div class="extras-header-left">
+      <span class="extras-header-eyebrow">Reference & Tools</span>
+      <span class="extras-header-title">Extras</span>
+    </div>
+    <span class="extras-toggle-icon">▾</span>
+  </div>
+  <div class="extras-body-wrap">
+    <div class="extras-inner">
+
+      <a class="extras-card" href="field-kit.html">
+        <div class="extras-card-eyebrow">Asset Reference</div>
+        <div class="extras-card-title">Field Kit</div>
+        <div class="extras-card-desc">A curated reference of production-ready assets, plugins, and marketplaces for Unreal Engine 5 — vetted tools from real production use including Fab, TurboSquid, Ultra Dynamic Sky, and more.</div>
+        <div class="extras-card-arrow">
+          <div class="extras-card-arrow-line"></div>
+          Open
+        </div>
+      </a>
+
+      <a class="extras-card" href="character-workflow.html">
+        <div class="extras-card-eyebrow">Character · Animation</div>
+        <div class="extras-card-title">C4D · Mixamo · UE5 Character Workflow</div>
+        <div class="extras-card-desc">Three complete paths for getting animated characters into Unreal Engine 5. Covers Mixamo auto-rigging, FBX export from Cinema 4D, IK retargeting to the UE5 Mannequin, and common troubleshooting.</div>
+        <div class="extras-card-arrow">
+          <div class="extras-card-arrow-line"></div>
+          Open
+        </div>
+      </a>
+
+    </div>
   </div>
 </section>
 
@@ -1072,14 +1211,14 @@
   const udsToggle  = document.getElementById('uds-toggle');
   udsToggle.addEventListener('click', () => udsSection.classList.toggle('open'));
 
-  // Scroll hint fade out
+  const extrasSection = document.getElementById('extras-section');
+  const extrasToggle  = document.getElementById('extras-toggle');
+  extrasToggle.addEventListener('click', () => extrasSection.classList.toggle('open'));
+
+  // Fade scroll hint out once user starts scrolling
   const scrollHint = document.getElementById('scroll-hint');
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 60) {
-      scrollHint.classList.add('hidden');
-    } else {
-      scrollHint.classList.remove('hidden');
-    }
+    scrollHint.classList.toggle('hidden', window.scrollY > 60);
   }, { passive: true });
 </script>
 
