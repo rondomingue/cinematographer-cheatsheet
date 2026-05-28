@@ -962,7 +962,7 @@
 </section>
 
 <div style="position:fixed;bottom:40px;left:0;width:100%;display:flex;justify-content:center;z-index:100;pointer-events:none;">
-<div class="scroll-hint" id="scroll-hint">
+<div class="scroll-hint" id="scroll-hint" onclick="document.querySelector('.guides').scrollIntoView({behavior:'smooth'})" style="pointer-events:auto;cursor:pointer;">
   <div class="scroll-arrow">
     <svg viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">
       <line x1="12" y1="2" x2="12" y2="26" stroke="rgba(238,238,240,0.7)" stroke-width="1.5" stroke-linecap="round"/>
