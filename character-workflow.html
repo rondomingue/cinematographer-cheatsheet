@@ -449,6 +449,7 @@
 
   /* SETTINGS BLOCK */
   .settings-block {
+    border-radius: 3px;
     background: rgba(0,0,0,0.25);
     border: 1px solid var(--border);
     border-left: 3px solid var(--border);
@@ -501,7 +502,9 @@
   .callout-good .callout-icon { color: var(--ue5); }
 
   /* COMPARISON TABLE */
-  .table-wrap { overflow-x: auto; margin-bottom: 8px; }
+  .table-wrap {
+    border-radius: 3px;
+    overflow-x: auto; margin-bottom: 8px; }
   table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 600px; }
   thead tr { background: var(--surface); }
   th {
@@ -535,7 +538,9 @@
   .qr-card {
     background: var(--surface); border: 1px solid var(--border); padding: 14px 16px;
     cursor: pointer; transition: border-color 0.15s;
-  }
+  
+    border-radius: 3px;
+}
   .qr-card:hover { border-color: var(--text-faint); }
   .qr-card.pinned { border-color: var(--accent); background: rgba(232,160,32,0.05); }
   .qr-label { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 5px; }

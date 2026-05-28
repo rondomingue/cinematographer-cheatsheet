@@ -170,6 +170,7 @@
   }
 
   #search-input {
+    border-radius: 3px;
     background: var(--bg);
     border: 1px solid var(--border);
     color: var(--text);
@@ -406,7 +407,9 @@
   }
 
   /* TABLES */
-  .table-wrap { overflow-x: auto; margin-bottom: 8px; }
+  .table-wrap {
+    border-radius: 3px;
+    overflow-x: auto; margin-bottom: 8px; }
 
   table {
     width: 100%;
@@ -486,11 +489,12 @@
   .formula-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-    gap: 12px;
+    gap: 8px;
     margin-bottom: 8px;
   }
 
   .formula-card {
+    border-radius: 3px;
     background: var(--surface);
     border: 1px solid var(--border);
     padding: 16px 28px;
@@ -557,7 +561,7 @@
     padding: 14px 16px;
     cursor: pointer;
     transition: border-color 0.15s;
-  }
+   border-radius: 3px; }
 
   .qr-card:hover { border-color: var(--text-faint); }
   .qr-card.pinned { border-color: var(--accent); background: rgba(232,160,32,0.05); }
