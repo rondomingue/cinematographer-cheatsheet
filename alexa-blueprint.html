@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arri Alexa Blueprint Camera — Cinematic Field Guide · Ron Domingue</title>
+<link rel="stylesheet" href="https://use.typekit.net/xhf1nbc.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #2a2a2e;
+    --surface: #323236;
+    --surface2: #3a3a3f;
+    --border: #4a4a52;
+    --accent: #c8289a;
+    --text: #eeeef0;
+    --text-dim: #9a9aa8;
+    --text-faint: #5a5a66;
+    --ue5: #7ac45a;
+    --zeiss: #4fc8e8;
+    --arri: #e8a020;
+    --warning: #e8c040;
+    --tip: #c84fc8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  #nav-toggle {
+    position: fixed; top: 16px; left: 16px; z-index: 200;
+    background: var(--surface); border: 1px solid var(--border);
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: background 0.15s;
+  }
+  #nav-toggle:hover { background: var(--surface2); }
+  #nav-toggle svg { width: 16px; height: 16px; stroke: var(--text-dim); }
+
+  #side-nav {
+    position: fixed; top: 0; left: 0; width: 300px; height: 100vh;
+    background: #1e1e22; border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; padding: 24px 0;
+    z-index: 100; overflow-y: auto;
+    transform: translateX(-100%); transition: transform 0.25s ease;
+  }
+  #side-nav.open { transform: translateX(0); }
+
+  .nav-logo { padding: 64px 18px 20px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+  .nav-logo-name { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.12em; color: var(--text); text-decoration: none; display: block; margin-bottom: 2px; }
+  .nav-logo-name:hover { color: var(--accent); }
+  .nav-logo-url { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--text-faint); text-decoration: none; }
+  .nav-logo-url:hover { color: var(--accent); }
+
+  .nav-section-head { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-faint); padding: 12px 18px 6px; }
+  .nav-divider { height: 1px; background: var(--border); margin: 10px 18px; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 7px 18px; font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); cursor: pointer; transition: color 0.15s, background 0.15s; text-decoration: none; }
+  .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+  .nav-item.active { color: var(--accent); }
+
+  #nav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 99; }
+  #nav-overlay.open { display: block; }
+
+  #top-bar { position: sticky; top: 0; z-index: 50; background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 48px 0 64px; height: 0; overflow: hidden; transition: height 0.2s ease; display: flex; align-items: center; }
+  #top-bar.visible { height: 44px; }
+  .top-bar-title { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.1em; color: var(--text-dim); }
+
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 32px 48px 28px 64px; position: relative; overflow: hidden; }
+  header::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px); pointer-events: none; }
+  .header-back { display: inline-flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); text-decoration: none; margin-bottom: 20px; transition: color 0.15s; }
+  .header-back:hover { color: var(--accent); }
+  .header-eyebrow { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 11px; letter-spacing: 0.28em; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
+  h1 { font-family: 'din-2014', sans-serif; font-weight: 200; font-size: clamp(24px, 3vw, 44px); letter-spacing: 0.08em; line-height: 0.95; color: var(--text); margin-bottom: 10px; }
+  h1 span { color: var(--accent); }
+  .header-sub { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 13px; color: var(--text-dim); letter-spacing: 0.18em; text-transform: uppercase; }
+  .header-byline { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 16px; }
+  .byline-name { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.12em; color: var(--text-dim); }
+  .byline-link { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.1em; color: var(--text-faint); text-decoration: none; border-bottom: 1px solid var(--text-faint); padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; }
+  .byline-link:hover { color: var(--accent); border-color: var(--accent); }
+
+  .legend { display: flex; gap: 20px; flex-wrap: wrap; padding: 14px 48px; background: var(--bg); border-bottom: 1px solid var(--border); }
+  .pill { display: flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot-arri { background: var(--arri); }
+  .dot-zeiss { background: var(--zeiss); }
+  .dot-ue5 { background: var(--ue5); }
+  .dot-tip { background: var(--tip); }
+
+  main { padding: 40px 48px 80px; max-width: 1400px; }
+
+  .section { margin-top: 48px; }
+  .section:first-child { margin-top: 0; }
+  .section-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-faint); border-top: 1px solid var(--border); padding: 14px 0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; transition: color 0.15s; }
+  .section:first-child .section-label { border-top: none; }
+  .section-label:hover { color: var(--text-dim); }
+  .toggle-icon { font-size: 15px; color: var(--text-dim); transition: transform 0.2s ease; flex-shrink: 0; }
+  .section.collapsed .toggle-icon { transform: rotate(-90deg); }
+  .section-body { overflow: hidden; transition: max-height 0.35s ease, opacity 0.25s ease; max-height: 6000px; opacity: 1; }
+  .section.collapsed .section-body { max-height: 0; opacity: 0; }
+
+  /* SPEC CARDS */
+  .spec-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin-bottom: 20px;
+  }
+
+  .spec-card {
+    background: var(--surface);
+    padding: 24px 28px;
+  }
+
+  .spec-card-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 8px;
+  }
+
+  .spec-card-value {
+    font-family: 'din-2014', sans-serif;
+    font-weight: 300;
+    font-size: clamp(18px, 2.5vw, 28px);
+    letter-spacing: 0.06em;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .spec-card-sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  .spec-card.sc-arri .spec-card-value { color: var(--arri); }
+  .spec-card.sc-zeiss .spec-card-value { color: var(--zeiss); }
+  .spec-card.sc-ue5 .spec-card-value { color: var(--ue5); }
+  .spec-card.sc-accent .spec-card-value { color: var(--accent); }
+
+  /* LENS TABLE */
+  .table-wrap { overflow-x: auto; margin-bottom: 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 500px; }
+  thead tr { background: var(--surface); }
+  th { font-family: 'Space Mono', monospace; font-size: 9px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; line-height: 1.4; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.03) !important; }
+  .row-alt td { background: rgba(0,0,0,0.22); }
+  tr.pinned td { background: rgba(200,40,154,0.08) !important; border-left: 2px solid var(--accent); }
+  .label-col { font-family: 'din-2014', sans-serif; font-weight: 400; font-size: 15px; color: var(--text); cursor: pointer; white-space: nowrap; }
+  .note-col { font-size: 12px; color: var(--text-dim); max-width: 260px; }
+  .val { font-family: 'Space Mono', monospace; font-size: 11px; }
+  .val-arri { color: var(--arri); }
+  .val-zeiss { color: var(--zeiss); }
+  .val-ue5 { color: var(--ue5); }
+  .val-accent { color: var(--accent); }
+
+  /* CALLOUTS */
+  .callout { display: flex; gap: 12px; padding: 12px 14px; margin-bottom: 12px; font-size: 12px; line-height: 1.6; }
+  .callout-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .callout-tip { background: rgba(200,79,200,0.07); border: 1px solid rgba(200,79,200,0.2); color: var(--text-dim); }
+  .callout-tip .callout-icon { color: var(--tip); }
+  .callout-warn { background: rgba(232,192,64,0.07); border: 1px solid rgba(232,192,64,0.2); color: var(--text-dim); }
+  .callout-warn .callout-icon { color: var(--warning); }
+  .callout-good { background: rgba(122,196,90,0.07); border: 1px solid rgba(122,196,90,0.2); color: var(--text-dim); }
+  .callout-good .callout-icon { color: var(--ue5); }
+
+  /* SETTINGS BLOCK */
+  .settings-block { background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-left: 3px solid var(--border); padding: 12px 16px; margin-bottom: 10px; font-family: 'Space Mono', monospace; font-size: 11px; line-height: 1.8; color: var(--text-dim); }
+  .settings-block.ue5 { border-left-color: var(--ue5); }
+  .settings-block.arri { border-left-color: var(--arri); }
+  .settings-block.zeiss { border-left-color: var(--zeiss); }
+  .settings-block .key { color: var(--text); }
+  .settings-block .val-s { color: var(--accent); }
+
+  /* DOWNLOAD SECTION */
+  .download-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+
+  .download-info {}
+  .download-title { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 18px; letter-spacing: 0.06em; color: var(--text); margin-bottom: 6px; }
+  .download-meta { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); }
+
+  .btn-download {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #0e0f11;
+    background: var(--accent);
+    padding: 14px 28px;
+    text-decoration: none;
+    transition: background 0.2s;
+    display: inline-block;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .btn-download:hover { background: #d930a8; }
+  .btn-download.coming-soon { background: var(--surface2); color: var(--text-faint); cursor: default; border: 1px solid var(--border); }
+
+  /* QR GRID */
+  .qr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-bottom: 8px; }
+  .qr-card { background: var(--surface); border: 1px solid var(--border); padding: 14px 16px; cursor: pointer; transition: border-color 0.15s; }
+  .qr-card:hover { border-color: var(--text-faint); }
+  .qr-card.pinned { border-color: var(--accent); background: rgba(200,40,154,0.05); }
+  .qr-label { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 5px; }
+  .qr-value { font-family: 'din-2014', sans-serif; font-weight: 400; font-size: 16px; color: var(--text); margin-bottom: 3px; }
+  .qr-desc { font-size: 11px; color: var(--text-dim); line-height: 1.4; }
+
+  footer { border-top: 1px solid var(--border); padding: 20px 48px; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.12em; color: var(--text-faint); text-transform: uppercase; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; align-items: center; }
+  footer a { color: var(--text-faint); text-decoration: none; border-bottom: 1px solid var(--text-faint); padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; }
+  footer a:hover { color: var(--accent); border-color: var(--accent); }
+
+  @media (max-width: 700px) {
+    header, .legend, main, footer { padding-left: 20px; padding-right: 20px; }
+    #top-bar { padding-left: 56px; padding-right: 20px; }
+    .spec-hero { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<button id="nav-toggle" aria-label="Toggle navigation">
+  <svg viewBox="0 0 16 16" fill="none" stroke-width="1.5" stroke-linecap="round">
+    <line x1="2" y1="4" x2="14" y2="4"/><line x1="2" y1="8" x2="14" y2="8"/><line x1="2" y1="12" x2="14" y2="12"/>
+  </svg>
+</button>
+
+<nav id="side-nav">
+  <div class="nav-logo">
+    <a class="nav-logo-name" href="index.html">Ron Domingue</a>
+    <a class="nav-logo-url" href="https://rondomingue.com" target="_blank">rondomingue.com ↗</a>
+  </div>
+  <div class="nav-section-head">Guides</div>
+  <a class="nav-item" href="index.html">← Home</a>
+  <a class="nav-item" href="light-units.html">Light Units Cheat Sheet</a>
+  <a class="nav-item" href="character-workflow.html">Character Workflow</a>
+  <a class="nav-item" href="color-pipeline.html">Color & LUT Pipeline</a>
+  <a class="nav-item active" href="alexa-blueprint.html">Alexa Blueprint Camera</a>
+  <div class="nav-divider"></div>
+  <a class="nav-item" href="field-kit.html">Field Kit</a>
+  <div class="nav-divider"></div>
+  <div class="nav-section-head">On this page</div>
+  <a class="nav-item" href="#s-overview">Overview</a>
+  <a class="nav-item" href="#s-sensor">Sensor Specs</a>
+  <a class="nav-item" href="#s-lenses">Master Prime Lenses</a>
+  <a class="nav-item" href="#s-ue5">UE5 Setup</a>
+  <a class="nav-item" href="#s-workflow">Workflow Tips</a>
+  <a class="nav-item" href="#s-download">Download</a>
+</nav>
+<div id="nav-overlay"></div>
+
+<div id="top-bar">
+  <span class="top-bar-title">Arri Alexa Blueprint Camera</span>
+</div>
+
+<header id="page-top">
+  <a class="header-back" href="index.html">← Home</a>
+  <div class="header-eyebrow">Blueprint · Unreal Engine 5 · Camera</div>
+  <h1>Arri Alexa <span>Blueprint</span> Camera</h1>
+  <div class="header-sub">ARRI/ZEISS Master Prime · Super 35 · UE5</div>
+  <div class="header-byline">
+    <span class="byline-name">Ron Domingue</span>
+    <a class="byline-link" href="https://rondomingue.com" target="_blank">rondomingue.com ↗</a>
+  </div>
+</header>
+
+<div class="legend">
+  <div class="pill"><div class="dot dot-arri"></div>ARRI Body</div>
+  <div class="pill"><div class="dot dot-zeiss"></div>ZEISS Master Prime</div>
+  <div class="pill"><div class="dot dot-ue5"></div>Unreal Engine 5</div>
+  <div class="pill"><div class="dot dot-tip"></div>Tips</div>
+</div>
+
+<main>
+
+  <!-- OVERVIEW -->
+  <div class="section" id="s-overview">
+    <div class="section-label"><span>Overview</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+      <p style="font-size:14px;color:var(--text-dim);line-height:1.8;max-width:700px;margin-bottom:20px;">A UE5 Blueprint CineCamera that physically simulates the ARRI Alexa Super 35 body with the full ARRI/ZEISS Master Prime lens set. Every lens preset maps real-world focal length, T-stop, minimum focus distance, and field of view to give your Unreal cinematics the optical character of one of cinema's most trusted camera systems.</p>
+
+      <div class="callout callout-good">
+        <span class="callout-icon">✓</span>
+        <span>Drop it into any UE5 project as a replacement for the default CineCamera Actor. Select your lens from the preset list and your scene inherits the real optical properties of that Master Prime — no manual calculation required.</span>
+      </div>
+
+      <div class="spec-hero">
+        <div class="spec-card sc-arri">
+          <div class="spec-card-label">Camera Body</div>
+          <div class="spec-card-value">ARRI Alexa</div>
+          <div class="spec-card-sub">Super 35 · Industry standard since 2010 · Used on thousands of feature films</div>
+        </div>
+        <div class="spec-card sc-zeiss">
+          <div class="spec-card-label">Lens Series</div>
+          <div class="spec-card-value">ZEISS Master Prime</div>
+          <div class="spec-card-sub">T1.3 maximum aperture · 12mm - 150mm · Academy Award winning optical design</div>
+        </div>
+        <div class="spec-card sc-ue5">
+          <div class="spec-card-label">Platform</div>
+          <div class="spec-card-value">Unreal Engine 5</div>
+          <div class="spec-card-sub">Blueprint CineCamera Actor · Works with Sequencer, path tracing, and Lumen</div>
+        </div>
+        <div class="spec-card sc-accent">
+          <div class="spec-card-label">Lens Presets</div>
+          <div class="spec-card-value">16 Focal Lengths</div>
+          <div class="spec-card-sub">12mm through 150mm · Full Master Prime range · Switchable in Blueprint</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SENSOR SPECS -->
+  <div class="section" id="s-sensor">
+    <div class="section-label"><span>Sensor Specifications — ARRI Alexa Super 35</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+      <div class="settings-block arri" style="margin-bottom:16px;">
+        <span class="key">Sensor Format</span> → <span class="val-s">Super 35</span><br>
+        <span class="key">Sensor Width</span> → <span class="val-s">28.17 mm</span><br>
+        <span class="key">Sensor Height</span> → <span class="val-s">18.13 mm</span><br>
+        <span class="key">Aspect Ratio</span> → <span class="val-s">1.556:1 (native) · 2.39:1 (anamorphic) · 1.78:1 (16:9)</span><br>
+        <span class="key">Native ISO</span> → <span class="val-s">800 (EI 800)</span><br>
+        <span class="key">Dynamic Range</span> → <span class="val-s">14+ stops</span><br>
+        <span class="key">Frame Rates</span> → <span class="val-s">23.976 / 24 / 25 / 29.97 / 30 fps</span>
+      </div>
+
+      <div class="callout callout-tip">
+        <span class="callout-icon">◆</span>
+        <span>In UE5 the sensor size is set in the CineCamera's Filmback settings. The Blueprint maps this to 28.17 x 18.13mm — matching the physical Alexa Super 35 exactly. This means your field of view calculations and depth of field will behave identically to a real Alexa on set.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LENS TABLE -->
+  <div class="section" id="s-lenses">
+    <div class="section-label"><span>ARRI/ZEISS Master Prime Lens Presets</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+      <div class="callout callout-tip">
+        <span class="callout-icon">◆</span>
+        <span>Each preset sets focal length, T-stop, minimum focus distance, and the resulting horizontal/vertical FOV on the Super 35 sensor. Click any row to pin it for reference.</span>
+      </div>
+      <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Lens</th><th>Focal Length</th><th>Max Aperture</th><th>Min Focus</th><th>HFOV (S35)</th><th>Character</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="label-col">MP 12</td><td class="val val-zeiss">12mm</td><td class="val val-arri">T1.3</td><td class="val">0.3m</td><td class="val">90.0°</td><td class="note-col">Extreme wide — immersive environments, architectural interiors</td></tr>
+          <tr class="row-alt"><td class="label-col">MP 14</td><td class="val val-zeiss">14mm</td><td class="val val-arri">T1.3</td><td class="val">0.3m</td><td class="val">82.0°</td><td class="note-col">Ultra wide — grand establishing shots, expansive landscapes</td></tr>
+          <tr><td class="label-col">MP 16</td><td class="val val-zeiss">16mm</td><td class="val val-arri">T1.3</td><td class="val">0.3m</td><td class="val">74.5°</td><td class="note-col">Wide — environmental context, cramped spaces</td></tr>
+          <tr class="row-alt"><td class="label-col">MP 18</td><td class="val val-zeiss">18mm</td><td class="val val-arri">T1.3</td><td class="val">0.3m</td><td class="val">68.0°</td><td class="note-col">Wide — action coverage, large ensemble scenes</td></tr>
+          <tr><td class="label-col">MP 21</td><td class="val val-zeiss">21mm</td><td class="val val-arri">T1.3</td><td class="val">0.3m</td><td class="val">59.5°</td><td class="note-col">Moderate wide — handheld feel, documentary style</td></tr>
+          <tr class="row-alt"><td class="label-col">MP 25</td><td class="val val-zeiss">25mm</td><td class="val val-arri">T1.3</td><td class="val">0.25m</td><td class="val">51.0°</td><td class="note-col">Near-normal — versatile, minimal distortion</td></tr>
+          <tr><td class="label-col">MP 27</td><td class="val val-zeiss">27mm</td><td class="val val-arri">T1.3</td><td class="val">0.25m</td><td class="val">47.5°</td><td class="note-col">Near-normal — slightly flatter perspective</td></tr>
+          <tr class="row-alt"><td class="label-col">MP 32</td><td class="val val-zeiss">32mm</td><td class="val val-arri">T1.3</td><td class="val">0.3m</td><td class="val">40.5°</td><td class="note-col">Normal — natural perspective, cinematic workhorse</td></tr>
+          <tr><td class="label-col">MP 35</td><td class="val val-zeiss">35mm</td><td class="val val-arri">T1.3</td><td class="val">0.3m</td><td class="val">37.5°</td><td class="note-col">Normal — closest to human eye perspective</td></tr>
+          <tr class="row-alt"><td class="label-col">MP 40</td><td class="val val-zeiss">40mm</td><td class="val val-arri">T1.3</td><td class="val">0.38m</td><td class="val">33.0°</td><td class="note-col">Slightly long — flattering for characters, subtle compression</td></tr>
+          <tr><td class="label-col">MP 50</td><td class="val val-zeiss">50mm</td><td class="val val-arri">T1.3</td><td class="val">0.5m</td><td class="val">27.0°</td><td class="note-col">Short tele — portrait, close coverage, clean background separation</td></tr>
+          <tr class="row-alt"><td class="label-col">MP 65</td><td class="val val-zeiss">65mm</td><td class="val val-arri">T1.3</td><td class="val">0.7m</td><td class="val">21.0°</td><td class="note-col">Medium tele — character close-ups, subtle depth compression</td></tr>
+          <tr><td class="label-col">MP 75</td><td class="val val-zeiss">75mm</td><td class="val val-arri">T1.3</td><td class="val">0.85m</td><td class="val">18.5°</td><td class="note-col">Tele — beauty shots, isolating subjects from environment</td></tr>
+          <tr class="row-alt"><td class="label-col">MP 100</td><td class="val val-zeiss">100mm</td><td class="val val-arri">T1.3</td><td class="val">1.0m</td><td class="val">14.0°</td><td class="note-col">Long tele — compressed perspective, surveillance feel</td></tr>
+          <tr><td class="label-col">MP 135</td><td class="val val-zeiss">135mm</td><td class="val val-arri">T1.3</td><td class="val">1.4m</td><td class="val">10.5°</td><td class="note-col">Long tele — dramatic compression, selective focus</td></tr>
+          <tr class="row-alt"><td class="label-col">MP 150</td><td class="val val-zeiss">150mm</td><td class="val val-arri">T1.3</td><td class="val">1.5m</td><td class="val">9.5°</td><td class="note-col">Super tele — maximum compression, intimate distance feeling</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- UE5 SETUP -->
+  <div class="section" id="s-ue5">
+    <div class="section-label"><span>UE5 Blueprint Settings</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+      <div class="settings-block ue5" style="margin-bottom:16px;">
+        <span class="key">Actor Type</span> → <span class="val-s">CineCamera Actor (Blueprint subclass)</span><br>
+        <span class="key">Filmback Width</span> → <span class="val-s">28.17 mm</span><br>
+        <span class="key">Filmback Height</span> → <span class="val-s">18.13 mm</span><br>
+        <span class="key">Max Aperture</span> → <span class="val-s">T1.3 (f/1.3 equiv)</span><br>
+        <span class="key">Lens Preset Variable</span> → <span class="val-s">Selectable — 12mm to 150mm</span><br>
+        <span class="key">Focus Method</span> → <span class="val-s">Manual or Tracking</span><br>
+        <span class="key">Shutter Speed</span> → <span class="val-s">1/48 sec (180° rule at 24fps)</span><br>
+        <span class="key">ISO</span> → <span class="val-s">800 (Alexa native)</span>
+      </div>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">⚠</span>
+        <span>UE5's depth of field at T1.3 on Super 35 is extremely shallow — especially on longer focal lengths. At 150mm T1.3 the depth of field is razor thin. Set your focus distance carefully or use Tracking focus mode in the Blueprint.</span>
+      </div>
+
+      <div class="callout callout-tip">
+        <span class="callout-icon">◆</span>
+        <span>For Sequencer work, keyframe the Lens Preset variable to simulate a lens change mid-shot. Combined with a subtle focus pull this can sell a completely different visual register without moving the camera.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKFLOW TIPS -->
+  <div class="section" id="s-workflow">
+    <div class="section-label"><span>Workflow Tips</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+      <div class="qr-grid">
+        <div class="qr-card"><div class="qr-label">Wide establishing</div><div class="qr-value">MP 16–21</div><div class="qr-desc">Environmental context, scale, and geography. Let the environment breathe.</div></div>
+        <div class="qr-card"><div class="qr-label">Scene coverage</div><div class="qr-value">MP 25–35</div><div class="qr-desc">The workhorses. Natural perspective, minimal distortion, most versatile range.</div></div>
+        <div class="qr-card"><div class="qr-label">Character shots</div><div class="qr-value">MP 40–65</div><div class="qr-desc">Flattering compression, background separation, cinematic portrait feel.</div></div>
+        <div class="qr-card"><div class="qr-label">Hero close-ups</div><div class="qr-value">MP 75–100</div><div class="qr-desc">Isolate subject completely. Background becomes pure bokeh.</div></div>
+        <div class="qr-card"><div class="qr-label">Dramatic compression</div><div class="qr-value">MP 135–150</div><div class="qr-desc">Stack foreground and background. Intimate distance feeling from far away.</div></div>
+        <div class="qr-card"><div class="qr-label">Cinematic aperture</div><div class="qr-value">T1.3–T2.8</div><div class="qr-desc">T1.3 for moody low-light. Stop down to T2.8 for more depth in bright scenes.</div></div>
+        <div class="qr-card"><div class="qr-label">Cinematic shutter</div><div class="qr-value">1/48 sec</div><div class="qr-desc">180° rule at 24fps. Gives natural motion blur cadence matching film.</div></div>
+        <div class="qr-card"><div class="qr-label">Native ISO</div><div class="qr-value">EI 800</div><div class="qr-desc">Alexa's sweet spot. Low noise, full dynamic range, natural tonal response.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOWNLOAD -->
+  <div class="section" id="s-download">
+    <div class="section-label"><span>Download</span><span class="toggle-icon">▾</span></div>
+    <div class="section-body">
+      <div class="download-section">
+        <div class="download-info">
+          <div class="download-title">Arri Alexa Blueprint Camera · v1.0</div>
+          <div class="download-meta">Unreal Engine 5 · Blueprint CineCamera Actor · ARRI/ZEISS Master Prime · Super 35</div>
+        </div>
+        <a class="btn-download coming-soon" href="#">Coming Soon</a>
+      </div>
+
+      <div class="callout callout-tip">
+        <span class="callout-icon">◆</span>
+        <span>The Blueprint will be available as a free download and submitted to Fab. Drop in the link here once it's ready — the download button above will go live automatically.</span>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span>Arri Alexa Blueprint Camera · Cinematic Field Guide</span>
+  <span>By <a href="https://rondomingue.com" target="_blank">Ron Domingue</a> · <a href="https://rondomingue.com" target="_blank">rondomingue.com</a></span>
+  <span><a href="index.html">← Home</a></span>
+</footer>
+
+<script>
+  const navToggle = document.getElementById('nav-toggle');
+  const sideNav   = document.getElementById('side-nav');
+  const overlay   = document.getElementById('nav-overlay');
+  const topBar    = document.getElementById('top-bar');
+  const pageTop   = document.getElementById('page-top');
+
+  navToggle.addEventListener('click', () => sideNav.classList.contains('open') ? closeNav() : openNav());
+  overlay.addEventListener('click', closeNav);
+  function openNav()  { sideNav.classList.add('open'); overlay.classList.add('open'); }
+  function closeNav() { sideNav.classList.remove('open'); overlay.classList.remove('open'); }
+
+  new IntersectionObserver(([e]) => topBar.classList.toggle('visible', !e.isIntersecting), { threshold: 0 }).observe(pageTop);
+
+  document.querySelectorAll('.section-label').forEach(label => {
+    label.addEventListener('click', () => label.closest('.section').classList.toggle('collapsed'));
+  });
+
+  document.querySelectorAll('tbody tr').forEach(row => row.addEventListener('click', () => row.classList.toggle('pinned')));
+  document.querySelectorAll('.qr-card').forEach(card => card.addEventListener('click', () => card.classList.toggle('pinned')));
+</script>
+
+</body>
+</html>
