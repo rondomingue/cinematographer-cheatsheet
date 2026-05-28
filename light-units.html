@@ -628,6 +628,36 @@
     #top-bar { padding-left: 56px; padding-right: 20px; }
     #search-bar-input { width: 100%; }
   }
+
+  /* HERO IMAGE HEADER */
+  .page-hero {
+    position: relative;
+    height: 280px;
+    overflow: hidden;
+  }
+
+  .page-hero-img {
+    position: absolute; inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transform: scale(1.03);
+    transition: transform 8s ease-out;
+  }
+
+  .page-hero-img.loaded { transform: scale(1.0); }
+
+  .page-hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.3) 0%,
+      rgba(0,0,0,0.1) 40%,
+      rgba(30,30,34,0.85) 80%,
+      #323236 100%
+    );
+  }
+
 </style>
 </head>
 <body>
@@ -679,6 +709,11 @@
 </div>
 
 <!-- HEADER -->
+<div class="page-hero">
+  <div class="page-hero-img" id="page-hero-img"></div>
+  <div class="page-hero-overlay"></div>
+</div>
+
 <header id="page-top">
   <div class="header-eyebrow">Technical Reference · v1.2</div>
   <h1>Cinematographer's<br><span>Light Units</span> Cheat Sheet</h1>
@@ -1088,6 +1123,28 @@
   searchBarInput.addEventListener('input', e => runSearch(e.target.value));
   searchTopInput.addEventListener('input', e => runSearch(e.target.value));
   searchClear.addEventListener('click', () => runSearch(''));
+</script>
+
+<script>
+
+  // Random hero image
+  const heroImages = [
+    'images/hero.png',
+    'images/DarkStar.png',
+    'images/Desert_01.png',
+    'images/ArcticBase_001.png',
+    'images/BladeRunner_01.png',
+    'images/GlassUI_01.png',
+    'images/HauntedSwamp.png',
+    'images/Temple_01.png'
+  ];
+  const heroEl = document.getElementById('page-hero-img');
+  if (heroEl) {
+    const pick = heroImages[Math.floor(Math.random() * heroImages.length)];
+    heroEl.style.backgroundImage = `url('${pick}')`;
+    setTimeout(() => heroEl.classList.add('loaded'), 50);
+  }
+
 </script>
 
 </body>
