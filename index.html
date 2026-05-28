@@ -155,7 +155,7 @@
     color: var(--accent);
     margin-bottom: 16px;
     opacity: 0;
-    animation: fade-up 0.8s 0.3s ease forwards;
+    position: relative;
   }
 
   .hero-title {
@@ -743,7 +743,7 @@
   </div>
 
   <div class="hero-content">
-    <div class="hero-eyebrow">Cinematic Field Guide · 2026</div>
+    <div class="hero-eyebrow" id="glitch-eyebrow"></div>
     <h1 class="hero-title">Cinematic<br><em>Field Guide</em></h1>
     <p class="hero-desc">Technical reference guides for lighting, rendering, and character animation across Cinema 4D, Octane, Redshift, and Unreal Engine 5.</p>
     <div class="hero-cta">
@@ -947,6 +947,55 @@
     current = (current + 1) % imgs.length;
     imgs[current].style.opacity = '1';
   }, 6000);
+
+  // GLITCH TYPEWRITER — chaotic random
+  const glitchChars = '!<>-_\\/[]{}=+*^?#@$%&~ΔΩ∑∂∫≠≈∞◆▸▹░▒▓█';
+
+  function glitchType(el, finalText, delay = 0, speed = 55) {
+    const len = finalText.length;
+    let resolved = 0;
+    let frame = 0;
+
+    setTimeout(() => {
+      el.style.opacity = '1';
+      el.setAttribute('data-text', finalText);
+      el.classList.add('glitch-active');
+
+      const interval = setInterval(() => {
+        let output = '';
+        for (let i = 0; i < len; i++) {
+          if (i < resolved) {
+            // occasionally glitch already-resolved chars
+            if (Math.random() < 0.04) {
+              output += glitchChars[Math.floor(Math.random() * glitchChars.length)];
+            } else {
+              output += finalText[i];
+            }
+          } else {
+            output += glitchChars[Math.floor(Math.random() * glitchChars.length)];
+          }
+        }
+        el.textContent = output;
+        el.setAttribute('data-text', output);
+        frame++;
+
+        // variable resolve speed — sometimes jumps 2, sometimes stalls
+        const roll = Math.random();
+        if (roll < 0.5 && resolved < len) resolved++;
+        else if (roll < 0.65 && resolved < len) resolved += 2;
+        // else stall this frame
+
+        if (resolved >= len) {
+          el.textContent = finalText;
+          el.setAttribute('data-text', finalText);
+          el.classList.remove('glitch-active');
+          clearInterval(interval);
+        }
+      }, speed);
+    }, delay);
+  }
+
+  glitchType(document.getElementById('glitch-eyebrow'), 'Cinematic Field Guide · 2026', 300, 55);
 
   // UDS section toggle
   const udsSection = document.querySelector('.uds-section');
