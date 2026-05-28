@@ -275,7 +275,21 @@
   }
   .modal-close:hover { color: var(--accent); }
 
-  @keyframes fade-up {
+  .btn-field-kit {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text);
+    background: transparent;
+    border: 1px solid rgba(238,238,240,0.25);
+    padding: 13px 24px;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+    display: inline-flex;
+    align-items: center;
+  }
+  .btn-field-kit:hover { border-color: var(--accent); color: var(--accent); }
     from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: translateY(0); }
   }
@@ -453,7 +467,7 @@
   .guide-card:hover .arrow-line { width: 36px; }
 
   .uds-section {
-    background: var(--accent);
+    background: #141518;
     border-top: none;
   }
 
@@ -466,9 +480,10 @@
     user-select: none;
     transition: background 0.15s;
     border-bottom: 1px solid transparent;
+    background: var(--accent);
   }
 
-  .uds-header:hover { background: rgba(0,0,0,0.08); }
+  .uds-header:hover { background: #d930a8; }
   .uds-section.open .uds-header { border-bottom-color: rgba(255,255,255,0.2); }
 
   .uds-header-left {
@@ -482,7 +497,7 @@
     font-size: 9px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.55);
+    color: rgba(255,255,255,0.6);
   }
 
   .uds-header-title {
@@ -495,7 +510,7 @@
 
   .uds-toggle-icon {
     font-size: 15px;
-    color: rgba(255,255,255,0.7);
+    color: rgba(255,255,255,0.75);
     transition: transform 0.25s ease;
     flex-shrink: 0;
   }
@@ -529,7 +544,7 @@
     font-size: 9px;
     letter-spacing: 0.25em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.55);
+    color: var(--accent);
     margin-bottom: 16px;
   }
 
@@ -539,25 +554,25 @@
     font-size: clamp(32px, 4vw, 56px);
     letter-spacing: 0.06em;
     line-height: 0.95;
-    color: #fff;
+    color: var(--text);
     margin-bottom: 24px;
   }
 
-  .uds-title span { color: rgba(255,255,255,0.75); }
+  .uds-title span { color: var(--accent); }
 
   .uds-lead {
     font-family: 'din-2014', sans-serif;
     font-weight: 300;
     font-size: 18px;
     letter-spacing: 0.03em;
-    color: #fff;
+    color: var(--text);
     line-height: 1.5;
     margin-bottom: 20px;
   }
 
   .uds-body {
     font-size: 13px;
-    color: rgba(255,255,255,0.75);
+    color: var(--text-dim);
     line-height: 1.8;
     margin-bottom: 16px;
     max-width: 520px;
@@ -566,17 +581,17 @@
   .uds-callout {
     display: flex;
     gap: 12px;
-    background: rgba(0,0,0,0.15);
-    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(232,192,64,0.07);
+    border: 1px solid rgba(232,192,64,0.2);
     padding: 14px 16px;
     margin: 20px 0 24px;
     font-size: 12px;
-    color: rgba(255,255,255,0.8);
+    color: var(--text-dim);
     line-height: 1.6;
   }
 
-  .uds-callout strong { color: #fff; }
-  .uds-callout-icon { color: rgba(255,255,255,0.9); font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .uds-callout strong { color: var(--warning); }
+  .uds-callout-icon { color: var(--warning); font-size: 14px; flex-shrink: 0; margin-top: 1px; }
 
   .uds-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 
@@ -585,17 +600,17 @@
     font-size: 9px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.45);
+    color: var(--text-faint);
     margin-bottom: 24px;
     padding-bottom: 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
+    border-bottom: 1px solid var(--border);
   }
 
   .uds-tip {
     display: flex;
     gap: 20px;
     padding: 20px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.15);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
   }
 
   .uds-tip:last-child { border-bottom: none; }
@@ -603,7 +618,7 @@
   .uds-tip-num {
     font-family: 'Space Mono', monospace;
     font-size: 9px;
-    color: rgba(255,255,255,0.5);
+    color: var(--accent);
     letter-spacing: 0.1em;
     flex-shrink: 0;
     padding-top: 3px;
@@ -615,14 +630,14 @@
     font-weight: 400;
     font-size: 14px;
     letter-spacing: 0.04em;
-    color: #fff;
+    color: var(--text);
     margin-bottom: 6px;
     line-height: 1.2;
   }
 
   .uds-tip-desc {
     font-size: 12px;
-    color: rgba(255,255,255,0.7);
+    color: var(--text-dim);
     line-height: 1.7;
   }
 
@@ -715,11 +730,15 @@
   <div class="hero-overlay"></div>
 
   <div class="top-bar">
-    <a class="top-logo" href="index.html">Ron Domingue</a>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <img src="images/Thai-Emblem_white.png" style="width:24px;height:24px;opacity:0.6;" alt="">
+      <a class="top-logo" href="index.html">Ron Domingue</a>
+    </div>
     <a class="top-site-url" href="https://rondomingue.com" target="_blank">rondomingue.com ↗</a>
   </div>
 
   <div class="hero-content">
+    <img src="images/Thai-Emblem_white.png" style="width:56px;height:56px;opacity:0.85;margin-bottom:22px;display:block;" alt="Ron Domingue">
     <div class="hero-eyebrow">Cinematic Field Guide · 2026</div>
     <h1 class="hero-title">Cinematic<br><em>Field Guide</em></h1>
     <p class="hero-desc">Technical reference guides for lighting, rendering, and character animation across Cinema 4D, Octane, Redshift, and Unreal Engine 5.</p>
@@ -731,6 +750,7 @@
           <span class="play-sub">UE5 Cinematic · Watch</span>
         </span>
       </button>
+      <a class="btn-field-kit" href="field-kit.html">Field Kit</a>
     </div>
   </div>
 
