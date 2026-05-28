@@ -31,7 +31,7 @@
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Barlow', sans-serif;
+    font-family: ’Barlow’, sans-serif;
     font-weight: 300;
     line-height: 1.5;
     min-height: 100vh;
@@ -70,18 +70,18 @@
   #side-nav.open { transform: translateX(0); }
 
   .nav-logo { padding: 64px 28px 20px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
-  .nav-logo-name { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.12em; color: var(--text); text-decoration: none; display: block; margin-bottom: 2px; }
+  .nav-logo-name { font-family: ’din-2014’, sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.12em; color: var(--text); text-decoration: none; display: block; margin-bottom: 2px; }
   .nav-logo-name:hover { color: var(--accent); }
-  .nav-logo-url { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--text-faint); text-decoration: none; }
+  .nav-logo-url { font-family: ’Space Mono’, monospace; font-size: 9px; color: var(--text-faint); text-decoration: none; }
   .nav-logo-url:hover { color: var(--accent); }
 
-  .nav-section-head { font-family: 'Space Mono', monospace; font-size: 7px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; color: rgba(255,255,255,0.9); padding: 14px 28px 5px 24px; }
+  .nav-section-head { font-family: ’Space Mono’, monospace; font-size: 7px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; color: rgba(255,255,255,0.9); padding: 14px 28px 5px 24px; }
   .nav-divider { height: 1px; background: var(--border); margin: 10px 18px; }
 
   .nav-item {
     display: flex; align-items: center; gap: 10px;
     padding: 7px 28px 7px 38px;
-    font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
+    font-family: ’Space Mono’, monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
     color: var(--text-faint); cursor: pointer; transition: color 0.15s, background 0.15s; text-decoration: none;
   }
   .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
@@ -97,7 +97,7 @@
     transition: height 0.2s ease; display: flex; align-items: center; justify-content: space-between;
   }
   #top-bar.visible { height: 44px; }
-  .top-bar-title { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.1em; color: var(--text-dim); }
+  .top-bar-title { font-family: ’din-2014’, sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.1em; color: var(--text-dim); }
 
   /* HEADER */
   header {
@@ -105,24 +105,24 @@
     padding: 32px 48px 28px 64px; position: relative; overflow: hidden;
   }
   header::before {
-    content: ''; position: absolute; inset: 0;
+    content: ’’; position: absolute; inset: 0;
     background: repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px);
     pointer-events: none;
   }
-  .header-back { display: inline-flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); text-decoration: none; margin-bottom: 20px; transition: color 0.15s; }
+  .header-back { display: inline-flex; align-items: center; gap: 8px; font-family: ’Space Mono’, monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); text-decoration: none; margin-bottom: 20px; transition: color 0.15s; }
   .header-back:hover { color: var(--accent); }
-  .header-eyebrow { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 11px; letter-spacing: 0.28em; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
-  h1 { font-family: 'din-2014', sans-serif; font-weight: 200; font-size: clamp(24px, 3vw, 44px); letter-spacing: 0.08em; line-height: 0.95; color: var(--text); margin-bottom: 10px; }
+  .header-eyebrow { font-family: ’din-2014’, sans-serif; font-weight: 300; font-size: 11px; letter-spacing: 0.28em; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
+  h1 { font-family: ’din-2014’, sans-serif; font-weight: 200; font-size: clamp(24px, 3vw, 44px); letter-spacing: 0.08em; line-height: 0.95; color: var(--text); margin-bottom: 10px; }
   h1 span { color: var(--accent); }
-  .header-sub { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 13px; color: var(--text-dim); letter-spacing: 0.18em; text-transform: uppercase; }
+  .header-sub { font-family: ’din-2014’, sans-serif; font-weight: 300; font-size: 13px; color: var(--text-dim); letter-spacing: 0.18em; text-transform: uppercase; }
   .header-byline { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 16px; }
-  .byline-name { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.12em; color: var(--text-dim); }
-  .byline-link { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.1em; color: var(--text-faint); text-decoration: none; border-bottom: 1px solid var(--text-faint); padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; }
+  .byline-name { font-family: ’din-2014’, sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.12em; color: var(--text-dim); }
+  .byline-link { font-family: ’Space Mono’, monospace; font-size: 9px; letter-spacing: 0.1em; color: var(--text-faint); text-decoration: none; border-bottom: 1px solid var(--text-faint); padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; }
   .byline-link:hover { color: var(--accent); border-color: var(--accent); }
 
   /* LEGEND */
   .legend { display: flex; gap: 20px; flex-wrap: wrap; padding: 14px 48px; background: var(--bg); border-bottom: 1px solid var(--border); }
-  .pill { display: flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
+  .pill { display: flex; align-items: center; gap: 8px; font-family: ’Space Mono’, monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
   .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
   .dot-octane { background: var(--octane); }
   .dot-redshift { background: var(--redshift); }
@@ -138,7 +138,7 @@
   .section { margin-top: 48px; }
   .section:first-child { margin-top: 0; }
   .section-label {
-    font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase;
+    font-family: ’Space Mono’, monospace; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase;
     color: var(--text-faint); border-top: 1px solid var(--border); padding: 14px 0;
     display: flex; align-items: center; justify-content: space-between;
     cursor: pointer; user-select: none; transition: color 0.15s;
@@ -165,9 +165,9 @@
   }
   .pf-node:last-child { border-right: none; }
 
-  .pf-num { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.15em; color: var(--text-faint); margin-bottom: 6px; }
-  .pf-app { font-family: 'din-2014', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
-  .pf-detail { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--text-faint); letter-spacing: 0.06em; line-height: 1.5; }
+  .pf-num { font-family: ’Space Mono’, monospace; font-size: 8px; letter-spacing: 0.15em; color: var(--text-faint); margin-bottom: 6px; }
+  .pf-app { font-family: ’din-2014’, sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .pf-detail { font-family: ’Space Mono’, monospace; font-size: 9px; color: var(--text-faint); letter-spacing: 0.06em; line-height: 1.5; }
 
   .pf-octane .pf-app { color: var(--octane); }
   .pf-redshift .pf-app { color: var(--redshift); }
@@ -175,7 +175,7 @@
   .pf-resolve .pf-app { color: var(--resolve); }
 
   .pf-node::after {
-    content: '→';
+    content: ’→’;
     position: absolute; right: -10px; top: 50%;
     transform: translateY(-50%);
     color: var(--text-faint); font-size: 12px;
@@ -187,12 +187,12 @@
   .steps { display: flex; flex-direction: column; gap: 0; }
   .step { display: grid; grid-template-columns: 48px 1fr; gap: 0; position: relative; }
   .step-left { display: flex; flex-direction: column; align-items: center; padding-top: 2px; }
-  .step-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; flex-shrink: 0; z-index: 1; }
+  .step-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: ’Space Mono’, monospace; font-size: 10px; font-weight: 700; flex-shrink: 0; z-index: 1; }
   .step-line { width: 1px; flex: 1; min-height: 20px; margin-top: 4px; }
   .step:last-child .step-line { display: none; }
   .step-content { padding: 0 0 28px 16px; }
-  .step-app { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 4px; }
-  .step-title { font-family: 'din-2014', sans-serif; font-weight: 400; font-size: 16px; letter-spacing: 0.04em; margin-bottom: 6px; line-height: 1.2; }
+  .step-app { font-family: ’Space Mono’, monospace; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 4px; }
+  .step-title { font-family: ’din-2014’, sans-serif; font-weight: 400; font-size: 16px; letter-spacing: 0.04em; margin-bottom: 6px; line-height: 1.2; }
   .step-desc { font-size: 13px; color: var(--text-dim); line-height: 1.6; margin-bottom: 10px; }
 
   .step-octane .step-num { background: rgba(232,160,32,0.12); color: var(--octane); border: 1px solid var(--octane); }
@@ -216,7 +216,7 @@
     border-radius: 3px;
     background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-left: 3px solid var(--border);
     padding: 12px 16px; margin-bottom: 10px;
-    font-family: 'Space Mono', monospace; font-size: 11px; line-height: 1.8; color: var(--text-dim);
+    font-family: ’Space Mono’, monospace; font-size: 11px; line-height: 1.8; color: var(--text-dim);
   }
   .settings-block.octane { border-left-color: var(--octane); }
   .settings-block.redshift { border-left-color: var(--redshift); }
@@ -248,7 +248,7 @@
     border: 1px solid var(--border);
     padding: 20px 24px;
     margin-bottom: 12px;
-    font-family: 'Space Mono', monospace;
+    font-family: ’Space Mono’, monospace;
     font-size: 10px;
   }
 
@@ -282,15 +282,15 @@
     overflow-x: auto; margin-bottom: 8px; }
   table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 500px; }
   thead tr { background: var(--surface); }
-  th { font-family: 'Space Mono', monospace; font-size: 9px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  th { font-family: ’Space Mono’, monospace; font-size: 9px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
   td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; line-height: 1.4; }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: rgba(255,255,255,0.03) !important; }
   .row-alt td { background: rgba(0,0,0,0.22); }
   tr.pinned td { background: rgba(200,40,154,0.08) !important; border-left: 2px solid var(--accent); }
-  .label-col { font-family: 'Barlow', sans-serif; font-weight: 500; font-size: 13px; color: var(--text); cursor: pointer; white-space: nowrap; }
+  .label-col { font-family: ’Barlow’, sans-serif; font-weight: 500; font-size: 13px; color: var(--text); cursor: pointer; white-space: nowrap; }
   .note-col { font-size: 12px; color: var(--text-dim); max-width: 260px; }
-  .val { font-family: 'Space Mono', monospace; font-size: 11px; }
+  .val { font-family: ’Space Mono’, monospace; font-size: 11px; }
   .val-octane { color: var(--octane); }
   .val-redshift { color: var(--redshift); }
   .val-ue5 { color: var(--ue5); }
@@ -303,12 +303,12 @@
   .qr-card { background: var(--surface); border: 1px solid var(--border); padding: 14px 16px; cursor: pointer; transition: border-color 0.15s;  border-radius: 3px; }
   .qr-card:hover { border-color: var(--text-faint); }
   .qr-card.pinned { border-color: var(--accent); background: rgba(200,40,154,0.05); }
-  .qr-label { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 5px; }
-  .qr-value { font-family: 'din-2014', sans-serif; font-weight: 600; font-size: 15px; color: var(--text); margin-bottom: 3px; line-height: 1.2; }
+  .qr-label { font-family: ’Space Mono’, monospace; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 5px; }
+  .qr-value { font-family: ’din-2014’, sans-serif; font-weight: 600; font-size: 15px; color: var(--text); margin-bottom: 3px; line-height: 1.2; }
   .qr-desc { font-size: 11px; color: var(--text-dim); line-height: 1.4; }
 
   /* FOOTER */
-  footer { border-top: 1px solid var(--border); padding: 20px 48px; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.12em; color: var(--text-faint); text-transform: uppercase; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; align-items: center; }
+  footer { border-top: 1px solid var(--border); padding: 20px 48px; font-family: ’Space Mono’, monospace; font-size: 9px; letter-spacing: 0.12em; color: var(--text-faint); text-transform: uppercase; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; align-items: center; }
   footer a { color: var(--text-faint); text-decoration: none; border-bottom: 1px solid var(--text-faint); padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; }
   footer a:hover { color: var(--accent); border-color: var(--accent); }
 
@@ -352,8 +352,8 @@
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-9CMETG9RBQ');
+  gtag(’js’, new Date());
+  gtag(’config’, ’G-9CMETG9RBQ’);
 </script>
 </head>
 <body>
@@ -434,16 +434,16 @@
         <div class="pf-node pf-resolve"><div class="pf-num">03</div><div class="pf-app">Deliver</div><div class="pf-detail">rec.709 / H.264<br>or rec.2020 HDR<br>baked LUT option</div></div>
       </div>
 
-      <div class="step-desc" style="margin-bottom:16px; max-width: 680px;">The core idea is simple: your renderer captures physically accurate light information in linear color space — like a RAW file from a camera. Applying a tone curve inside the renderer permanently bakes creative decisions into the image before you've even touched it in post. Instead, export that linear data untouched as EXR, and let DaVinci Resolve handle all the creative color work.</div>
+      <div class="step-desc" style="margin-bottom:16px; max-width: 680px;">The core idea is simple: your renderer captures physically accurate light information in linear color space — like a RAW file from a camera. Applying a tone curve inside the renderer permanently bakes creative decisions into the image before you’ve even touched it in post. Instead, export that linear data untouched as EXR, and let DaVinci Resolve handle all the creative color work.</div>
 
       <div class="callout callout-ron">
         <span class="callout-icon">◆</span>
-        <div><strong style="color:var(--accent)">Ron's workflow:</strong> Tone curve disabled in all renderers. Everything exports as linear EXR. ACES color space in Resolve (Linear-ACES_HD project). The ACES Transform node converts linear to display — that's the only "tone mapping" in the pipeline. Everything after is creative: contrast, Film Look Creator, Dehancer 35mm grain, custom vignette and chromatic aberration.</div>
+        <div><strong style="color:var(--accent)">Ron’s workflow:</strong> Tone curve disabled in all renderers. Everything exports as linear EXR. ACES color space in Resolve (Linear-ACES_HD project). The ACES Transform node converts linear to display — that’s the only "tone mapping" in the pipeline. Everything after is creative: contrast, Film Look Creator, Dehancer 35mm grain, custom vignette and chromatic aberration.</div>
       </div>
 
       <div class="callout callout-tip">
         <span class="callout-icon">◆</span>
-        <span>Think of it like shooting LOG on a cinema camera. You'd never shoot with a baked-in look. Same principle — keep the data clean, grade it properly.</span>
+        <span>Think of it like shooting LOG on a cinema camera. You’d never shoot with a baked-in look. Same principle — keep the data clean, grade it properly.</span>
       </div>
     </div>
   </div>
@@ -469,7 +469,7 @@
             </div>
             <div class="callout callout-warn">
               <span class="callout-icon">⚠</span>
-              <span>Your Octane viewport will look flat and washed out — that's correct. You're looking at linear light data. The grade happens in Resolve.</span>
+              <span>Your Octane viewport will look flat and washed out — that’s correct. You’re looking at linear light data. The grade happens in Resolve.</span>
             </div>
           </div>
         </div>
@@ -530,7 +530,7 @@
             </div>
             <div class="callout callout-tip">
               <span class="callout-icon">◆</span>
-              <span>Redshift can output ACEScg directly if your project uses ACES. This matches Ron's Linear-ACES_HD Resolve project perfectly — no color space conversion node needed on import.</span>
+              <span>Redshift can output ACEScg directly if your project uses ACES. This matches Ron’s Linear-ACES_HD Resolve project perfectly — no color space conversion node needed on import.</span>
             </div>
           </div>
         </div>
@@ -558,7 +558,7 @@
             </div>
             <div class="callout callout-warn">
               <span class="callout-icon">⚠</span>
-              <span>With tone curve at 0, UE5's viewport will look overexposed and blown out in bright areas — that's normal. You're seeing untonemapped linear HDR values. Trust the EXR output, not the viewport.</span>
+              <span>With tone curve at 0, UE5’s viewport will look overexposed and blown out in bright areas — that’s normal. You’re seeing untonemapped linear HDR values. Trust the EXR output, not the viewport.</span>
             </div>
           </div>
         </div>
@@ -605,7 +605,7 @@
             </div>
             <div class="callout callout-ron">
               <span class="callout-icon">◆</span>
-              <span><strong style="color:var(--accent)">Ron's project:</strong> Linear-ACES_HD — working in ACES color space with linear gamma input. This is why the Curves panel shows a straight diagonal line: Resolve is receiving linear light, not a log or gamma-encoded signal.</span>
+              <span><strong style="color:var(--accent)">Ron’s project:</strong> Linear-ACES_HD — working in ACES color space with linear gamma input. This is why the Curves panel shows a straight diagonal line: Resolve is receiving linear light, not a log or gamma-encoded signal.</span>
             </div>
           </div>
         </div>
@@ -615,7 +615,7 @@
           <div class="step-content">
             <div class="step-app">Resolve — Media Import</div>
             <div class="step-title">Import EXR sequence</div>
-            <div class="step-desc">Drag your EXR folder into the Media Pool. Resolve will auto-detect the sequence. Set the input color space to match your renderer's output.</div>
+            <div class="step-desc">Drag your EXR folder into the Media Pool. Resolve will auto-detect the sequence. Set the input color space to match your renderer’s output.</div>
             <div class="settings-block resolve">
               <span class="key">Input color space</span> → <span class="val">Linear / ACEScg</span><br>
               <span class="key">Input gamma</span> → <span class="val">Linear</span><br>
@@ -630,7 +630,7 @@
 
   <!-- NODE TREE -->
   <div class="section" id="s-nodes">
-    <div class="section-label"><span>Ron's Resolve Node Tree</span><span class="toggle-icon">▾</span></div>
+    <div class="section-label"><span>Ron’s Resolve Node Tree</span><span class="toggle-icon">▾</span></div>
     <div class="section-body">
 
       <div class="callout callout-ron">
@@ -691,7 +691,7 @@
     <div class="section-body">
       <div class="callout callout-ron">
         <span class="callout-icon">◆</span>
-        <span><strong style="color:var(--accent)">Ron's approach:</strong> Dehancer handles all film grain — not Resolve's built-in grain. The 35mm emulations in Dehancer include authentic grain structure, halation, and color response that's far more convincing than any synthetic grain node. Film Look Creator in Resolve adds the tone/color character, Dehancer adds the physical texture.</span>
+        <span><strong style="color:var(--accent)">Ron’s approach:</strong> Dehancer handles all film grain — not Resolve’s built-in grain. The 35mm emulations in Dehancer include authentic grain structure, halation, and color response that’s far more convincing than any synthetic grain node. Film Look Creator in Resolve adds the tone/color character, Dehancer adds the physical texture.</span>
       </div>
 
       <div class="settings-block ron">
@@ -735,7 +735,7 @@
 
       <div class="callout callout-warn">
         <span class="callout-icon">⚠</span>
-        <span>A LUT baked from your Resolve grade will only look correct if the input color space matches. If your renderer outputs linear and your LUT was built on linear input — it'll match. If there's a mismatch, you'll get a color shift. Always document what color space the LUT expects.</span>
+        <span>A LUT baked from your Resolve grade will only look correct if the input color space matches. If your renderer outputs linear and your LUT was built on linear input — it’ll match. If there’s a mismatch, you’ll get a color shift. Always document what color space the LUT expects.</span>
       </div>
     </div>
   </div>
@@ -766,13 +766,13 @@
 </footer>
 
 <script>
-  const navToggle = document.getElementById('nav-toggle');
+  const navToggle = document.getElementById(’nav-toggle’);
 
   // Smooth scroll nav anchor links with offset
-  document.querySelectorAll('#side-nav a[href^="#"]').forEach(link => {
-    link.addEventListener('click', e => {
+  document.querySelectorAll(’#side-nav a[href^="#"]’).forEach(link => {
+    link.addEventListener(’click’, e => {
       e.preventDefault();
-      const target = document.querySelector(link.getAttribute('href'));
+      const target = document.querySelector(link.getAttribute(’href’));
       if (!target) return;
       const top = target.getBoundingClientRect().top + window.scrollY - 32;
       const start = window.scrollY;
@@ -800,47 +800,47 @@
   const topBar    = document.getElementById('top-bar');
   const pageTop   = document.getElementById('page-top');
 
-  navToggle.addEventListener('click', () => sideNav.classList.contains('open') ? closeNav() : openNav());
-  overlay.addEventListener('click', closeNav);
-  function openNav()  { sideNav.classList.add('open'); overlay.classList.add('open'); }
-  function closeNav() { sideNav.classList.remove('open'); overlay.classList.remove('open'); }
+  navToggle.addEventListener('click', () => sideNav.classList.contains(’open’) ? closeNav() : openNav());
+  overlay.addEventListener(’click’, closeNav);
+  function openNav()  { sideNav.classList.add(’open’); overlay.classList.add(’open’); }
+  function closeNav() { sideNav.classList.remove(’open’); overlay.classList.remove(’open’); }
 
-  const sections = document.querySelectorAll('.section[id]');
-  const navItems = document.querySelectorAll('#side-nav .nav-item');
-  window.addEventListener('scroll', () => {
-    let current = '';
+  const sections = document.querySelectorAll(’.section[id]’);
+  const navItems = document.querySelectorAll(’#side-nav .nav-item’);
+  window.addEventListener(’scroll’, () => {
+    let current = ’’;
     sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) current = s.id; });
-    navItems.forEach(n => n.classList.toggle('active', n.getAttribute('href') === '#' + current));
+    navItems.forEach(n => n.classList.toggle(’active’, n.getAttribute(’href’) === ’#’ + current));
   }, { passive: true });
 
-  new IntersectionObserver(([e]) => topBar.classList.toggle('visible', !e.isIntersecting), { threshold: 0 }).observe(pageTop);
+  new IntersectionObserver(([e]) => topBar.classList.toggle(’visible’, !e.isIntersecting), { threshold: 0 }).observe(pageTop);
 
-  document.querySelectorAll('.section-label').forEach(label => {
-    label.addEventListener('click', () => label.closest('.section').classList.toggle('collapsed'));
+  document.querySelectorAll(’.section-label’).forEach(label => {
+    label.addEventListener(’click’, () => label.closest(’.section’).classList.toggle(’collapsed’));
   });
 
-  document.querySelectorAll('tbody tr').forEach(row => row.addEventListener('click', () => row.classList.toggle('pinned')));
-  document.querySelectorAll('.qr-card').forEach(card => card.addEventListener('click', () => card.classList.toggle('pinned')));
+  document.querySelectorAll(’tbody tr’).forEach(row => row.addEventListener(’click’, () => row.classList.toggle(’pinned’)));
+  document.querySelectorAll(’.qr-card’).forEach(card => card.addEventListener(’click’, () => card.classList.toggle(’pinned’)));
 </script>
 
 <script>
 
   // Random hero image
   const heroImages = [
-    'images/hero/hero.png',
-    'images/hero/DarkStar.png',
-    'images/hero/Desert_01.png',
-    'images/hero/ArcticBase_001.png',
-    'images/hero/BladeRunner_01.png',
-    'images/hero/GlassUI_01.png',
-    'images/hero/HauntedSwamp.png',
-    'images/hero/Temple_01.png'
+    ’images/hero/hero.png’,
+    ’images/hero/DarkStar.png’,
+    ’images/hero/Desert_01.png’,
+    ’images/hero/ArcticBase_001.png’,
+    ’images/hero/BladeRunner_01.png’,
+    ’images/hero/GlassUI_01.png’,
+    ’images/hero/HauntedSwamp.png’,
+    ’images/hero/Temple_01.png’
   ];
-  const heroEl = document.getElementById('page-hero-img');
+  const heroEl = document.getElementById(’page-hero-img’);
   if (heroEl) {
     const pick = heroImages[Math.floor(Math.random() * heroImages.length)];
-    heroEl.style.backgroundImage = `url('${pick}')`;
-    setTimeout(() => heroEl.classList.add('loaded'), 50);
+    heroEl.style.backgroundImage = `url(’${pick}’)`;
+    setTimeout(() => heroEl.classList.add(’loaded’), 50);
   }
 
 </script>

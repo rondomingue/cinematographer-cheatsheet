@@ -30,7 +30,7 @@
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Barlow', sans-serif;
+    font-family: ’Barlow’, sans-serif;
     font-weight: 300;
     line-height: 1.5;
     min-height: 100vh;
@@ -68,14 +68,14 @@
   #side-nav.open { transform: translateX(0); }
 
   .nav-logo { padding: 64px 28px 20px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
-  .nav-logo-name { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.12em; color: var(--text); text-decoration: none; display: block; margin-bottom: 2px; }
+  .nav-logo-name { font-family: ’din-2014’, sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.12em; color: var(--text); text-decoration: none; display: block; margin-bottom: 2px; }
   .nav-logo-name:hover { color: var(--accent); }
-  .nav-logo-url { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--text-faint); text-decoration: none; }
+  .nav-logo-url { font-family: ’Space Mono’, monospace; font-size: 9px; color: var(--text-faint); text-decoration: none; }
   .nav-logo-url:hover { color: var(--accent); }
 
-  .nav-section-head { font-family: 'Space Mono', monospace; font-size: 7px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; color: rgba(255,255,255,0.9); padding: 14px 28px 5px 24px; }
+  .nav-section-head { font-family: ’Space Mono’, monospace; font-size: 7px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; color: rgba(255,255,255,0.9); padding: 14px 28px 5px 24px; }
   .nav-divider { height: 1px; background: var(--border); margin: 10px 18px; }
-  .nav-item { display: flex; align-items: center; gap: 10px; padding: 7px 28px 7px 38px; font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); cursor: pointer; transition: color 0.15s, background 0.15s; text-decoration: none; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 7px 28px 7px 38px; font-family: ’Space Mono’, monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); cursor: pointer; transition: color 0.15s, background 0.15s; text-decoration: none; }
   .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
   .nav-item.active { color: var(--accent); }
 
@@ -84,7 +84,7 @@
 
   #top-bar { position: sticky; top: 0; z-index: 50; background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 48px 0 64px; height: 0; overflow: hidden; transition: height 0.2s ease; display: flex; align-items: center; }
   #top-bar.visible { height: 44px; }
-  .top-bar-title { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.1em; color: var(--text-dim); }
+  .top-bar-title { font-family: ’din-2014’, sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.1em; color: var(--text-dim); }
 
   header {
     background: var(--surface);
@@ -119,20 +119,20 @@
     position: relative;
     z-index: 2;
   }
-  header::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px); pointer-events: none; }
-  .header-back { display: inline-flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); text-decoration: none; margin-bottom: 20px; transition: color 0.15s; }
+  header::before { content: ’’; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px); pointer-events: none; }
+  .header-back { display: inline-flex; align-items: center; gap: 8px; font-family: ’Space Mono’, monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); text-decoration: none; margin-bottom: 20px; transition: color 0.15s; }
   .header-back:hover { color: var(--accent); }
-  .header-eyebrow { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 11px; letter-spacing: 0.28em; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
-  h1 { font-family: 'din-2014', sans-serif; font-weight: 200; font-size: clamp(24px, 3vw, 44px); letter-spacing: 0.08em; line-height: 0.95; color: var(--text); margin-bottom: 10px; }
+  .header-eyebrow { font-family: ’din-2014’, sans-serif; font-weight: 300; font-size: 11px; letter-spacing: 0.28em; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
+  h1 { font-family: ’din-2014’, sans-serif; font-weight: 200; font-size: clamp(24px, 3vw, 44px); letter-spacing: 0.08em; line-height: 0.95; color: var(--text); margin-bottom: 10px; }
   h1 span { color: var(--accent); }
-  .header-sub { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 13px; color: var(--text-dim); letter-spacing: 0.18em; text-transform: uppercase; }
+  .header-sub { font-family: ’din-2014’, sans-serif; font-weight: 300; font-size: 13px; color: var(--text-dim); letter-spacing: 0.18em; text-transform: uppercase; }
   .header-byline { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 16px; }
-  .byline-name { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.12em; color: var(--text-dim); }
-  .byline-link { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.1em; color: var(--text-faint); text-decoration: none; border-bottom: 1px solid var(--text-faint); padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; }
+  .byline-name { font-family: ’din-2014’, sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.12em; color: var(--text-dim); }
+  .byline-link { font-family: ’Space Mono’, monospace; font-size: 9px; letter-spacing: 0.1em; color: var(--text-faint); text-decoration: none; border-bottom: 1px solid var(--text-faint); padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; }
   .byline-link:hover { color: var(--accent); border-color: var(--accent); }
 
   .legend { display: flex; gap: 20px; flex-wrap: wrap; padding: 14px 48px; background: var(--bg); border-bottom: 1px solid var(--border); }
-  .pill { display: flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
+  .pill { display: flex; align-items: center; gap: 8px; font-family: ’Space Mono’, monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); }
   .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
   .dot-arri { background: var(--arri); }
   .dot-zeiss { background: var(--zeiss); }
@@ -143,7 +143,7 @@
 
   .section { margin-top: 48px; }
   .section:first-child { margin-top: 0; }
-  .section-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-faint); border-top: 1px solid var(--border); padding: 14px 0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; transition: color 0.15s; }
+  .section-label { font-family: ’Space Mono’, monospace; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-faint); border-top: 1px solid var(--border); padding: 14px 0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; transition: color 0.15s; }
   .section:first-child .section-label { border-top: none; }
   .section-label:hover { color: var(--text-dim); }
   .toggle-icon { font-size: 15px; color: var(--text-dim); transition: transform 0.2s ease; flex-shrink: 0; }
@@ -167,7 +167,7 @@
   }
 
   .spec-card-label {
-    font-family: 'Space Mono', monospace;
+    font-family: ’Space Mono’, monospace;
     font-size: 8px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -176,7 +176,7 @@
   }
 
   .spec-card-value {
-    font-family: 'din-2014', sans-serif;
+    font-family: ’din-2014’, sans-serif;
     font-weight: 300;
     font-size: clamp(18px, 2.5vw, 28px);
     letter-spacing: 0.06em;
@@ -202,15 +202,15 @@
     overflow-x: auto; margin-bottom: 8px; }
   table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 500px; }
   thead tr { background: var(--surface); }
-  th { font-family: 'Space Mono', monospace; font-size: 9px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  th { font-family: ’Space Mono’, monospace; font-size: 9px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
   td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; line-height: 1.4; }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: rgba(255,255,255,0.03) !important; }
   .row-alt td { background: rgba(0,0,0,0.22); }
   tr.pinned td { background: rgba(200,40,154,0.08) !important; border-left: 2px solid var(--accent); }
-  .label-col { font-family: 'din-2014', sans-serif; font-weight: 400; font-size: 15px; color: var(--text); cursor: pointer; white-space: nowrap; }
+  .label-col { font-family: ’din-2014’, sans-serif; font-weight: 400; font-size: 15px; color: var(--text); cursor: pointer; white-space: nowrap; }
   .note-col { font-size: 12px; color: var(--text-dim); max-width: 260px; }
-  .val { font-family: 'Space Mono', monospace; font-size: 11px; }
+  .val { font-family: ’Space Mono’, monospace; font-size: 11px; }
   .val-arri { color: var(--arri); }
   .val-zeiss { color: var(--zeiss); }
   .val-ue5 { color: var(--ue5); }
@@ -229,7 +229,7 @@
   .callout-good .callout-icon { color: var(--ue5); }
 
   /* SETTINGS BLOCK */
-  .settings-block { background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-left: 3px solid var(--border); padding: 12px 16px; margin-bottom: 10px; font-family: 'Space Mono', monospace; font-size: 11px; line-height: 1.8; color: var(--text-dim); border-radius: 3px; }
+  .settings-block { background: rgba(0,0,0,0.25); border: 1px solid var(--border); border-left: 3px solid var(--border); padding: 12px 16px; margin-bottom: 10px; font-family: ’Space Mono’, monospace; font-size: 11px; line-height: 1.8; color: var(--text-dim); border-radius: 3px; }
   .settings-block.ue5 { border-left-color: var(--ue5); }
   .settings-block.arri { border-left-color: var(--arri); }
   .settings-block.zeiss { border-left-color: var(--zeiss); }
@@ -251,12 +251,12 @@
   }
 
   .download-info {}
-  .download-title { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 18px; letter-spacing: 0.06em; color: var(--text); margin-bottom: 6px; }
-  .download-meta { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); }
+  .download-title { font-family: ’din-2014’, sans-serif; font-weight: 300; font-size: 18px; letter-spacing: 0.06em; color: var(--text); margin-bottom: 6px; }
+  .download-meta { font-family: ’Space Mono’, monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); }
 
   .btn-download {
     border-radius: 3px;
-    font-family: 'Space Mono', monospace;
+    font-family: ’Space Mono’, monospace;
     font-size: 10px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -277,11 +277,11 @@
   .qr-card { background: var(--surface); border: 1px solid var(--border); padding: 14px 16px; cursor: pointer; transition: border-color 0.15s; border-radius: 3px; }
   .qr-card:hover { border-color: var(--text-faint); }
   .qr-card.pinned { border-color: var(--accent); background: rgba(200,40,154,0.05); }
-  .qr-label { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 5px; }
-  .qr-value { font-family: 'din-2014', sans-serif; font-weight: 400; font-size: 16px; color: var(--text); margin-bottom: 3px; }
+  .qr-label { font-family: ’Space Mono’, monospace; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 5px; }
+  .qr-value { font-family: ’din-2014’, sans-serif; font-weight: 400; font-size: 16px; color: var(--text); margin-bottom: 3px; }
   .qr-desc { font-size: 11px; color: var(--text-dim); line-height: 1.4; }
 
-  footer { border-top: 1px solid var(--border); padding: 20px 48px; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.12em; color: var(--text-faint); text-transform: uppercase; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; align-items: center; }
+  footer { border-top: 1px solid var(--border); padding: 20px 48px; font-family: ’Space Mono’, monospace; font-size: 9px; letter-spacing: 0.12em; color: var(--text-faint); text-transform: uppercase; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; align-items: center; }
   footer a { color: var(--text-faint); text-decoration: none; border-bottom: 1px solid var(--text-faint); padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; }
   footer a:hover { color: var(--accent); border-color: var(--accent); }
 
@@ -299,8 +299,8 @@
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-9CMETG9RBQ');
+  gtag(’js’, new Date());
+  gtag(’config’, ’G-9CMETG9RBQ’);
 </script>
 </head>
 <body>
@@ -370,7 +370,7 @@
   <div class="section" id="s-overview">
     <div class="section-label"><span>Overview</span><span class="toggle-icon">▾</span></div>
     <div class="section-body">
-      <p style="font-size:14px;color:var(--text-dim);line-height:1.8;max-width:700px;margin-bottom:20px;">A UE5 Blueprint CineCamera that physically simulates the ARRI Alexa Super 35 body with the full ARRI/ZEISS Master Prime lens set. Every lens preset maps real-world focal length, T-stop, minimum focus distance, and field of view to give your Unreal cinematics the optical character of one of cinema's most trusted camera systems.</p>
+      <p style="font-size:14px;color:var(--text-dim);line-height:1.8;max-width:700px;margin-bottom:20px;">A UE5 Blueprint CineCamera that physically simulates the ARRI Alexa Super 35 body with the full ARRI/ZEISS Master Prime lens set. Every lens preset maps real-world focal length, T-stop, minimum focus distance, and field of view to give your Unreal cinematics the optical character of one of cinema’s most trusted camera systems.</p>
 
       <div class="callout callout-good">
         <span class="callout-icon">✓</span>
@@ -418,7 +418,7 @@
 
       <div class="callout callout-tip">
         <span class="callout-icon">◆</span>
-        <span>In UE5 the sensor size is set in the CineCamera's Filmback settings. The Blueprint maps this to 28.17 x 18.13mm — matching the physical Alexa Super 35 exactly. This means your field of view calculations and depth of field will behave identically to a real Alexa on set.</span>
+        <span>In UE5 the sensor size is set in the CineCamera’s Filmback settings. The Blueprint maps this to 28.17 x 18.13mm — matching the physical Alexa Super 35 exactly. This means your field of view calculations and depth of field will behave identically to a real Alexa on set.</span>
       </div>
     </div>
   </div>
@@ -476,7 +476,7 @@
 
       <div class="callout callout-warn">
         <span class="callout-icon">⚠</span>
-        <span>UE5's depth of field at T1.3 on Super 35 is extremely shallow — especially on longer focal lengths. At 150mm T1.3 the depth of field is razor thin. Set your focus distance carefully or use Tracking focus mode in the Blueprint.</span>
+        <span>UE5’s depth of field at T1.3 on Super 35 is extremely shallow — especially on longer focal lengths. At 150mm T1.3 the depth of field is razor thin. Set your focus distance carefully or use Tracking focus mode in the Blueprint.</span>
       </div>
 
       <div class="callout callout-tip">
@@ -498,7 +498,7 @@
         <div class="qr-card"><div class="qr-label">Dramatic compression</div><div class="qr-value">MP 135–150</div><div class="qr-desc">Stack foreground and background. Intimate distance feeling from far away.</div></div>
         <div class="qr-card"><div class="qr-label">Cinematic aperture</div><div class="qr-value">T1.3–T2.8</div><div class="qr-desc">T1.3 for moody low-light. Stop down to T2.8 for more depth in bright scenes.</div></div>
         <div class="qr-card"><div class="qr-label">Cinematic shutter</div><div class="qr-value">1/48 sec</div><div class="qr-desc">180° rule at 24fps. Gives natural motion blur cadence matching film.</div></div>
-        <div class="qr-card"><div class="qr-label">Native ISO</div><div class="qr-value">EI 800</div><div class="qr-desc">Alexa's sweet spot. Low noise, full dynamic range, natural tonal response.</div></div>
+        <div class="qr-card"><div class="qr-label">Native ISO</div><div class="qr-value">EI 800</div><div class="qr-desc">Alexa’s sweet spot. Low noise, full dynamic range, natural tonal response.</div></div>
       </div>
     </div>
   </div>
@@ -517,7 +517,7 @@
 
       <div class="callout callout-tip">
         <span class="callout-icon">◆</span>
-        <span>The Blueprint will be available as a free download and submitted to Fab. Drop in the link here once it's ready — the download button above will go live automatically.</span>
+        <span>The Blueprint will be available as a free download and submitted to Fab. Drop in the link here once it’s ready — the download button above will go live automatically.</span>
       </div>
     </div>
   </div>
@@ -531,13 +531,13 @@
 </footer>
 
 <script>
-  const navToggle = document.getElementById('nav-toggle');
+  const navToggle = document.getElementById(’nav-toggle’);
 
   // Smooth scroll nav anchor links with offset
-  document.querySelectorAll('#side-nav a[href^="#"]').forEach(link => {
-    link.addEventListener('click', e => {
+  document.querySelectorAll(’#side-nav a[href^="#"]’).forEach(link => {
+    link.addEventListener(’click’, e => {
       e.preventDefault();
-      const target = document.querySelector(link.getAttribute('href'));
+      const target = document.querySelector(link.getAttribute(’href’));
       if (!target) return;
       const top = target.getBoundingClientRect().top + window.scrollY - 32;
       const start = window.scrollY;
@@ -565,39 +565,39 @@
   const topBar    = document.getElementById('top-bar');
   const pageTop   = document.getElementById('page-top');
 
-  navToggle.addEventListener('click', () => sideNav.classList.contains('open') ? closeNav() : openNav());
-  overlay.addEventListener('click', closeNav);
-  function openNav()  { sideNav.classList.add('open'); overlay.classList.add('open'); }
-  function closeNav() { sideNav.classList.remove('open'); overlay.classList.remove('open'); }
+  navToggle.addEventListener('click', () => sideNav.classList.contains(’open’) ? closeNav() : openNav());
+  overlay.addEventListener(’click’, closeNav);
+  function openNav()  { sideNav.classList.add(’open’); overlay.classList.add(’open’); }
+  function closeNav() { sideNav.classList.remove(’open’); overlay.classList.remove(’open’); }
 
-  new IntersectionObserver(([e]) => topBar.classList.toggle('visible', !e.isIntersecting), { threshold: 0 }).observe(pageTop);
+  new IntersectionObserver(([e]) => topBar.classList.toggle(’visible’, !e.isIntersecting), { threshold: 0 }).observe(pageTop);
 
-  document.querySelectorAll('.section-label').forEach(label => {
-    label.addEventListener('click', () => label.closest('.section').classList.toggle('collapsed'));
+  document.querySelectorAll(’.section-label’).forEach(label => {
+    label.addEventListener(’click’, () => label.closest(’.section’).classList.toggle(’collapsed’));
   });
 
-  document.querySelectorAll('tbody tr').forEach(row => row.addEventListener('click', () => row.classList.toggle('pinned')));
-  document.querySelectorAll('.qr-card').forEach(card => card.addEventListener('click', () => card.classList.toggle('pinned')));
+  document.querySelectorAll(’tbody tr’).forEach(row => row.addEventListener(’click’, () => row.classList.toggle(’pinned’)));
+  document.querySelectorAll(’.qr-card’).forEach(card => card.addEventListener(’click’, () => card.classList.toggle(’pinned’)));
 </script>
 
 <script>
 
   // Random hero image
   const heroImages = [
-    'images/hero/hero.png',
-    'images/hero/DarkStar.png',
-    'images/hero/Desert_01.png',
-    'images/hero/ArcticBase_001.png',
-    'images/hero/BladeRunner_01.png',
-    'images/hero/GlassUI_01.png',
-    'images/hero/HauntedSwamp.png',
-    'images/hero/Temple_01.png'
+    ’images/hero/hero.png’,
+    ’images/hero/DarkStar.png’,
+    ’images/hero/Desert_01.png’,
+    ’images/hero/ArcticBase_001.png’,
+    ’images/hero/BladeRunner_01.png’,
+    ’images/hero/GlassUI_01.png’,
+    ’images/hero/HauntedSwamp.png’,
+    ’images/hero/Temple_01.png’
   ];
-  const heroEl = document.getElementById('page-hero-img');
+  const heroEl = document.getElementById(’page-hero-img’);
   if (heroEl) {
     const pick = heroImages[Math.floor(Math.random() * heroImages.length)];
-    heroEl.style.backgroundImage = `url('${pick}')`;
-    setTimeout(() => heroEl.classList.add('loaded'), 50);
+    heroEl.style.backgroundImage = `url(’${pick}’)`;
+    setTimeout(() => heroEl.classList.add(’loaded’), 50);
   }
 
 </script>

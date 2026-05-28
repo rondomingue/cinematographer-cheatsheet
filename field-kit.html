@@ -29,7 +29,7 @@
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Barlow', sans-serif;
+    font-family: ’Barlow’, sans-serif;
     font-weight: 300;
     line-height: 1.5;
     min-height: 100vh;
@@ -68,14 +68,14 @@
   #side-nav.open { transform: translateX(0); }
 
   .nav-logo { padding: 64px 28px 20px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
-  .nav-logo-name { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.12em; color: var(--text); text-decoration: none; display: block; margin-bottom: 2px; }
+  .nav-logo-name { font-family: ’din-2014’, sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.12em; color: var(--text); text-decoration: none; display: block; margin-bottom: 2px; }
   .nav-logo-name:hover { color: var(--accent); }
-  .nav-logo-url { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--text-faint); text-decoration: none; }
+  .nav-logo-url { font-family: ’Space Mono’, monospace; font-size: 9px; color: var(--text-faint); text-decoration: none; }
   .nav-logo-url:hover { color: var(--accent); }
 
-  .nav-section-head { font-family: 'Space Mono', monospace; font-size: 7px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; color: rgba(255,255,255,0.9); padding: 14px 28px 5px 24px; }
+  .nav-section-head { font-family: ’Space Mono’, monospace; font-size: 7px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; color: rgba(255,255,255,0.9); padding: 14px 28px 5px 24px; }
   .nav-divider { height: 1px; background: var(--border); margin: 10px 18px; }
-  .nav-item { display: flex; align-items: center; gap: 10px; padding: 7px 28px 7px 38px; font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); cursor: pointer; transition: color 0.15s, background 0.15s; text-decoration: none; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 7px 28px 7px 38px; font-family: ’Space Mono’, monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); cursor: pointer; transition: color 0.15s, background 0.15s; text-decoration: none; }
   .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
   .nav-item.active { color: var(--accent); }
 
@@ -85,20 +85,20 @@
   /* TOP BAR */
   #top-bar { position: sticky; top: 0; z-index: 50; background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 48px 0 64px; height: 0; overflow: hidden; transition: height 0.2s ease; display: flex; align-items: center; }
   #top-bar.visible { height: 44px; }
-  .top-bar-title { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.1em; color: var(--text-dim); }
+  .top-bar-title { font-family: ’din-2014’, sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.1em; color: var(--text-dim); }
 
   /* HEADER */
   header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 32px 48px 28px 64px; position: relative; overflow: hidden; }
-  header::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px); pointer-events: none; }
-  .header-back { display: inline-flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); text-decoration: none; margin-bottom: 20px; transition: color 0.15s; }
+  header::before { content: ’’; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px); pointer-events: none; }
+  .header-back { display: inline-flex; align-items: center; gap: 8px; font-family: ’Space Mono’, monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); text-decoration: none; margin-bottom: 20px; transition: color 0.15s; }
   .header-back:hover { color: var(--accent); }
-  .header-eyebrow { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 11px; letter-spacing: 0.28em; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
-  h1 { font-family: 'din-2014', sans-serif; font-weight: 200; font-size: clamp(24px, 3vw, 44px); letter-spacing: 0.08em; line-height: 0.95; color: var(--text); margin-bottom: 10px; }
+  .header-eyebrow { font-family: ’din-2014’, sans-serif; font-weight: 300; font-size: 11px; letter-spacing: 0.28em; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
+  h1 { font-family: ’din-2014’, sans-serif; font-weight: 200; font-size: clamp(24px, 3vw, 44px); letter-spacing: 0.08em; line-height: 0.95; color: var(--text); margin-bottom: 10px; }
   h1 span { color: var(--accent); }
-  .header-sub { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 13px; color: var(--text-dim); letter-spacing: 0.18em; text-transform: uppercase; }
+  .header-sub { font-family: ’din-2014’, sans-serif; font-weight: 300; font-size: 13px; color: var(--text-dim); letter-spacing: 0.18em; text-transform: uppercase; }
   .header-byline { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 16px; }
-  .byline-name { font-family: 'din-2014', sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.12em; color: var(--text-dim); }
-  .byline-link { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.1em; color: var(--text-faint); text-decoration: none; border-bottom: 1px solid var(--text-faint); padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; }
+  .byline-name { font-family: ’din-2014’, sans-serif; font-weight: 300; font-size: 12px; letter-spacing: 0.12em; color: var(--text-dim); }
+  .byline-link { font-family: ’Space Mono’, monospace; font-size: 9px; letter-spacing: 0.1em; color: var(--text-faint); text-decoration: none; border-bottom: 1px solid var(--text-faint); padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; }
   .byline-link:hover { color: var(--accent); border-color: var(--accent); }
 
   /* MAIN */
@@ -106,7 +106,7 @@
 
   /* CATEGORY LABEL */
   .cat-label {
-    font-family: 'Space Mono', monospace;
+    font-family: ’Space Mono’, monospace;
     font-size: 9px;
     letter-spacing: 0.25em;
     text-transform: uppercase;
@@ -140,7 +140,7 @@
   }
 
   .asset-card::before {
-    content: '';
+    content: ’’;
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 2px;
@@ -158,7 +158,7 @@
   .ac-plugin::before { background: var(--plugin); }
 
   .asset-type {
-    font-family: 'Space Mono', monospace;
+    font-family: ’Space Mono’, monospace;
     font-size: 8px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -170,7 +170,7 @@
   .ac-plugin .asset-type { color: var(--plugin); }
 
   .asset-name {
-    font-family: 'din-2014', sans-serif;
+    font-family: ’din-2014’, sans-serif;
     font-weight: 400;
     font-size: 20px;
     letter-spacing: 0.06em;
@@ -196,7 +196,7 @@
 
   .tag {
     border-radius: 3px;
-    font-family: 'Space Mono', monospace;
+    font-family: ’Space Mono’, monospace;
     font-size: 8px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -209,7 +209,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    font-family: 'Space Mono', monospace;
+    font-family: ’Space Mono’, monospace;
     font-size: 9px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -230,7 +230,7 @@
   .asset-card:hover .link-line { width: 32px; }
 
   /* FOOTER */
-  footer { border-top: 1px solid var(--border); padding: 20px 48px; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.12em; color: var(--text-faint); text-transform: uppercase; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; align-items: center; }
+  footer { border-top: 1px solid var(--border); padding: 20px 48px; font-family: ’Space Mono’, monospace; font-size: 9px; letter-spacing: 0.12em; color: var(--text-faint); text-transform: uppercase; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; align-items: center; }
   footer a { color: var(--text-faint); text-decoration: none; border-bottom: 1px solid var(--text-faint); padding-bottom: 1px; transition: color 0.15s, border-color 0.15s; }
   footer a:hover { color: var(--accent); border-color: var(--accent); }
 
@@ -245,8 +245,8 @@
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-9CMETG9RBQ');
+  gtag(’js’, new Date());
+  gtag(’config’, ’G-9CMETG9RBQ’);
 </script>
 </head>
 <body>
@@ -381,7 +381,7 @@
     <a class="asset-card ac-kit" href="https://forma3dstore.com" target="_blank">
       <div class="asset-type">3D Asset Store · Premium</div>
       <div class="asset-name">Forma 3D Store</div>
-      <div class="asset-desc">Premium 3D models, textures, materials, and environment collections built for Unreal Engine, Unity, Blender, and professional film and VFX production. Strong catalogue of buildings, landscapes, vegetation, and PBR material libraries. The quality bar is consistently high - production-ready assets that don't need post-processing cleanup before they hit the renderer.</div>
+      <div class="asset-desc">Premium 3D models, textures, materials, and environment collections built for Unreal Engine, Unity, Blender, and professional film and VFX production. Strong catalogue of buildings, landscapes, vegetation, and PBR material libraries. The quality bar is consistently high - production-ready assets that don’t need post-processing cleanup before they hit the renderer.</div>
       <div class="asset-tags">
         <span class="tag">UE5</span>
         <span class="tag">Blender</span>
@@ -423,7 +423,7 @@
     <a class="asset-card ac-plugin" href="https://www.youtube.com/results?sp=mAEB&search_query=william+faucher" target="_blank">
       <div class="asset-type">YouTube · UE5 Tutorials</div>
       <div class="asset-name">William Faucher</div>
-      <div class="asset-desc">One of the best Unreal Engine educators working today. Deep-dive tutorials on cinematic lighting, Lumen, rendering, post process, and virtual production workflows. If you want to understand why something works in UE5 - not just how to click the buttons - Faucher's channel is the place to start. Also sells assets and tools on Fab.</div>
+      <div class="asset-desc">One of the best Unreal Engine educators working today. Deep-dive tutorials on cinematic lighting, Lumen, rendering, post process, and virtual production workflows. If you want to understand why something works in UE5 - not just how to click the buttons - Faucher’s channel is the place to start. Also sells assets and tools on Fab.</div>
       <div class="asset-tags">
         <span class="tag">UE5</span>
         <span class="tag">Cinematic Lighting</span>
@@ -437,7 +437,7 @@
     <a class="asset-card ac-plugin" href="https://www.youtube.com/@JonathanWinbush" target="_blank">
       <div class="asset-type">YouTube · UE5 & Motion Graphics</div>
       <div class="asset-name">Jonathan Winbush</div>
-      <div class="asset-desc">Winbush bridges the gap between motion graphics and real-time production in a way almost nobody else does. Covers Unreal Engine, After Effects, Cinema 4D, and the workflows that connect them - highly relevant if you're coming from a motion design background and moving into virtual production. Practical, production-focused, and genuinely enthusiastic about the tools.</div>
+      <div class="asset-desc">Winbush bridges the gap between motion graphics and real-time production in a way almost nobody else does. Covers Unreal Engine, After Effects, Cinema 4D, and the workflows that connect them - highly relevant if you’re coming from a motion design background and moving into virtual production. Practical, production-focused, and genuinely enthusiastic about the tools.</div>
       <div class="asset-tags">
         <span class="tag">UE5</span>
         <span class="tag">After Effects</span>
@@ -451,7 +451,7 @@
     <a class="asset-card ac-plugin" href="https://www.youtube.com/c/pwnisher" target="_blank">
       <div class="asset-type">YouTube · 3D & Creative Challenges</div>
       <div class="asset-name">Pwnisher (Clinton Jones)</div>
-      <div class="asset-desc">Clinton Jones runs some of the most inspiring community challenges in 3D - thousands of artists interpreting the same prompt, producing wildly different results. Equal parts creative inspiration and technical showcase. His own work is exceptional, and watching the challenge compilations is one of the fastest ways to survey what's possible across the full range of modern 3D tools.</div>
+      <div class="asset-desc">Clinton Jones runs some of the most inspiring community challenges in 3D - thousands of artists interpreting the same prompt, producing wildly different results. Equal parts creative inspiration and technical showcase. His own work is exceptional, and watching the challenge compilations is one of the fastest ways to survey what’s possible across the full range of modern 3D tools.</div>
       <div class="asset-tags">
         <span class="tag">3D</span>
         <span class="tag">Cinema 4D</span>
@@ -465,7 +465,7 @@
     <a class="asset-card ac-plugin" href="https://boundless-resource.com" target="_blank">
       <div class="asset-type">Courses & Plugins · UE5 Filmmaking</div>
       <div class="asset-name">Boundless Entertainment</div>
-      <div class="asset-desc">Tools and training specifically built for filmmakers working in Unreal Engine. Covers virtual production, cinematography, sequencer workflows, and the practical skills that bridge traditional filmmaking and real-time production. Lifetime course access and plugins designed for the filmmaker's perspective - not the game developer's.</div>
+      <div class="asset-desc">Tools and training specifically built for filmmakers working in Unreal Engine. Covers virtual production, cinematography, sequencer workflows, and the practical skills that bridge traditional filmmaking and real-time production. Lifetime course access and plugins designed for the filmmaker’s perspective - not the game developer’s.</div>
       <div class="asset-tags">
         <span class="tag">UE5</span>
         <span class="tag">Virtual Production</span>
@@ -500,7 +500,7 @@
     <a class="asset-card ac-ue5" href="https://www.fab.com/sellers/William%20Faucher" target="_blank">
       <div class="asset-type">UE5 Assets · William Faucher</div>
       <div class="asset-name">William Faucher on Fab</div>
-      <div class="asset-desc">William Faucher's asset store on Fab - cinematic-quality UE5 tools and packs built by one of the most respected voices in Unreal Engine education. Assets are production-tested and built with the same attention to quality and workflow that defines his tutorials.</div>
+      <div class="asset-desc">William Faucher’s asset store on Fab - cinematic-quality UE5 tools and packs built by one of the most respected voices in Unreal Engine education. Assets are production-tested and built with the same attention to quality and workflow that defines his tutorials.</div>
       <div class="asset-tags">
         <span class="tag">UE5</span>
         <span class="tag">Cinematic</span>
@@ -533,7 +533,7 @@
     <a class="asset-card ac-kit" href="https://www.turbosquid.com" target="_blank">
       <div class="asset-type">3D Marketplace · Industry Standard</div>
       <div class="asset-name">TurboSquid</div>
-      <div class="asset-desc">The largest 3D model marketplace in the world - and one I know well having worked there as a UI/UX Designer across PixelSquid, Kraken, StemCell, and brand initiatives. TurboSquid's catalogue spans every category imaginable, from photorealistic vehicles and characters to architectural assets and VFX elements. The StemCell certification program ensures assets meet a consistent quality and compatibility standard for production pipelines. For one-off assets that fall outside of kit-based workflows, it's the first stop.</div>
+      <div class="asset-desc">The largest 3D model marketplace in the world - and one I know well having worked there as a UI/UX Designer across PixelSquid, Kraken, StemCell, and brand initiatives. TurboSquid’s catalogue spans every category imaginable, from photorealistic vehicles and characters to architectural assets and VFX elements. The StemCell certification program ensures assets meet a consistent quality and compatibility standard for production pipelines. For one-off assets that fall outside of kit-based workflows, it’s the first stop.</div>
       <div class="asset-tags">
         <span class="tag">3D Models</span>
         <span class="tag">All Categories</span>
@@ -548,7 +548,7 @@
     <a class="asset-card ac-kit" href="https://www.cgtrader.com" target="_blank">
       <div class="asset-type">3D Marketplace · Community</div>
       <div class="asset-name">CG Trader</div>
-      <div class="asset-desc">A large community-driven 3D marketplace with a broad catalogue spanning game assets, architectural visualization, characters, vehicles, and environments. Strong for finding niche or specialized assets that don't show up on the bigger platforms - and often at competitive prices. Worth checking alongside TurboSquid when hunting for something specific.</div>
+      <div class="asset-desc">A large community-driven 3D marketplace with a broad catalogue spanning game assets, architectural visualization, characters, vehicles, and environments. Strong for finding niche or specialized assets that don’t show up on the bigger platforms - and often at competitive prices. Worth checking alongside TurboSquid when hunting for something specific.</div>
       <div class="asset-tags">
         <span class="tag">3D Models</span>
         <span class="tag">Game Assets</span>
@@ -562,7 +562,7 @@
     <a class="asset-card ac-kit" href="https://www.fab.com" target="_blank">
       <div class="asset-type">Marketplace · Epic Games</div>
       <div class="asset-name">Fab</div>
-      <div class="asset-desc">Epic Games' unified asset marketplace - merging the Unreal Engine Marketplace, Sketchfab, ArtStation Marketplace, and Quixel into a single platform. The go-to source for UE5 plugins, environment packs, characters, materials, and tools. If it's built for Unreal, it's on Fab. Includes a growing library of free and discounted assets each month.</div>
+      <div class="asset-desc">Epic Games’ unified asset marketplace - merging the Unreal Engine Marketplace, Sketchfab, ArtStation Marketplace, and Quixel into a single platform. The go-to source for UE5 plugins, environment packs, characters, materials, and tools. If it’s built for Unreal, it’s on Fab. Includes a growing library of free and discounted assets each month.</div>
       <div class="asset-tags">
         <span class="tag">UE5</span>
         <span class="tag">Plugins</span>
@@ -585,13 +585,13 @@
 </footer>
 
 <script>
-  const navToggle = document.getElementById('nav-toggle');
+  const navToggle = document.getElementById(’nav-toggle’);
 
   // Smooth scroll nav anchor links with offset
-  document.querySelectorAll('#side-nav a[href^="#"]').forEach(link => {
-    link.addEventListener('click', e => {
+  document.querySelectorAll(’#side-nav a[href^="#"]’).forEach(link => {
+    link.addEventListener(’click’, e => {
       e.preventDefault();
-      const target = document.querySelector(link.getAttribute('href'));
+      const target = document.querySelector(link.getAttribute(’href’));
       if (!target) return;
       const top = target.getBoundingClientRect().top + window.scrollY - 32;
       const start = window.scrollY;
@@ -619,12 +619,12 @@
   const topBar    = document.getElementById('top-bar');
   const pageTop   = document.getElementById('page-top');
 
-  navToggle.addEventListener('click', () => sideNav.classList.contains('open') ? closeNav() : openNav());
-  overlay.addEventListener('click', closeNav);
-  function openNav()  { sideNav.classList.add('open'); overlay.classList.add('open'); }
-  function closeNav() { sideNav.classList.remove('open'); overlay.classList.remove('open'); }
+  navToggle.addEventListener('click', () => sideNav.classList.contains(’open’) ? closeNav() : openNav());
+  overlay.addEventListener(’click’, closeNav);
+  function openNav()  { sideNav.classList.add(’open’); overlay.classList.add(’open’); }
+  function closeNav() { sideNav.classList.remove(’open’); overlay.classList.remove(’open’); }
 
-  new IntersectionObserver(([e]) => topBar.classList.toggle('visible', !e.isIntersecting), { threshold: 0 }).observe(pageTop);
+  new IntersectionObserver(([e]) => topBar.classList.toggle(’visible’, !e.isIntersecting), { threshold: 0 }).observe(pageTop);
 </script>
 
 </body>
