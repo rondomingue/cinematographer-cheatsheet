@@ -640,7 +640,7 @@
 
       <!-- NODE WIRE DIAGRAM -->
       <div style="margin-bottom:20px;border:1px solid var(--border);border-radius:4px;overflow:hidden;">
-        <svg width="100%" viewBox="0 0 680 350" role="img" xmlns="http://www.w3.org/2000/svg">
+        <svg width="100%" viewBox="0 0 680 350" role="img" xmlns="http://www.w3.org/2000/svg" style="pointer-events:none;display:block;">
           <title>Ron's DaVinci Resolve node graph</title>
           <desc>01 Source to 02 ACES to 03 LUT to 04 Color Correct to 05 Contrast — then Contrast feeds down to 06 Vignette, continuing 07 Chromatic to 08 Glow to 09 Film Look / Dehancer (interchangeable, or both).</desc>
           <defs>
@@ -650,13 +650,13 @@
           </defs>
 
           <!-- Background -->
-          <rect x="0" y="0" width="680" height="340" fill="#1a1a1e"/>
+          <rect x="0" y="0" width="680" height="350" fill="#1a1a1e" pointer-events="none"/>
 
           <!-- Subtle dot grid instead of lines -->
           <pattern id="grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
             <circle cx="10" cy="10" r="0.8" fill="#2a2a30"/>
           </pattern>
-          <rect x="0" y="0" width="680" height="340" fill="url(#grid)"/>
+          <rect x="0" y="0" width="680" height="350" fill="url(#grid)" pointer-events="none"/>
 
           <!-- ── NODE LAYOUT ─────────────────────────────────────────────
                Top row:    y=46, h=48, center-y=70, port-y=70, bottom-port=94
