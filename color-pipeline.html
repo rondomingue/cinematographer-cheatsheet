@@ -652,11 +652,17 @@
           <!-- Background -->
           <rect x="0" y="0" width="680" height="350" fill="#1a1a1e" pointer-events="none"/>
 
-          <!-- Subtle dot grid instead of lines -->
-          <pattern id="grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-            <circle cx="10" cy="10" r="0.8" fill="#2a2a30"/>
-          </pattern>
-          <rect x="0" y="0" width="680" height="350" fill="url(#grid)" pointer-events="none"/>
+          <!-- Grid lines -->
+          <g pointer-events="none" stroke="#222228" stroke-width="0.5">
+            <line x1="68"  y1="0" x2="68"  y2="350"/><line x1="136" y1="0" x2="136" y2="350"/>
+            <line x1="204" y1="0" x2="204" y2="350"/><line x1="272" y1="0" x2="272" y2="350"/>
+            <line x1="340" y1="0" x2="340" y2="350"/><line x1="408" y1="0" x2="408" y2="350"/>
+            <line x1="476" y1="0" x2="476" y2="350"/><line x1="544" y1="0" x2="544" y2="350"/>
+            <line x1="612" y1="0" x2="612" y2="350"/>
+            <line x1="0" y1="60"  x2="680" y2="60"/> <line x1="0" y1="120" x2="680" y2="120"/>
+            <line x1="0" y1="180" x2="680" y2="180"/><line x1="0" y1="240" x2="680" y2="240"/>
+            <line x1="0" y1="300" x2="680" y2="300"/>
+          </g>
 
           <!-- ── NODE LAYOUT ─────────────────────────────────────────────
                Top row:    y=46, h=48, center-y=70, port-y=70, bottom-port=94
