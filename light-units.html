@@ -1026,158 +1026,65 @@
 </footer>
 
 <script>
-  // ── NAV TOGGLE ──────────────────────────────────────────
-  const navToggle = document.getElementById(’nav-toggle’);
+  document.addEventListener('DOMContentLoaded', function() {
+    var navToggle = document.getElementById('nav-toggle');
+    var sideNav   = document.getElementById('side-nav');
+    var overlay   = document.getElementById('nav-overlay');
+    var topBar    = document.getElementById('top-bar');
+    var pageTop   = document.getElementById('page-top');
 
-  // Smooth scroll nav anchor links with offset
-  document.querySelectorAll(’#side-nav a[href^="#"]’).forEach(link => {
-    link.addEventListener(’click’, e => {
-      e.preventDefault();
-      const target = document.querySelector(link.getAttribute(’href’));
-      if (!target) return;
-      const top = target.getBoundingClientRect().top + window.scrollY - 32;
-      const start = window.scrollY;
-      const distance = top - start;
-      const duration = 800;
-      let startTime = null;
-      function easeInOutCubic(t) {
-        return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
-      }
-      function step(timestamp) {
-        if (!startTime) startTime = timestamp;
-        const elapsed = timestamp - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        window.scrollTo(0, start + distance * easeInOutCubic(progress));
-        if (progress < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-      document.getElementById('side-nav').classList.remove('open');
-      document.getElementById('nav-overlay').classList.remove('open');
+    function openNav()  { sideNav.classList.add('open'); overlay.classList.add('open'); }
+    function closeNav() { sideNav.classList.remove('open'); overlay.classList.remove('open'); }
+
+    navToggle.addEventListener('click', function() {
+      sideNav.classList.contains('open') ? closeNav() : openNav();
     });
-  });
+    overlay.addEventListener('click', closeNav);
 
-  const sideNav   = document.getElementById('side-nav');
-  const overlay   = document.getElementById('nav-overlay');
-
-  function openNav()  { sideNav.classList.add('open'); overlay.classList.add('open'); }
-  function closeNav() { sideNav.classList.remove('open'); overlay.classList.remove('open'); }
-
-  navToggle.addEventListener('click', () => sideNav.classList.contains(’open’) ? closeNav() : openNav());
-  overlay.addEventListener(’click’, closeNav);
-
-  // Highlight active nav item on scroll
-  const sections = document.querySelectorAll(’.section[id]’);
-  const navItems = document.querySelectorAll(’.nav-item’);
-
-  window.addEventListener(’scroll’, () => {
-    let current = ’’;
-    sections.forEach(s => {
-      if (window.scrollY >= s.offsetTop - 80) current = s.id;
-    });
-    navItems.forEach(n => {
-      n.classList.toggle(’active’, n.getAttribute(’href’) === ’#’ + current);
-    });
-  }, { passive: true });
-
-  // ── STICKY TOP BAR ──────────────────────────────────────
-  const topBar  = document.getElementById(’top-bar’);
-  const pageTop = document.getElementById(’page-top’);
-
-  const observer = new IntersectionObserver(([e]) => {
-    topBar.classList.toggle(’visible’, !e.isIntersecting);
-  }, { threshold: 0 });
-  observer.observe(pageTop);
-
-  // ── COLLAPSIBLE SECTIONS ────────────────────────────────
-  document.querySelectorAll(’.section-label’).forEach(label => {
-    label.addEventListener(’click’, () => {
-      label.closest(’.section’).classList.toggle(’collapsed’);
-    });
-  });
-
-  // ── ROW PIN HIGHLIGHT ───────────────────────────────────
-  document.querySelectorAll(’tbody tr’).forEach(row => {
-    row.addEventListener(’click’, () => {
-      row.classList.toggle(’pinned’);
-    });
-  });
-
-  document.querySelectorAll(’.formula-card, .qr-card’).forEach(card => {
-    card.addEventListener(’click’, () => card.classList.toggle(’pinned’));
-  });
-
-  // ── SEARCH ──────────────────────────────────────────────
-  const searchBarInput = document.getElementById(’search-bar-input’);
-  const searchTopInput = document.getElementById(’search-input’);
-  const searchClear    = document.getElementById(’search-clear’);
-  const barCount       = document.getElementById(’bar-count’);
-  const topCount       = document.getElementById(’top-count’);
-
-  function escapeReg(s) {
-    return s.replace(/[.*+?^${}()|[\]\\]/g, ’\\$&’);
-  }
-
-  function runSearch(query) {
-    const q = query.trim();
-    let matchCount = 0;
-
-    // Sync both inputs
-    if (searchBarInput.value !== q) searchBarInput.value = q;
-    if (searchTopInput.value !== q) searchTopInput.value = q;
-
-    searchClear.classList.toggle(’visible’, q.length > 0);
-
-    document.querySelectorAll(’.section’).forEach(section => {
-      let sectionHits = 0;
-      const rows = section.querySelectorAll(’tbody tr’);
-
-      rows.forEach(row => {
-        if (!q) {
-          row.classList.remove(’search-match’, ’search-hide’);
-          // restore original text
-          row.querySelectorAll(’td’).forEach(td => {
-            if (td.dataset.orig) { td.innerHTML = td.dataset.orig; delete td.dataset.orig; }
-          });
-          return;
+    document.querySelectorAll('#side-nav a[href^="#"]').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var target = document.querySelector(link.getAttribute('href'));
+        if (!target) return;
+        var top = target.getBoundingClientRect().top + window.scrollY - 32;
+        var start = window.scrollY;
+        var distance = top - start;
+        var duration = 800;
+        var startTime = null;
+        function easeInOutCubic(t) { return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2; }
+        function step(timestamp) {
+          if (!startTime) startTime = timestamp;
+          var elapsed = timestamp - startTime;
+          var progress = Math.min(elapsed / duration, 1);
+          window.scrollTo(0, start + distance * easeInOutCubic(progress));
+          if (progress < 1) requestAnimationFrame(step);
         }
-
-        const text = row.textContent.toLowerCase();
-        const match = text.includes(q.toLowerCase());
-
-        row.classList.toggle(’search-match’, match);
-        row.classList.toggle(’search-hide’, !match);
-
-        if (match) {
-          sectionHits++;
-          matchCount++;
-          // highlight matching text
-          row.querySelectorAll(’td’).forEach(td => {
-            if (!td.dataset.orig) td.dataset.orig = td.innerHTML;
-            const re = new RegExp(`(${escapeReg(q)})`, ’gi’);
-            td.innerHTML = td.dataset.orig.replace(re, ’<mark>$1</mark>’);
-          });
-        } else {
-          row.querySelectorAll(’td’).forEach(td => {
-            if (td.dataset.orig) { td.innerHTML = td.dataset.orig; delete td.dataset.orig; }
-          });
-        }
+        requestAnimationFrame(step);
+        closeNav();
       });
-
-      if (rows.length > 0) {
-        section.classList.toggle(’search-empty’, q.length > 0 && sectionHits === 0);
-        // auto-expand sections with hits
-        if (q && sectionHits > 0) section.classList.remove(’collapsed’);
-      }
     });
 
-    const countText = q ? `${matchCount} match${matchCount !== 1 ? ’es’ : ’’}` : ’’;
-    barCount.textContent = countText;
-    topCount.textContent = countText;
-  }
+    var sections = document.querySelectorAll('.section[id]');
+    var navItems = document.querySelectorAll('#side-nav .nav-item');
+    window.addEventListener('scroll', function() {
+      var current = '';
+      sections.forEach(function(s) { if (window.scrollY >= s.offsetTop - 80) current = s.id; });
+      navItems.forEach(function(n) { n.classList.toggle('active', n.getAttribute('href') === '#' + current); });
+    }, { passive: true });
 
-  searchBarInput.addEventListener(’input’, e => runSearch(e.target.value));
-  searchTopInput.addEventListener(’input’, e => runSearch(e.target.value));
-  searchClear.addEventListener(’click’, () => runSearch(’’));
+    if (pageTop) {
+      new IntersectionObserver(function(entries) {
+        topBar.classList.toggle('visible', !entries[0].isIntersecting);
+      }, { threshold: 0 }).observe(pageTop);
+    }
+
+    document.querySelectorAll('.section-label').forEach(function(label) {
+      label.addEventListener('click', function() { label.closest('.section').classList.toggle('collapsed'); });
+    });
+
+    document.querySelectorAll('tbody tr').forEach(function(row) { row.addEventListener('click', function() { row.classList.toggle('pinned'); }); });
+    document.querySelectorAll('.qr-card').forEach(function(card) { card.addEventListener('click', function() { card.classList.toggle('pinned'); }); });
+  });
 </script>
 
 <script>
