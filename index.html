@@ -1458,7 +1458,6 @@
   function shutterClick() {
     if (!audioCtx) audioCtx = new AudioCtx();
 
-    // Mechanical transient: short noise burst + quick pitch drop
     const bufferSize = audioCtx.sampleRate * 0.04;
     const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
     const data = buffer.getChannelData(0);
@@ -1469,7 +1468,6 @@
     const source = audioCtx.createBufferSource();
     source.buffer = buffer;
 
-    // Bandpass — shapes noise into a mechanical click
     const filter = audioCtx.createBiquadFilter();
     filter.type = 'bandpass';
     filter.frequency.value = 2800;
@@ -1485,9 +1483,44 @@
     source.start();
   }
 
+  // Sharper single-frame advance click for film selections
+  function frameAdvance() {
+    if (!audioCtx) audioCtx = new AudioCtx();
+
+    const bufferSize = audioCtx.sampleRate * 0.025;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 10);
+    }
+
+    const source = audioCtx.createBufferSource();
+    source.buffer = buffer;
+
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 4200;
+    filter.Q.value = 1.2;
+
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.025);
+
+    source.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioCtx.destination);
+    source.start();
+  }
+
   // Attach to guide cards and extras cards
   document.querySelectorAll('.guide-card, .extras-card').forEach(card => {
     card.addEventListener('mouseenter', shutterClick);
+  });
+
+  // Watch button and film selections
+  document.getElementById('reel-trigger').addEventListener('mouseenter', shutterClick);
+  document.querySelectorAll('.reel-item').forEach(item => {
+    item.addEventListener('mouseenter', frameAdvance);
   });
   const udsSection = document.querySelector('.uds-section');
   const udsToggle  = document.getElementById('uds-toggle');
