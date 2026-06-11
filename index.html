@@ -1451,9 +1451,16 @@
 
   loadExposure();
 
-  // SHUTTER CLICK — Web Audio API, no external file
+  // Unlock AudioContext on first interaction
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
   let audioCtx = null;
+
+  function unlockAudio() {
+    if (!audioCtx) audioCtx = new AudioCtx();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+  }
+  document.addEventListener('pointerdown', unlockAudio, { once: true });
+  document.addEventListener('pointerenter', unlockAudio, { once: true });
 
   function shutterClick() {
     if (!audioCtx) audioCtx = new AudioCtx();
@@ -1514,9 +1521,9 @@
 
   // Attach to guide cards and extras cards — deferred until DOM ready
   document.querySelectorAll('.guide-card, .extras-card').forEach(card => {
-    card.addEventListener('mouseenter', shutterClick);
+    card.addEventListener('pointerenter', shutterClick);
   });
-  document.getElementById('reel-trigger').addEventListener('mouseenter', shutterClick);
+  document.getElementById('reel-trigger').addEventListener('pointerenter', shutterClick);
   document.querySelectorAll('.reel-item').forEach(item => {
     item.addEventListener('mouseenter', frameAdvance);
   });
