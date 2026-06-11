@@ -1012,6 +1012,7 @@
 
   <div class="hero-content">
     <div class="hero-eyebrow" id="glitch-eyebrow"></div>
+    <div class="hero-eyebrow" id="exposure-eyebrow" style="opacity:0;margin-bottom:16px;"></div>
     <h1 class="hero-title">Cinematic<br><em>Field Guide</em></h1>
     <p class="hero-desc">Unreal Engine 5 production references for cinematographers coming from Cinema 4D, Octane, and Redshift. Lighting, rendering, color grading, camera systems, and character workflows.</p>
     <div class="hero-cta">
@@ -1332,7 +1333,123 @@
     }, delay);
   }
 
-  glitchType(document.getElementById('glitch-eyebrow'), 'Cinematic Field Guide · 2026', 300, 55);
+  // Row 1 — glitch in user coordinates once geo resolves
+
+  // TIMECODE — starts immediately, counts up from page load at 24fps
+  const tcEl = document.getElementById('exposure-eyebrow');
+  const pageLoadTime = Date.now();
+
+  function formatTC(ms) {
+    const totalFrames = Math.floor(ms / (1000 / 24));
+    const frames = totalFrames % 24;
+    const secs   = Math.floor(totalFrames / 24) % 60;
+    const mins   = Math.floor(totalFrames / 24 / 60) % 60;
+    const hrs    = Math.floor(totalFrames / 24 / 3600);
+    return [hrs, mins, secs].map(n => String(n).padStart(2,'0')).join(':') +
+           ':' + String(frames).padStart(2,'0');
+  }
+
+  // EXPOSURE ROW — fires after geo + weather resolve
+  function getNDStop(lux) {
+    if (lux > 80000) return 'ND 1.8';
+    if (lux > 40000) return 'ND 1.5';
+    if (lux > 20000) return 'ND 1.2';
+    if (lux > 10000) return 'ND 0.9';
+    if (lux > 5000)  return 'ND 0.6';
+    if (lux > 1000)  return 'ND 0.3';
+    return 'CLEAR';
+  }
+
+  function getConditionLabel(code) {
+    if (code === 0) return 'CLEAR';
+    if (code <= 3)  return 'PARTLY CLOUDY';
+    if (code <= 48) return 'OVERCAST / FOG';
+    if (code <= 67) return 'RAIN';
+    if (code <= 77) return 'SNOW';
+    if (code <= 82) return 'SHOWERS';
+    return 'STORM';
+  }
+
+  function getSunElevLabel(el) {
+    if (el > 60)  return 'OVERHEAD';
+    if (el > 30)  return 'MID SKY';
+    if (el > 10)  return 'LOW SUN';
+    if (el > 0)   return 'GOLDEN HOUR';
+    return 'NIGHT';
+  }
+
+  async function loadExposure() {
+    let lat = 29.9511, lon = -90.0715;
+    try {
+      const geo = await fetch('https://ipapi.co/json/');
+      const gd  = await geo.json();
+      if (gd.latitude) {
+        lat = gd.latitude;
+        lon = gd.longitude;
+        const city    = (gd.city || '').toUpperCase();
+        const latStr  = Math.abs(lat).toFixed(4) + '°' + (lat >= 0 ? 'N' : 'S');
+        const lonStr  = Math.abs(lon).toFixed(4) + '°' + (lon >= 0 ? 'E' : 'W');
+        locationLabel = `${city} / ${latStr} ${lonStr}`;
+      }
+    } catch(e) {}
+
+    const latStr = Math.abs(lat).toFixed(4) + '°' + (lat >= 0 ? 'N' : 'S');
+    const lonStr = Math.abs(lon).toFixed(4) + '°' + (lon >= 0 ? 'E' : 'W');
+    const coordStr = `${latStr} ${lonStr}`;
+
+    // glitch in coordinates first, then start live timecode append
+    glitchType(document.getElementById('glitch-eyebrow'), coordStr, 0, 55);
+
+    // after glitch resolves (~2s), switch to live timecode
+    setTimeout(() => {
+      const eyebrow = document.getElementById('glitch-eyebrow');
+      function tickRow1() {
+        eyebrow.textContent = `${coordStr} / ${formatTC(Date.now() - pageLoadTime)}`;
+        requestAnimationFrame(tickRow1);
+      }
+      tickRow1();
+    }, 2200);
+
+    try {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=weather_code,direct_radiation&hourly=sunshine_duration&daily=sunrise,sunset&timezone=auto&forecast_days=1`;
+      const res  = await fetch(url);
+      const data = await res.json();
+
+      const code  = data.current.weather_code;
+      const lux   = (data.current.direct_radiation || 0) * 120;
+      const now   = new Date();
+      const rise  = new Date(data.daily.sunrise[0]);
+      const set   = new Date(data.daily.sunset[0]);
+      const dayLen = (set - rise) / 1000;
+      const elapsed = (now - rise) / 1000;
+      const sunEl = Math.round(Math.sin((elapsed / dayLen) * Math.PI) * 90);
+
+      const condition = getConditionLabel(code);
+      const sunLabel  = getSunElevLabel(sunEl);
+      const nd        = getNDStop(lux);
+      const sunDeg    = Math.max(0, sunEl);
+
+      // start timecode ticker now that data is ready
+      let tcStarted = false;
+      function tickExposure() {
+        tcEl.textContent = `${condition} / ${sunLabel} / T2.8 / 1/24S / ISO 800 / ${nd}`;
+        requestAnimationFrame(tickExposure);
+      }
+      tcEl.style.opacity = '1';
+      tickExposure();
+
+    } catch(e) {
+      // fallback — just show timecode
+      tcEl.style.opacity = '1';
+      function tickFallback() {
+        tcEl.textContent = `CLEAR / NIGHT / T2.8 / 1/24S / ISO 800 / NO ND`;
+        requestAnimationFrame(tickFallback);
+      }
+      tickFallback();
+    }
+  }
+
+  loadExposure();
 
   // UDS section toggle
   const udsSection = document.querySelector('.uds-section');
