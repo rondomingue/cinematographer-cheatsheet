@@ -1513,12 +1513,10 @@
   }
 
   // Attach to guide cards and extras cards — deferred until DOM ready
-  window.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.guide-card, .extras-card').forEach(card => {
-      card.addEventListener('mouseenter', shutterClick);
-    });
-    document.getElementById('reel-trigger').addEventListener('mouseenter', shutterClick);
+  document.querySelectorAll('.guide-card, .extras-card').forEach(card => {
+    card.addEventListener('mouseenter', shutterClick);
   });
+  document.getElementById('reel-trigger').addEventListener('mouseenter', shutterClick);
   document.querySelectorAll('.reel-item').forEach(item => {
     item.addEventListener('mouseenter', frameAdvance);
   });
