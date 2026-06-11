@@ -1452,78 +1452,54 @@
   loadExposure();
 
   // Unlock AudioContext on first interaction
+  // AUDIO ENGINE — unlocked on first mousemove (no click required)
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
   let audioCtx = null;
+  let audioReady = false;
 
-  function unlockAudio() {
-    if (!audioCtx) audioCtx = new AudioCtx();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
+  function initAudio() {
+    if (audioReady) return;
+    audioCtx = new AudioCtx();
+    // Play a silent buffer to unlock — works on first mousemove
+    const buf = audioCtx.createBuffer(1, 1, audioCtx.sampleRate);
+    const src = audioCtx.createBufferSource();
+    src.buffer = buf;
+    src.connect(audioCtx.destination);
+    src.start(0);
+    audioCtx.resume().then(() => { audioReady = true; });
   }
-  document.addEventListener('pointerdown', unlockAudio, { once: true });
-  document.addEventListener('pointerenter', unlockAudio, { once: true });
 
-  function shutterClick() {
-    if (!audioCtx) audioCtx = new AudioCtx();
+  document.addEventListener('mousemove', initAudio, { once: true });
 
-    const bufferSize = audioCtx.sampleRate * 0.04;
-    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-      data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 6);
+  function playClick(freq, duration, gain, decay) {
+    if (!audioReady) return;
+    const t = audioCtx.currentTime;
+    const bufSize = Math.floor(audioCtx.sampleRate * duration);
+    const buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < bufSize; i++) {
+      d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufSize, decay);
     }
-
-    const source = audioCtx.createBufferSource();
-    source.buffer = buffer;
-
-    const filter = audioCtx.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.frequency.value = 2800;
-    filter.Q.value = 0.8;
-
-    const gain = audioCtx.createGain();
-    gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
-
-    source.connect(filter);
-    filter.connect(gain);
-    gain.connect(audioCtx.destination);
-    source.start();
+    const src = audioCtx.createBufferSource();
+    src.buffer = buf;
+    const filt = audioCtx.createBiquadFilter();
+    filt.type = 'bandpass';
+    filt.frequency.value = freq;
+    filt.Q.value = 1.0;
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(gain, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + duration);
+    src.connect(filt); filt.connect(g); g.connect(audioCtx.destination);
+    src.start(t);
   }
 
-  // Sharper single-frame advance click for film selections
-  function frameAdvance() {
-    if (!audioCtx) audioCtx = new AudioCtx();
+  function shutterClick() { playClick(2800, 0.04, 0.20, 6); }
+  function frameAdvance() { playClick(4200, 0.022, 0.12, 10); }
 
-    const bufferSize = audioCtx.sampleRate * 0.025;
-    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-      data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 10);
-    }
-
-    const source = audioCtx.createBufferSource();
-    source.buffer = buffer;
-
-    const filter = audioCtx.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.frequency.value = 4200;
-    filter.Q.value = 1.2;
-
-    const gain = audioCtx.createGain();
-    gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.025);
-
-    source.connect(filter);
-    filter.connect(gain);
-    gain.connect(audioCtx.destination);
-    source.start();
-  }
-
-  // Attach to guide cards and extras cards — deferred until DOM ready
   document.querySelectorAll('.guide-card, .extras-card').forEach(card => {
-    card.addEventListener('pointerenter', shutterClick);
+    card.addEventListener('mouseenter', shutterClick);
   });
-  document.getElementById('reel-trigger').addEventListener('pointerenter', shutterClick);
+  document.getElementById('reel-trigger').addEventListener('mouseenter', shutterClick);
   document.querySelectorAll('.reel-item').forEach(item => {
     item.addEventListener('mouseenter', frameAdvance);
   });
