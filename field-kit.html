@@ -595,6 +595,67 @@
     function openNav()  { sideNav.classList.add('open'); overlay.classList.add('open'); }
     function closeNav() { sideNav.classList.remove('open'); overlay.classList.remove('open'); }
 
+
+  // MECHANICAL TOGGLE — Web Audio API
+  const _AudioCtx = window.AudioContext || window.webkitAudioContext;
+  let _audioCtx = null;
+
+  function mechanicalToggle() {
+    if (!_audioCtx) _audioCtx = new _AudioCtx();
+    const t = _audioCtx.currentTime;
+
+    // First transient — hard click
+    const buf1 = _audioCtx.createBuffer(1, Math.floor(_audioCtx.sampleRate * 0.012), _audioCtx.sampleRate);
+    const d1 = buf1.getChannelData(0);
+    for (let i = 0; i < d1.length; i++) d1[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d1.length, 4);
+    const src1 = _audioCtx.createBufferSource();
+    src1.buffer = buf1;
+    const f1 = _audioCtx.createBiquadFilter();
+    f1.type = "bandpass"; f1.frequency.value = 3800; f1.Q.value = 1.5;
+    const g1 = _audioCtx.createGain();
+    g1.gain.setValueAtTime(0.22, t);
+    g1.gain.exponentialRampToValueAtTime(0.001, t + 0.012);
+    src1.connect(f1); f1.connect(g1); g1.connect(_audioCtx.destination);
+    src1.start(t);
+
+    // Second transient — softer settle
+    const buf2 = _audioCtx.createBuffer(1, Math.floor(_audioCtx.sampleRate * 0.018), _audioCtx.sampleRate);
+    const d2 = buf2.getChannelData(0);
+    for (let i = 0; i < d2.length; i++) d2[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d2.length, 8);
+    const src2 = _audioCtx.createBufferSource();
+    src2.buffer = buf2;
+    const f2 = _audioCtx.createBiquadFilter();
+    f2.type = "bandpass"; f2.frequency.value = 1800; f2.Q.value = 0.9;
+    const g2 = _audioCtx.createGain();
+    g2.gain.setValueAtTime(0.10, t + 0.018);
+    g2.gain.exponentialRampToValueAtTime(0.001, t + 0.038);
+    src2.connect(f2); f2.connect(g2); g2.connect(_audioCtx.destination);
+    src2.start(t + 0.018);
+  }
+
+    navToggle.addEventListener('click', mechanicalToggle);
+  // FRAME ADVANCE — side nav link hover
+  function frameAdvance() {
+    if (!_audioCtx) _audioCtx = new _AudioCtx();
+    const t = _audioCtx.currentTime;
+    const bufSize = Math.floor(_audioCtx.sampleRate * 0.022);
+    const buf = _audioCtx.createBuffer(1, bufSize, _audioCtx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < bufSize; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufSize, 10);
+    const src = _audioCtx.createBufferSource();
+    src.buffer = buf;
+    const filt = _audioCtx.createBiquadFilter();
+    filt.type = 'bandpass'; filt.frequency.value = 4200; filt.Q.value = 1.2;
+    const gain = _audioCtx.createGain();
+    gain.gain.setValueAtTime(0.10, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.022);
+    src.connect(filt); filt.connect(gain); gain.connect(_audioCtx.destination);
+    src.start(t);
+  }
+
+  document.querySelectorAll('.nav-item').forEach(function(item) {
+    item.addEventListener('mouseenter', frameAdvance);
+  });
     navToggle.addEventListener('click', function() {
       sideNav.classList.contains('open') ? closeNav() : openNav();
     });
