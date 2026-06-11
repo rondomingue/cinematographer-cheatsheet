@@ -1469,7 +1469,7 @@
     audioCtx.resume().then(() => { audioReady = true; });
   }
 
-  document.addEventListener('mousemove', initAudio, { once: true });
+  document.addEventListener('mousedown', initAudio, { once: true });
 
   function playClick(freq, duration, gain, decay) {
     if (!audioReady) return;
@@ -1534,6 +1534,7 @@
   const reelPanel   = document.getElementById('reel-panel');
 
   reelTrigger.addEventListener('click', (e) => {
+    initAudio();
     e.stopPropagation();
     reelPanel.classList.toggle('open');
   });
