@@ -1452,27 +1452,20 @@
   loadExposure();
 
   // Unlock AudioContext on first interaction
-  // AUDIO ENGINE — unlocked on first mousemove (no click required)
+  // AUDIO ENGINE
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
   let audioCtx = null;
-  let audioReady = false;
 
   function initAudio() {
-    if (audioReady) return;
+    if (audioCtx) return;
     audioCtx = new AudioCtx();
-    // Play a silent buffer to unlock — works on first mousemove
-    const buf = audioCtx.createBuffer(1, 1, audioCtx.sampleRate);
-    const src = audioCtx.createBufferSource();
-    src.buffer = buf;
-    src.connect(audioCtx.destination);
-    src.start(0);
-    audioCtx.resume().then(() => { audioReady = true; });
+    audioCtx.resume();
   }
 
   document.addEventListener('mousedown', initAudio, { once: true });
 
-  function playClick(freq, duration, gain, decay) {
-    if (!audioReady) return;
+  function playClick(freq, duration, gainVal, decay) {
+    if (!audioCtx || audioCtx.state === 'suspended') return;
     const t = audioCtx.currentTime;
     const bufSize = Math.floor(audioCtx.sampleRate * duration);
     const buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
@@ -1487,7 +1480,7 @@
     filt.frequency.value = freq;
     filt.Q.value = 1.0;
     const g = audioCtx.createGain();
-    g.gain.setValueAtTime(gain, t);
+    g.gain.setValueAtTime(gainVal, t);
     g.gain.exponentialRampToValueAtTime(0.001, t + duration);
     src.connect(filt); filt.connect(g); g.connect(audioCtx.destination);
     src.start(t);
@@ -1534,7 +1527,6 @@
   const reelPanel   = document.getElementById('reel-panel');
 
   reelTrigger.addEventListener('click', (e) => {
-    initAudio();
     e.stopPropagation();
     reelPanel.classList.toggle('open');
   });
